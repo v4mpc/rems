@@ -51,7 +51,7 @@ class WorkBook:
         return f"{name}_{self.sheet_name}_{self.region}_{date_travel}.xlsx"
 
     def write_field_data(self, field, data):
-        field_data = self.fiels[field]
+        field_data = self.fields[field]
         if isinstance(field_data, list):
 
             # we have a list, data should be a list
@@ -60,7 +60,8 @@ class WorkBook:
                 cell_address = self.fields[field][x]
                 cell_value = data[x]
                 self.write_cell(cell_address, cell_value)
-                x = +1
+                x += 1
+                print('test')
 
         else:
             # we have a string, data is a string
@@ -71,7 +72,9 @@ class WorkBook:
 
 if __name__ == "__main__":
     arf = WorkBook()
-    arf.write_cell('C27', 1)
+    # arf.write_cell('C27', 1)
+    data = 'Yona'
+    field_type = 'purpose'
+    arf.write_field_data(field_type, data)
     file_name = arf.generate_file_name()
-
     arf.save(file_name)
