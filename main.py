@@ -3,13 +3,14 @@ import logging
 import datetime
 
 
-class Arf:
+class WorkBook:
     def __init__(self):
         self.sample_arf_path = "arf.xlsx"  # erf.xlsx
         self.wb = load_workbook(filename=self.sample_arf_path)
         self.sheet_name = "Advance Request"  # Tanzania Expense Report
         self.sheet = self.wb[self.sheet_name]
-        self.field_mapping = {
+        self.region = 'morogoro'
+        self.fields = {
             'date_of_request': 'G4',
             'name': 'B8',
             'address': 'B9',
@@ -30,11 +31,9 @@ class Arf:
             'signature_date': 'G65',
             'approved_by': 'B68',
             'approve_date': 'G68'
-
         }
 
     def write_cell(self, cell_address, cell_value):
-        # logging.info("Writing Data")
         self.sheet[cell_address] = cell_value
 
     def save(self, filename_with_extension):
@@ -43,26 +42,36 @@ class Arf:
     def read_cell(self, cell_address):
         return self.sheet[cell_address].value
 
-    def make_field_mapping(self, field_list, start_cell, number_of_fields):
-        fields = {}
-        column = {}
-        for x in range(number_of_fields+1):
-            for field in field_list:
-                fields[f"{field}_x"]
+    def generate_file_name(self):
+        name_address = self.fields['name']
+        region = self.region
+        date_address = self.fields['date_of_request']
+        name = "_".join(self.read_cell(name_address).split(' '))
+        date_travel = self.read_cell(date_address).date()
+        return f"{name}_{self.sheet_name}_{self.region}_{date_travel}.xlsx"
 
-    def generate_file_name(self, name, region, date):
-        # name =
-        return f"{name}_{self.sheet_name}_{region}_{date}.xlsx"
+    def write_field_data(self, field, data):
+        field_data = self.fiels[field]
+        if isinstance(field_data, list):
+
+            # we have a list, data should be a list
+            x = 0
+            while len(data) > x:
+                cell_address = self.fields[field][x]
+                cell_value = data[x]
+                self.write_cell(cell_address, cell_value)
+                x = +1
+
+        else:
+            # we have a string, data is a string
+            cell_address = self.fields[field]
+            cell_value = data
+            self.write_cell(cell_address, cell_value)
 
 
 if __name__ == "__main__":
-    arf = Arf()
+    arf = WorkBook()
     arf.write_cell('C27', 1)
+    file_name = arf.generate_file_name()
 
-    name_address = arf.field_mapping['name']
-    region = 'morogo'
-    date_address = arf.field_mapping['date_of_request']
-    name = "_".join(arf.read_cell(name_address).split(' '))
-    date_travel = arf.read_cell(date_address).date()
-    file_name = arf.generate_file_name(name, region, date_travel)
     arf.save(file_name)
