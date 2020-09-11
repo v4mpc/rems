@@ -5,9 +5,9 @@ import datetime
 
 class Arf:
     def __init__(self):
-        self.sample_arf_path = "arf.xlsx"
+        self.sample_arf_path = "arf.xlsx"  # erf.xlsx
         self.wb = load_workbook(filename=self.sample_arf_path)
-        self.sheet_name = "Advance Request"
+        self.sheet_name = "Advance Request"  # Tanzania Expense Report
         self.sheet = self.wb[self.sheet_name]
         self.field_mapping = {
             'date_of_request': 'G4',
@@ -16,44 +16,16 @@ class Arf:
             'purpose': 'B13',
             'period_of_travel_from': 'B16',
             'period_of_travel_to': 'E16',
-            'me_destination_1': 'B27',
-            'me_no_of_days_1': 'C27',
-            'me_amount_1': 'D27',
-            'me_rate_1': 'E27',
-            'me_destination_2': 'B28',
-            'me_no_of_days_2': 'C28',
-            'me_amount_2': 'D28',
-            'me_rate_2': 'E28',
-            'me_destination_3': 'B29',
-            'me_no_of_days_3': 'C29',
-            'me_amount_3': 'D29',
-            'me_rate_3': 'E29',
-            'me_destination_4': 'B30',
-            'me_no_of_days_4': 'C30',
-            'me_amount_4': 'D30',
-            'me_rate_4': 'E30',
-            'me_destination_5': 'B31',
-            'me_no_of_days_5': 'C31',
-            'me_amount_5': 'D31',
-            'me_rate_5': 'E31',
-            'me_destination_6': 'B32',
-            'me_no_of_days_6': 'C32',
-            'me_amount_6': 'D32',
-            'me_rate_6': 'E32',
-            'lodge_destination_1': 'B41',
-            'lodge_no_of_nights_1': 'C41',
-            'lodge_amount_1': 'D41',
-            'lodge_rate_1': 'E41',
-            'lodge_destination_2': 'B42',
-            'lodge_no_of_nights_2': 'C42',
-            'lodge_amount_2': 'D42',
-            'lodge_rate_2': 'E42',
-            'other_purpose_1': 'B55',
-            'other_amount_1': 'D55',
-            'other_purpose_2': 'B56',
-            'other_amount_2': 'D56',
-            'other_purpose_3': 'B57',
-            'other_amount_3': 'D57',
+            'me_destination': ['B27', 'B28', 'B29', 'B30', 'B31', 'B21'],
+            'me_no_of_days': ['C27', 'C28', 'C29', 'C30', 'C31', 'C21'],
+            'me_amount': ['D27', 'D28', 'D29', 'D30', 'D31', 'D21'],
+            'me_rate': ['E27', 'E28', 'E29', 'E30', 'E31', 'E21'],
+            'lodge_destination': ['B41', 'B42', 'B43', 'B44', 'B45', 'B46'],
+            'lodge_no_of_nights': ['C41', 'C42', 'C43', 'C44', 'C45', 'C46'],
+            'lodge_amount': ['D41', 'D42', 'D43', 'D44', 'D45', 'D46'],
+            'lodge_rate': ['E41', 'E42', 'E43', 'E44', 'E45', 'E46'],
+            'other_purpose': ['B55', 'B56', 'B57', 'B58', 'B59'],
+            'other_amount': ['D55', 'D56', 'D57', 'D58', 'D59'],
             'signature': 'B65',
             'signature_date': 'G65',
             'approved_by': 'B68',
@@ -85,7 +57,7 @@ class Arf:
 
 if __name__ == "__main__":
     arf = Arf()
-    arf.write_cell('C27', 2)
+    arf.write_cell('C27', 1)
 
     name_address = arf.field_mapping['name']
     region = 'morogo'
