@@ -36,6 +36,13 @@ class WorkBook:
     def write_cell(self, cell_address, cell_value):
         self.sheet[cell_address] = cell_value
 
+    def get_number_of_nights(self, start_date, end_date):
+        # date dd-mm-yyy
+        start_date = datetime.datetime.strptime(start_date, "%d-%m-%Y")
+        end_date = datetime.datetime.strptime(end_date, "%d-%m-%Y")
+        delta_date = end_date-start_date
+        return delta_date.days
+
     def save(self, filename_with_extension):
         self.wb.save(filename_with_extension)
 
@@ -61,7 +68,6 @@ class WorkBook:
                 cell_value = data[x]
                 self.write_cell(cell_address, cell_value)
                 x += 1
-                print('test')
 
         else:
             # we have a string, data is a string
@@ -72,9 +78,10 @@ class WorkBook:
 
 if __name__ == "__main__":
     arf = WorkBook()
-    # arf.write_cell('C27', 1)
-    data = 'Yona'
-    field_type = 'purpose'
-    arf.write_field_data(field_type, data)
-    file_name = arf.generate_file_name()
-    arf.save(file_name)
+    # # arf.write_cell('C27', 1)
+    # data = 'Yona'
+    # field_type = 'purpose'
+    # arf.write_field_data(field_type, data)
+    # file_name = arf.generate_file_name()
+    # arf.save(file_name)
+    print(arf.get_number_of_nights('21-09-2020', '27-09-2020'))
