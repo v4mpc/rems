@@ -5,12 +5,20 @@ from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 
 
+class Location(models.Model):
+    name = models.CharField(max_length=50)
+    lodging = models.IntegerField()
+    me = models.IntegerField()
+    created_on = models.DateField(auto_now=True, auto_now_add=False)
+
+
 class Arf(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-    location = models.ForeignKey('Location', models.SET_NULL, null=True)
+    location = models.ForeignKey(
+        'Location', models.SET_NULL, null=True)
     address = models.TextField()
     purpose = models.TextField()
     start_date = models.DateField(auto_now=False, auto_now_add=False)
@@ -21,29 +29,25 @@ class Arf(models.Model):
     excel_path = models.FileField(upload_to='uploads/', max_length=100)
 
 
-class Location(models.Model):
-    name = models.CharField(max_length=50)
-    lodging = models.IntegerField()
-    me = models.IntegerField()
-    created_on = models.DateField(auto_now=True, auto_now_add=False)
-
-
 class Me(models.Model):
-    arf = models.ForeignKey('Arf', on_delete=models.CASCADE, null=True)
+    arf = models.ForeignKey(
+        'Arf', on_delete=models.CASCADE, blank=True, null=True, related_name='mes')
     destination = models.TextField()
     no_of_nights = models.SmallIntegerField()
     daily_rate = models.IntegerField()
     percentage_of_daily_rate = models.SmallIntegerField()
     created_on = models.DateField(auto_now=True, auto_now_add=False)
-    erf = models.ForeignKey('Erf', models.SET_NULL, null=True)
+    erf = models.ForeignKey('Erf', models.SET_NULL,
+                            blank=True, null=True, related_name='mes')
 
 
 class OtherCost(models.Model):
-    arf = models.ForeignKey('Arf', models.SET_NULL, null=True)
+    arf = models.ForeignKey('Arf', models.SET_NULL,
+                            blank=True, null=True, related_name='other_costs')
     purpose = models.TextField()
     amount = models.IntegerField()
     created_on = models.DateField(auto_now=True, auto_now_add=False)
-    erf = models.ForeignKey('Erf', models.SET_NULL, null=True)
+    erf = models.ForeignKey('Erf', models.SET_NULL, blank=True, null=True)
 
 
 class Erf(models.Model):
@@ -51,8 +55,9 @@ class Erf(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-    arf = models.OneToOneField('Arf', models.SET_NULL, null=True)
-    location = models.ForeignKey('Location', models.SET_NULL, null=True)
+    arf = models.OneToOneField('Arf', models.SET_NULL, blank=True, null=True)
+    location = models.ForeignKey(
+        'Location', models.SET_NULL, blank=True, null=True)
     address = models.TextField()
     purpose = models.TextField()
     start_date = models.DateField(auto_now=False, auto_now_add=False)

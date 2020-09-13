@@ -2,8 +2,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
-from rems_api.serializers import LocationSerializer
-from rems_api.models import Location
+from rems_api.serializers import LocationSerializer, ArfSerializer
+from rems_api.models import Location, Arf
 from rest_framework import status
 from django.http import Http404
 
@@ -19,11 +19,39 @@ class HelloView(APIView, TokenAuthentication):
 
 
 class ArfList(APIView):
-    pass
+
+    def get(self, request):
+        arfs = Arf.objects.all()
+        serializer = ArfSerializer(arfs, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = ArfSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ArfDetail(APIView):
-    pass
+    def get_object(self, pk):
+        try:
+            return Arf.objects.get(pk=pk)
+        except Arf.DoesNotExist:
+            raise Http404
+
+    def get(self, resquest, pk):
+        arf = self.get_object(pk)
+        serializer = ArfSerializer(arf)
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        pass
+
+    def delete(self, request, pk):
+        arf = self.get_object(pk)
+        arf.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class LocationList(APIView):

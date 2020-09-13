@@ -10,6 +10,11 @@ urlpatterns = [
     path('locations/', views.LocationList.as_view(), name='location_list'),
     path('locations/<int:pk>/', views.LocationDetail.as_view()),
 
+    path('arfs/', views.ArfList.as_view(), name='arf_list'),
+    path('arfs/<int:pk>/', views.ArfDetail.as_view()),
+
+
+
 
     # path('')
     url(r'^login/', rest_views.obtain_auth_token)
