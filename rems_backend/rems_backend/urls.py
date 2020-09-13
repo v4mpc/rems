@@ -7,6 +7,10 @@ from django.conf.urls import url
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('hello/', views.HelloView.as_view(), name='hello'),
+    path('locations/', views.LocationList.as_view(), name='location_list'),
+    path('locations/<int:pk>/', views.LocationDetail.as_view()),
+
+
     # path('')
     url(r'^login/', rest_views.obtain_auth_token)
 ]
