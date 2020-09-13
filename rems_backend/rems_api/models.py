@@ -1,5 +1,8 @@
 from django.db import models
 from django.conf import settings
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
 
 
 class Arf(models.Model):
@@ -58,3 +61,9 @@ class Erf(models.Model):
     created_on = models.DateField(auto_now=True, auto_now_add=False)
     status = models.CharField(max_length=50)
     excel_path = models.FileField(upload_to='uploads/', max_length=100)
+
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
