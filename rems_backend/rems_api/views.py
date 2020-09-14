@@ -7,6 +7,8 @@ from rems_api.models import Location, Arf
 from rest_framework import status
 from django.http import Http404
 
+# TODO: Make authenication work
+
 
 class HelloView(APIView, TokenAuthentication):
     # permission_classes = (IsAuthenticated, )
@@ -21,6 +23,7 @@ class HelloView(APIView, TokenAuthentication):
 class ArfList(APIView):
 
     def get(self, request):
+        # TODO: List file according to lodgin user
         arfs = Arf.objects.all()
         serializer = ArfSerializer(arfs, many=True)
         return Response(serializer.data)
