@@ -28,7 +28,7 @@ class ArfList(APIView):
     def post(self, request):
         serializer = ArfSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(owner=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -46,7 +46,12 @@ class ArfDetail(APIView):
         return Response(serializer.data)
 
     def put(self, request, pk):
-        pass
+        arf = self.get_object(pk)
+        serializer = ArfSerializer(arf, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
         arf = self.get_object(pk)

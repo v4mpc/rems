@@ -3,6 +3,7 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import User
 
 
 class Location(models.Model):
@@ -36,6 +37,7 @@ class Me(models.Model):
     no_of_nights = models.SmallIntegerField()
     daily_rate = models.IntegerField()
     percentage_of_daily_rate = models.SmallIntegerField()
+    lodging = models.BooleanField(blank=True, null=True,)
     created_on = models.DateField(auto_now=True, auto_now_add=False)
     erf = models.ForeignKey('Erf', models.SET_NULL,
                             blank=True, null=True, related_name='mes')
@@ -48,6 +50,16 @@ class OtherCost(models.Model):
     amount = models.IntegerField()
     created_on = models.DateField(auto_now=True, auto_now_add=False)
     erf = models.ForeignKey('Erf', models.SET_NULL, blank=True, null=True)
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name='profile')
+    name = models.CharField(max_length=100)
+    image = models.FileField(upload_to='uploads/',
+                             max_length=100, blank=True, null=True)
+    signature = models.FileField(
+        upload_to='uploads/', max_length=100, blank=True, null=True)
 
 
 class Erf(models.Model):
