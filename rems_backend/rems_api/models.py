@@ -37,10 +37,21 @@ class Me(models.Model):
     no_of_nights = models.SmallIntegerField()
     daily_rate = models.IntegerField()
     percentage_of_daily_rate = models.SmallIntegerField()
-    lodging = models.BooleanField(blank=True, null=True,)
     created_on = models.DateField(auto_now=True, auto_now_add=False)
     erf = models.ForeignKey('Erf', models.SET_NULL,
                             blank=True, null=True, related_name='mes')
+
+
+class Lodging(models.Model):
+    arf = models.ForeignKey(
+        'Arf', on_delete=models.CASCADE, blank=True, null=True, related_name='lodgings')
+    destination = models.TextField()
+    no_of_nights = models.SmallIntegerField()
+    daily_rate = models.IntegerField()
+    percentage_of_daily_rate = models.SmallIntegerField()
+    created_on = models.DateField(auto_now=True, auto_now_add=False)
+    erf = models.ForeignKey('Erf', models.SET_NULL,
+                            blank=True, null=True, related_name='lodgings')
 
 
 class OtherCost(models.Model):

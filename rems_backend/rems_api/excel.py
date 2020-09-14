@@ -39,7 +39,7 @@ class WorkBook:
         pass
 
     def init(self, validated_data):
-        print(validated_data['purpose'])
+        # print(validated_data['purpose'])
         self.region = validated_data['location'].name
         self.date_of_request = validated_data['date_of_request']
         self.user = validated_data['user']
@@ -50,6 +50,8 @@ class WorkBook:
         self.period_of_travel_to = validated_data['end_date']
         self.signature = ''
         self.mes = validated_data['mes']
+        self.lodgings = validated_data['lodgings']
+        self.other_costs = validated_data['other_costs']
         self.signature_date = self.date_of_request
         self.fields = {
             'date_of_request': 'G4',
@@ -116,33 +118,30 @@ class WorkBook:
         self.write_field_data('period_of_travel_to',
                               self.period_of_travel_to)
         # me
-        me = self.transform_for_write(self.mes, False)
+        me = self.transform_for_write(self.mes)
         self.write_field_data('me_destination', me['destination'])
         self.write_field_data('me_no_of_days', me['no_of_nights'])
         self.write_field_data('me_amount', me['daily_rate'])
         self.write_field_data('me_rate', me['percentage_of_daily_rate'])
-
         # lodging
-        lodging = self.transform_for_write(self.mes, True)
+        lodging = self.transform_for_write(self.lodgings)
         self.write_field_data('lodge_destination', lodging['destination'])
         self.write_field_data('lodge_no_of_nights', lodging['no_of_nights'])
         self.write_field_data('lodge_amount', lodging['daily_rate'])
         self.write_field_data(
             'lodge_rate', lodging['percentage_of_daily_rate'])
-
         # other costs
+        other_cost = self.transform_for_write(self.other_costs)
+        self.write_field_data('other_purpose', other_cost['purpose'])
+        self.write_field_data('other_amount', other_cost['amount'])
 
         self.write_field_data('signature_date', self.signature_date)
         self.save()
 
-    def transform_for_write(self, list_of_costs, lodging):
-        # if not lodging:
-        #     # remove lodging from lists of dicts
+    def transform_for_write(self, list_of_costs):
         dict_of_costs = {}
         for dict_of_cost in list_of_costs:
             for key, value in dict_of_cost.items():
-                if not lodging and key is not 'lodging' and not value:
-                    continue
                 try:
                     dict_of_costs[key].append(value)
                 except KeyError:
