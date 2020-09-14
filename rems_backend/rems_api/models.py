@@ -27,7 +27,7 @@ class Arf(models.Model):
     date_of_request = models.DateField(auto_now=False, auto_now_add=False)
     created_on = models.DateField(auto_now=True, auto_now_add=False)
     status = models.CharField(max_length=50)
-    excel_path = models.FileField(upload_to='uploads/', max_length=100)
+    excel_sheet = models.CharField(blank=True, null=True, max_length=100)
 
 
 class Me(models.Model):
@@ -88,7 +88,7 @@ class Erf(models.Model):
     date_of_request = models.DateField(auto_now=False, auto_now_add=False)
     created_on = models.DateField(auto_now=True, auto_now_add=False)
     status = models.CharField(max_length=50)
-    excel_path = models.FileField(upload_to='uploads/', max_length=100)
+    excel_sheet = models.CharField(blank=True, null=True, max_length=100)
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)

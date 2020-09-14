@@ -46,6 +46,7 @@ class ArfDetail(APIView):
         return Response(serializer.data)
 
     def put(self, request, pk):
+        # TODO: Finish put method check this(https://www.django-rest-framework.org/api-guide/serializers/)
         arf = self.get_object(pk)
         serializer = ArfSerializer(arf, data=request.data)
         if serializer.is_valid():
@@ -55,6 +56,7 @@ class ArfDetail(APIView):
 
     def delete(self, request, pk):
         arf = self.get_object(pk)
+        # TODO: Delete file too
         arf.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 

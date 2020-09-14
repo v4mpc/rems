@@ -78,13 +78,15 @@ class WorkBook:
 
     def generate_file_name(self):
         # region = self.region
+        return os.path.join(
+            self.module_dir, f'static/rems_api/{self.get_file_name()}')
+
+    def get_file_name(self):
         region = "_".join(self.region.split(' '))
         sheet_name = "_".join(self.sheet_name.split(' '))
         name = "_".join(self.name.split(' '))
         date_travel = self.date_of_request
-        file_name = f"{name}_{sheet_name}_{region}_{date_travel}.xlsx"
-        return os.path.join(
-            self.module_dir, f'static/rems_api/{file_name}')
+        return f"{name}_{sheet_name}_{region}_{date_travel}.xlsx"
 
     def write_field_data(self, field, data):
         field_data = self.fields[field]
@@ -153,10 +155,4 @@ class WorkBook:
 
 if __name__ == "__main__":
     arf = WorkBook()
-    # # arf.write_cell('C27', 1)
-    # data = 'Yona'
-    # field_type = 'purpose'
-    # arf.write_field_data(field_type, data)
-    # file_name = arf.generate_file_name()
-    # arf.save(file_name)
     print(arf.get_number_of_nights('21-09-2020', '27-09-2020'))

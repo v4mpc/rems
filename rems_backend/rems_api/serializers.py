@@ -40,7 +40,7 @@ class ArfSerializer(serializers.ModelSerializer):
     class Meta:
         model = Arf
         fields = ['pk', 'user', 'location', 'address', 'purpose',
-                  'start_date', 'end_date', 'date_of_request', 'status', 'mes', 'lodgings', 'other_costs']
+                  'start_date', 'end_date', 'date_of_request', 'status', 'mes', 'lodgings', 'other_costs', 'excel_sheet']
 
     def create(self, validated_data):
         arf_sheet = WorkBook("Advance Request")
@@ -48,6 +48,8 @@ class ArfSerializer(serializers.ModelSerializer):
         if arf_sheet.exists():
             raise serializers.ValidationError('File exists')
         arf_sheet.write_and_save()
+        file_name = arf_sheet.get_file_name()
+        validated_data['excel_sheet'] = file_name
         mes_data = validated_data.pop('mes')
         lodgings_data = validated_data.pop('lodgings')
         other_costs_data = validated_data.pop('other_costs')
