@@ -1,15 +1,19 @@
 from openpyxl import load_workbook
 import logging
 import datetime
+from django.conf import settings
+import os
+from pathlib import Path
 
 
 class WorkBook:
-    def __init__(self, sheet_name, region):
-        self.sample_arf_path = "arf.xlsx"  # erf.xlsx
+    def __init__(self, sheet_name):
+        self.module_dir = os.path.dirname(__file__)
+        self.sample_arf_path = os.path.join(
+            self.module_dir, 'static/rems_api/arf.xlsx')  # "arf.xlsx"  # erf.xlsx
         self.wb = load_workbook(filename=self.sample_arf_path)
         self.sheet_name = sheet_name  # "Advance Request"  # Tanzania Expense Report
         self.sheet = self.wb[self.sheet_name]
-        self.region = region
 
     def write_cell(self, cell_address, cell_value):
         self.sheet[cell_address] = cell_value
@@ -22,26 +26,30 @@ class WorkBook:
         return delta_date.days
 
     def save(self):
+        # print(self.generate_file_name())
         self.wb.save(self.generate_file_name())
 
     def read_cell(self, cell_address):
         return self.sheet[cell_address].value
 
-    def excel_exists(self):
-        pass
+    def exists(self):
+        return Path(self.generate_file_name()).is_file()
 
     def delete(self):
         pass
 
     def init(self, validated_data):
+        print(validated_data['purpose'])
+        self.region = validated_data['location'].name
         self.date_of_request = validated_data['date_of_request']
-        self.user = validated_data.pop('owner')
-        self.name = user.profile.name
+        self.user = validated_data['user']
+        self.name = self.user.profile.name
         self.address = validated_data['address']
         self.purpose = validated_data['purpose']
         self.period_of_travel_from = validated_data['start_date']
         self.period_of_travel_to = validated_data['end_date']
         self.signature = ''
+        self.mes = validated_data['mes']
         self.signature_date = self.date_of_request
         self.fields = {
             'date_of_request': 'G4',
@@ -67,10 +75,14 @@ class WorkBook:
         }
 
     def generate_file_name(self):
-        region = self.region
+        # region = self.region
+        region = "_".join(self.region.split(' '))
+        sheet_name = "_".join(self.sheet_name.split(' '))
         name = "_".join(self.name.split(' '))
         date_travel = self.date_of_request
-        return f"{name}_{self.sheet_name}_{self.region}_{date_travel}.xlsx"
+        file_name = f"{name}_{sheet_name}_{region}_{date_travel}.xlsx"
+        return os.path.join(
+            self.module_dir, f'static/rems_api/{file_name}')
 
     def write_field_data(self, field, data):
         field_data = self.fields[field]
@@ -81,7 +93,11 @@ class WorkBook:
             while len(data) > x:
                 cell_address = self.fields[field][x]
                 cell_value = data[x]
-                self.write_cell(cell_address, cell_value)
+                if field is 'lodge_rate' or field is 'me_rate':
+                    self.write_cell(cell_address, f'{cell_value}%')
+                else:
+                    self.write_cell(cell_address, cell_value)
+
                 x += 1
 
         else:
@@ -90,18 +106,50 @@ class WorkBook:
             cell_value = data
             self.write_cell(cell_address, cell_value)
 
-        def write_and_save(self):
-            self.write_field_data('date_of_request', self.date_of_request)
-            self.write_field_data('name', self.name)
-            self.write_field_data('address', self.address)
-            self.write_field_data('purpose', self.purpose)
-            self.write_field_data(
-                'period_of_travel_from', self.period_of_travel_from)
-            self.write_field_data('period_of_travel_to',
-                                  self.period_of_travel_to)
-            self.write_field_data('date_of_request', self.date_of_request)
-            self.write_field_data('signature_date', self.signature_date)
-            self.save()
+    def write_and_save(self):
+        self.write_field_data('date_of_request', self.date_of_request)
+        self.write_field_data('name', self.name)
+        # self.write_field_data('address', self.address)
+        self.write_field_data('purpose', self.purpose)
+        self.write_field_data(
+            'period_of_travel_from', self.period_of_travel_from)
+        self.write_field_data('period_of_travel_to',
+                              self.period_of_travel_to)
+        # me
+        me = self.transform_for_write(self.mes, False)
+        self.write_field_data('me_destination', me['destination'])
+        self.write_field_data('me_no_of_days', me['no_of_nights'])
+        self.write_field_data('me_amount', me['daily_rate'])
+        self.write_field_data('me_rate', me['percentage_of_daily_rate'])
+
+        # lodging
+        lodging = self.transform_for_write(self.mes, True)
+        self.write_field_data('lodge_destination', lodging['destination'])
+        self.write_field_data('lodge_no_of_nights', lodging['no_of_nights'])
+        self.write_field_data('lodge_amount', lodging['daily_rate'])
+        self.write_field_data(
+            'lodge_rate', lodging['percentage_of_daily_rate'])
+
+        # other costs
+
+        self.write_field_data('signature_date', self.signature_date)
+        self.save()
+
+    def transform_for_write(self, list_of_costs, lodging):
+        # if not lodging:
+        #     # remove lodging from lists of dicts
+        dict_of_costs = {}
+        for dict_of_cost in list_of_costs:
+            for key, value in dict_of_cost.items():
+                if not lodging and key is not 'lodging' and not value:
+                    continue
+                try:
+                    dict_of_costs[key].append(value)
+                except KeyError:
+                    dict_of_costs[key] = []
+                    dict_of_costs[key].append(value)
+
+        return dict_of_costs
 
 
 if __name__ == "__main__":

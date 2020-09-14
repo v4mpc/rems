@@ -13,7 +13,7 @@ class LocationSerializer(serializers.ModelSerializer):
 class MeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Me
-        fields = ['destination', 'no_of_nights', 'lodging'
+        fields = ['destination', 'no_of_nights', 'lodging',
                   'daily_rate', 'percentage_of_daily_rate', 'pk']
 
 
@@ -27,14 +27,12 @@ class ArfSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         # first lets create the excel
-        region = Location.objects.get(pk=validated_data['location'])
-        arf_sheet = WorkBook("Advance Request", region)
+        # region = Location.objects.get(pk=validated_data['location'])
+        arf_sheet = WorkBook("Advance Request")
         arf_sheet.init(validated_data)
+        if arf_sheet.exists():
+            raise serializers.ValidationError('File exists')
         arf_sheet.write_and_save()
-
-        # region=validated_date
-
-        # then add that excel name to excel_path field
         mes_data = validated_data.pop('mes')
         arf = Arf.objects.create(**validated_data)
         for me_data in mes_data:
