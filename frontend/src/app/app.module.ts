@@ -57,6 +57,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { ArfCreateComponent } from './pages/arf-create/arf-create.component';
 
 
 @NgModule({
@@ -64,6 +65,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
     AppComponent,
     LayoutComponent,
     ArfIndexComponent,
+    ArfCreateComponent,
   ],
   imports: [
     BrowserModule,
