@@ -3,10 +3,19 @@
     [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
     <mat-toolbar>Rems</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item href="#">Dashboard</a>
+      <a class="new-button-margin" mat-raised-button color="primary" [matMenuTriggerFor]="menu">
+        <mat-icon>add</mat-icon>
+        <span>New</span>
+      </a>
+      <mat-menu #menu="matMenu">
+        <a mat-menu-item>Advance Request</a>
+        <a mat-menu-item>Expense Report</a>
+      </mat-menu>
+
+      <a mat-list-item>Dashboard</a>
       <a matTooltip="Advance Request Form" mat-list-item routerLink="arfs">Arf</a>
       <a mat-list-item matTooltip="Expense Request Form">Erf</a>
-      <a mat-list-item href="#">Profile</a>
+      <a mat-list-item>Profile</a>
 
     </mat-nav-list>
   </mat-sidenav>
