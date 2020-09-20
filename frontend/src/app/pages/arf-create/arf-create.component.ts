@@ -125,6 +125,8 @@ export class ArfCreateComponent implements OnInit {
     }
     this.addMe(me3)
 
+    console.log(this.mes)
+
   }
 
 
@@ -153,6 +155,14 @@ export class ArfCreateComponent implements OnInit {
 
 
   mesSum() {
+
+    let sum = 0
+    this.mes.value.forEach(me => {
+      sum += ((me.rate * me.days * me.pRate) / 100)
+    });
+
+    return sum
+
 
 
   }
