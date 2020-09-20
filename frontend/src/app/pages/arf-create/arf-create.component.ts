@@ -52,8 +52,8 @@ export class ArfCreateComponent implements OnInit {
 
   locations: Location[] = [
     { pk: 1, name: 'Dar Es Salaam', lodging: 150000, me: 60000 },
-    { pk: 2, name: 'Bagamoyo', lodging: 150000, me: 60000 },
-    { pk: 3, name: 'Morogoro', lodging: 150000, me: 60000 },
+    { pk: 2, name: 'Bagamoyo', lodging: 120000, me: 50000 },
+    { pk: 3, name: 'Morogoro', lodging: 100000, me: 40000 },
   ];
 
   addMe(me: Me) {
@@ -102,20 +102,42 @@ export class ArfCreateComponent implements OnInit {
     this.mes.clear()
     // first row
     const me = {
-      destination: 'Dar Es Salaam - RegionName',
+      destination: `Dar Es Salaam - ${this.arfForm.value.region.name}`,
       days: 1,
-      rate: 122323,
+      rate: this.arfForm.value.region.me,
       pRate: 75
     }
     this.addMe(me)
     // second row
+    const me2 = {
+      destination: this.arfForm.value.region.name,
+      days: 1,
+      rate: this.arfForm.value.region.me,
+      pRate: 100
+    }
+    this.addMe(me2)
     // third row
+    const me3 = {
+      destination: `${this.arfForm.value.region.name} - Dar Es Salaam `,
+      days: 1,
+      rate: this.arfForm.value.region.me,
+      pRate: 75
+    }
+    this.addMe(me3)
 
   }
 
 
   regionChanged() {
-    console.log('this.arfForm.value.region')
+    this.fillMes()
+  }
+
+  startDateChanged() {
+
+  }
+
+  endDateChanged() {
+
   }
 
 

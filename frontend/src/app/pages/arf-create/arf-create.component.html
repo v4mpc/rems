@@ -8,7 +8,7 @@
 
     <mat-form-field appearance="fill">
         <mat-label>Select Region</mat-label>
-        <mat-select formControlName="region" (change)="regionChanged()">
+        <mat-select formControlName="region" (selectionChange)="regionChanged()">
             <mat-option *ngFor="let location of locations" [value]="location">
                 {{location.name}}
             </mat-option>
