@@ -1,58 +1,112 @@
-<mat-form-field class="example-full-width">
-    <mat-label>Travel Purpose</mat-label>
-    <textarea matInput placeholder=""></textarea>
-</mat-form-field>
+<form [formGroup]="arfForm">
+    <mat-form-field class="example-full-width">
+        <mat-label>Travel Purpose</mat-label>
+        <textarea matInput formControlName="purpose"></textarea>
+    </mat-form-field>
 
-<br>
+    <br>
 
-<mat-form-field appearance="fill">
-    <mat-label>Select Region</mat-label>
-    <mat-select>
-        <mat-option *ngFor="let food of foods" [value]="food.value">
-            {{food.viewValue}}
-        </mat-option>
-    </mat-select>
-</mat-form-field>
-<br>
-
-
-<mat-form-field appearance="fill">
-    <mat-label>Travel Date Range</mat-label>
-    <mat-date-range-input [rangePicker]="picker">
-        <input matStartDate placeholder="Start date">
-        <input matEndDate placeholder="End date">
-    </mat-date-range-input>
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-date-range-picker #picker></mat-date-range-picker>
-</mat-form-field>
-
-<br>
-
-<h2>M&IE</h2>
-
-<table mat-table>
-
-    <ng-container matColumnDef="Destination">
-        <th mat-header-cell *matHeaderCellDef> Destination </th>
-        <td mat-cell *matCellDef="let element"> Destination </td>
-    </ng-container>
-
-    <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef> # of Days </th>
-        <td mat-cell *matCellDef="let element"># of Days </td>
-    </ng-container>
+    <mat-form-field appearance="fill">
+        <mat-label>Select Region</mat-label>
+        <mat-select formControlName="region" (change)="regionChanged()">
+            <mat-option *ngFor="let location of locations" [value]="location">
+                {{location.name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <br>
 
 
-    <ng-container matColumnDef="Rate">
-        <th mat-header-cell *matHeaderCellDef> Rate </th>
-        <td mat-cell *matCellDef="let element"> Rate </td>
-    </ng-container>
+    <mat-form-field appearance="fill">
+        <mat-label>Travel Date Range</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+            <input formControlName="startTravelDate" (change)="startDateChanged()" matStartDate
+                placeholder="Start date">
+            <input formControlName="endTravelDate" (change)="endDateChanged()" matEndDate placeholder="End date">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
 
-    <ng-container matColumnDef="symbol">
-        <th mat-header-cell *matHeaderCellDef> % Rate </th>
-        <td mat-cell *matCellDef="let element"> % Rate </td>
-    </ng-container>
+    <br>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns">Advance Amount</tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
+    <div formArrayName="mes">
+        <h2>M&IE</h2>
+
+
+        <table>
+
+            <thead>
+
+            </thead>
+
+            <tbody>
+                <ng-container *ngFor="let me of mes.controls; let i=index">
+                    <ng-container [formGroupName]="i">
+                        <tr>
+                            <td>
+                                <mat-form-field>
+                                    <mat-label>Destination</mat-label>
+                                    <input matInput formControlName="destination">
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field>
+                                    <mat-label># of Days</mat-label>
+                                    <input matInput formControlName="days" type="number">
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field>
+                                    <mat-label>Daily Rate</mat-label>
+                                    <input formControlName="rate" matInput>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field>
+                                    <mat-label>% Daily Rate</mat-label>
+                                    <input formControlName="pRate" matInput>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                45345
+                            </td>
+
+                            <td *ngIf="i+1==mes.length">
+                                <button mat-icon-button color="primary" (click)="addMe()"
+                                    aria-label="Example icon button with a home icon">
+                                    <mat-icon>add</mat-icon>
+                                </button>
+                            </td>
+                            <td *ngIf="mes.length>1">
+                                <button mat-icon-button color="warn" (click)="removeMe(i)"
+                                    aria-label="Example icon button with a home icon">
+                                    <mat-icon>clear</mat-icon>
+                                </button>
+                            </td>
+
+
+                        </tr>
+                    </ng-container>
+
+
+
+                </ng-container>
+
+
+
+
+
+
+
+
+            </tbody>
+        </table>
+
+
+    </div>
+
+
+
+
+</form>

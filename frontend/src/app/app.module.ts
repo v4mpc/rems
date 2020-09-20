@@ -59,6 +59,8 @@ import { MatTreeModule } from '@angular/material/tree';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { ArfCreateComponent } from './pages/arf-create/arf-create.component';
 
+import { ReactiveFormsModule } from "@angular/forms";
+
 
 @NgModule({
   declarations: [
@@ -72,6 +74,7 @@ import { ArfCreateComponent } from './pages/arf-create/arf-create.component';
     AppRoutingModule,
     BrowserAnimationsModule,
     LayoutModule,
+    ReactiveFormsModule,
 
 
     A11yModule,
