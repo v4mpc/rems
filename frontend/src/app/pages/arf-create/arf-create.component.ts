@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Me } from "../../interfaces/me";
 import { Location } from "../../interfaces/location";
 import { Lodging } from "../../interfaces/lodging";
+import { OtherCost } from "../../interfaces/other-cost";
 
 
 interface Food {
@@ -47,6 +48,8 @@ export class ArfCreateComponent implements OnInit {
     this.maxDate = new Date(currentYear + 1, 11, 31);
     this.addMe({ destination: '', days: null, rate: null, pRate: null })
     this.addLodging({ destination: '', nights: null, rate: null, pRate: null })
+    this.addOtherCost({ purpose: '', amount: null })
+
 
   }
 
@@ -86,10 +89,10 @@ export class ArfCreateComponent implements OnInit {
   }
 
 
-  addOtherCost() {
+  addOtherCost(otherCost: OtherCost) {
     const group = new FormGroup({
-      purpose: new FormControl(''),
-      amount: new FormControl(''),
+      purpose: new FormControl(otherCost.purpose),
+      amount: new FormControl(otherCost.amount),
     })
 
 
@@ -235,6 +238,20 @@ export class ArfCreateComponent implements OnInit {
     let sum = 0
     this.lodgings.value.forEach(lodging => {
       sum += ((lodging.rate * lodging.nights * lodging.pRate) / 100)
+    });
+
+    return sum
+
+
+
+  }
+
+
+  otherCostsSum() {
+
+    let sum = 0
+    this.otherCosts.value.forEach(otherCost => {
+      sum += otherCost.amount
     });
 
     return sum
