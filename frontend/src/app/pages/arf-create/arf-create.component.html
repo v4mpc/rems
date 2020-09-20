@@ -1,11 +1,14 @@
-<form [formGroup]="arfForm">
+<form [formGroup]="arfForm" class="example-container">
     <mat-form-field class="example-full-width">
         <mat-label>Travel Purpose</mat-label>
         <textarea matInput formControlName="purpose"></textarea>
+        <mat-error>
+            Please fill purpose
+        </mat-error>
     </mat-form-field>
 
-    <br>
 
+    <br>
     <mat-form-field appearance="fill">
         <mat-label>Select Region</mat-label>
         <mat-select formControlName="region" (selectionChange)="regionChanged()">
@@ -13,19 +16,25 @@
                 {{location.name}}
             </mat-option>
         </mat-select>
+        <mat-error>
+            Please fill where you traveling to
+        </mat-error>
     </mat-form-field>
-    <br>
+
 
 
     <mat-form-field appearance="fill">
         <mat-label>Travel Date Range</mat-label>
         <mat-date-range-input [rangePicker]="picker">
-            <input formControlName="startTravelDate" (change)="startDateChanged()" matStartDate
+            <input formControlName="startTravelDate" (dateChange)="startDateChanged()" matStartDate
                 placeholder="Start date">
-            <input formControlName="endTravelDate" (change)="endDateChanged()" matEndDate placeholder="End date">
+            <input formControlName="endTravelDate" (dateChange)="endDateChanged()" matEndDate placeholder="End date">
         </mat-date-range-input>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
+        <mat-error>
+            Please fill travel date range
+        </mat-error>
     </mat-form-field>
 
     <br>
@@ -48,24 +57,38 @@
                                 <mat-form-field>
                                     <mat-label>Destination</mat-label>
                                     <input matInput formControlName="destination">
+                                    <mat-error>
+                                        Please fill this field
+                                    </mat-error>
                                 </mat-form-field>
                             </td>
                             <td>
                                 <mat-form-field>
                                     <mat-label># of Days</mat-label>
                                     <input matInput formControlName="days" type="number">
+                                    <mat-error>
+                                        Please fill this field
+                                    </mat-error>
                                 </mat-form-field>
                             </td>
                             <td>
                                 <mat-form-field>
                                     <mat-label>Daily Rate</mat-label>
                                     <input formControlName="rate" matInput>
+                                    <mat-error>
+                                        Please fill this field
+                                    </mat-error>
                                 </mat-form-field>
+
                             </td>
                             <td>
                                 <mat-form-field>
                                     <mat-label>% Daily Rate</mat-label>
-                                    <input formControlName="pRate" matInput>
+                                    <input type="number" formControlName="pRate" matInput>
+                                    <span matSuffix>%</span>
+                                    <mat-error>
+                                        Please fill this field
+                                    </mat-error>
                                 </mat-form-field>
                             </td>
                             <td>
@@ -75,13 +98,13 @@
                             <td *ngIf="i+1==mes.length">
                                 <button mat-icon-button color="primary" (click)="addMe({destination:''})"
                                     aria-label="Example icon button with a home icon">
-                                    <mat-icon>add</mat-icon>
+                                    <mat-icon>add_circle</mat-icon>
                                 </button>
                             </td>
                             <td *ngIf="mes.length>1">
                                 <button mat-icon-button color="warn" (click)="removeMe(i)"
                                     aria-label="Example icon button with a home icon">
-                                    <mat-icon>clear</mat-icon>
+                                    <mat-icon>remove_circle</mat-icon>
                                 </button>
                             </td>
 
@@ -99,6 +122,109 @@
 
                     <td>Total</td>
                     <td>{{mesSum()|number}}</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+
+
+
+
+
+
+
+            </tbody>
+        </table>
+
+
+    </div>
+
+
+
+
+    <div formArrayName="lodgings">
+        <h2>Lodging</h2>
+
+
+        <table>
+
+            <thead>
+
+            </thead>
+
+            <tbody>
+                <ng-container *ngFor="let lodging of lodgings.controls; let i=index">
+                    <ng-container [formGroupName]="i">
+                        <tr>
+                            <td>
+                                <mat-form-field>
+                                    <mat-label>Destination</mat-label>
+                                    <input matInput formControlName="destination">
+                                    <mat-error>
+                                        Please fill this field
+                                    </mat-error>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field>
+                                    <mat-label># of nights</mat-label>
+                                    <input matInput formControlName="nights" type="number">
+                                    <mat-error>
+                                        Please fill this field
+                                    </mat-error>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field>
+                                    <mat-label>Daily Rate</mat-label>
+                                    <input formControlName="rate" matInput>
+                                    <mat-error>
+                                        Please fill this field
+                                    </mat-error>
+                                </mat-form-field>
+
+                            </td>
+                            <td>
+                                <mat-form-field>
+                                    <mat-label>% Daily Rate</mat-label>
+                                    <input type="number" formControlName="pRate" matInput>
+                                    <span matSuffix>%</span>
+                                    <mat-error>
+                                        Please fill this field
+                                    </mat-error>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                {{((lodgings.value[i].rate*lodgings.value[i].nights*lodgings.value[i].pRate)/100)|number}}
+                            </td>
+
+                            <td *ngIf="i+1==lodgings.length">
+                                <button mat-icon-button color="primary" (click)="addLodging({destination:''})"
+                                    aria-label="Example icon button with a home icon">
+                                    <mat-icon>add_circle</mat-icon>
+                                </button>
+                            </td>
+                            <td *ngIf="lodgings.length>1">
+                                <button mat-icon-button color="warn" (click)="removeLodging(i)"
+                                    aria-label="Example icon button with a home icon">
+                                    <mat-icon>remove_circle</mat-icon>
+                                </button>
+                            </td>
+
+
+                        </tr>
+                    </ng-container>
+
+
+
+                </ng-container>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                    <td>Total</td>
+                    <td>{{lodgingsSum()|number}}</td>
                     <td></td>
                     <td></td>
                 </tr>

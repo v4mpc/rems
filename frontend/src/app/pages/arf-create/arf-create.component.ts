@@ -3,6 +3,7 @@ import { FormControl, Validator, FormArray, FormGroup, Validators } from '@angul
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Me } from "../../interfaces/me";
 import { Location } from "../../interfaces/location";
+import { Lodging } from "../../interfaces/lodging";
 
 
 interface Food {
@@ -36,7 +37,7 @@ export class ArfCreateComponent implements OnInit {
 
   mes = this.arfForm.get('mes') as FormArray
   otherCosts = this.arfForm.get('otherCosts') as FormArray
-  lodgings = this.arfForm.get('logdings') as FormArray
+  lodgings = this.arfForm.get('lodgings') as FormArray
 
   constructor(
     private _snackBar: MatSnackBar
@@ -44,10 +45,13 @@ export class ArfCreateComponent implements OnInit {
     const currentYear = new Date().getFullYear();
     this.minDate = new Date(currentYear - 1, 0, 1);
     this.maxDate = new Date(currentYear + 1, 11, 31);
+    this.addMe({ destination: '', days: null, rate: null, pRate: null })
+    this.addLodging({ destination: '', nights: null, rate: null, pRate: null })
+
   }
 
   ngOnInit(): void {
-    this.addMe({ destination: '', days: null, rate: null, pRate: null })
+
   }
 
   locations: Location[] = [
@@ -77,6 +81,9 @@ export class ArfCreateComponent implements OnInit {
   removeMe(index: number) {
     this.mes.removeAt(index)
   }
+  removeLodging(index: number) {
+    this.lodgings.removeAt(index)
+  }
 
 
   addOtherCost() {
@@ -85,11 +92,37 @@ export class ArfCreateComponent implements OnInit {
       amount: new FormControl(''),
     })
 
+
+
     this.otherCosts.push(group)
   }
 
+
+
+
+
   removeOtherCost(index: number) {
     this.otherCosts.removeAt(index)
+  }
+
+
+
+  addLodging(lodging: Lodging) {
+    if (this.mes.length <= 9) {
+      const group = new FormGroup({
+        destination: new FormControl(lodging.destination, [Validators.required]),
+        nights: new FormControl(lodging.nights, [Validators.required]),
+        rate: new FormControl(lodging.rate, [Validators.required]),
+        pRate: new FormControl(lodging.pRate, [Validators.required]),
+
+      })
+
+      this.lodgings.push(group)
+
+    } else {
+      this._snackBar.open("10 is the limit")
+    }
+
   }
 
   isComplete(rangePicker) {
@@ -98,6 +131,10 @@ export class ArfCreateComponent implements OnInit {
 
 
   fillMes() {
+
+    if (!this.validInputs()) {
+      return;
+    }
     // clear the mes array
     this.mes.clear()
     // first row
@@ -125,22 +162,48 @@ export class ArfCreateComponent implements OnInit {
     }
     this.addMe(me3)
 
-    console.log(this.mes)
 
+
+  }
+
+
+  fillLodgings() {
+    if (!this.validInputs()) {
+      return;
+    }
+    this.lodgings.clear()
+    const lodging = {
+      destination: this.arfForm.value.region.name,
+      nights: this.diffDays(this.arfForm.value.startTravelDate, this.arfForm.value.endTravelDate),
+      rate: this.arfForm.value.region.lodging,
+      pRate: 100
+    }
+    this.addLodging(lodging)
   }
 
 
   regionChanged() {
-    console.log(this.mes)
+
     this.fillMes()
+    this.fillLodgings()
   }
 
   startDateChanged() {
+    this.fillMes()
+    this.fillLodgings()
+
 
   }
 
   endDateChanged() {
+    this.fillMes()
+    this.fillLodgings()
 
+
+  }
+
+  validInputs() {
+    return this.arfForm.get('region').valid && this.arfForm.get('startTravelDate').valid && this.arfForm.get('endTravelDate').valid
   }
 
 
@@ -159,6 +222,19 @@ export class ArfCreateComponent implements OnInit {
     let sum = 0
     this.mes.value.forEach(me => {
       sum += ((me.rate * me.days * me.pRate) / 100)
+    });
+
+    return sum
+
+
+
+  }
+
+  lodgingsSum() {
+
+    let sum = 0
+    this.lodgings.value.forEach(lodging => {
+      sum += ((lodging.rate * lodging.nights * lodging.pRate) / 100)
     });
 
     return sum
