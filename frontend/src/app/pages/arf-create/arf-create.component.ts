@@ -47,7 +47,7 @@ export class ArfCreateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.addMe({ destination: '', days: NaN, rate: NaN, pRate: NaN })
+    this.addMe({ destination: '', days: null, rate: null, pRate: null })
   }
 
   locations: Location[] = [
@@ -111,7 +111,7 @@ export class ArfCreateComponent implements OnInit {
     // second row
     const me2 = {
       destination: this.arfForm.value.region.name,
-      days: 1,
+      days: this.diffDays(this.arfForm.value.startTravelDate, this.arfForm.value.endTravelDate) - 2,
       rate: this.arfForm.value.region.me,
       pRate: 100
     }
@@ -129,6 +129,7 @@ export class ArfCreateComponent implements OnInit {
 
 
   regionChanged() {
+    console.log(this.mes)
     this.fillMes()
   }
 
@@ -137,6 +138,22 @@ export class ArfCreateComponent implements OnInit {
   }
 
   endDateChanged() {
+
+  }
+
+
+  diffDays(startDate, endDate) {
+    const date1 = new Date(startDate);
+    const date2 = new Date(endDate);
+    const diffTime = Math.abs(date2.getTime() - date1.getTime());
+    console.log(Math.ceil(diffTime / (1000 * 60 * 60 * 24)))
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  }
+
+
+  mesSum() {
+
 
   }
 

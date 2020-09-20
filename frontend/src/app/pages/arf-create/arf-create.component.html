@@ -69,11 +69,11 @@
                                 </mat-form-field>
                             </td>
                             <td>
-                                45345
+                                {{((mes.value[i].rate*mes.value[i].days*mes.value[i].pRate)/100)|number}}
                             </td>
 
                             <td *ngIf="i+1==mes.length">
-                                <button mat-icon-button color="primary" (click)="addMe()"
+                                <button mat-icon-button color="primary" (click)="addMe({destination:''})"
                                     aria-label="Example icon button with a home icon">
                                     <mat-icon>add</mat-icon>
                                 </button>
@@ -92,6 +92,16 @@
 
 
                 </ng-container>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                    <td>Total</td>
+                    <td>sum</td>
+                    <td></td>
+                    <td></td>
+                </tr>
 
 
 
