@@ -22,6 +22,8 @@ interface Food {
 
 export class ArfCreateComponent implements OnInit {
   meLimit = 10
+  panelOpenState = false;
+
   arfForm = new FormGroup({
     purpose: new FormControl('', [Validators.required, Validators.max(2)]),
     region: new FormControl('', Validators.required),
@@ -30,6 +32,8 @@ export class ArfCreateComponent implements OnInit {
     mes: new FormArray([]),
     lodgings: new FormArray([]),
     otherCosts: new FormArray([])
+
+
 
 
   })
