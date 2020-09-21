@@ -5,6 +5,7 @@ import { Me } from "../../interfaces/me";
 import { Location } from "../../interfaces/location";
 import { Lodging } from "../../interfaces/lodging";
 import { OtherCost } from "../../interfaces/other-cost";
+import { ArfService } from "../../services/arf.service";
 
 
 interface Food {
@@ -45,7 +46,8 @@ export class ArfCreateComponent implements OnInit {
   lodgings = this.arfForm.get('lodgings') as FormArray
 
   constructor(
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private arfServive: ArfService,
   ) {
     const currentYear = new Date().getFullYear();
     this.minDate = new Date(currentYear - 1, 0, 1);
@@ -262,6 +264,18 @@ export class ArfCreateComponent implements OnInit {
 
 
 
+  }
+
+
+  save(arf) {
+
+    if (!this.arfForm.valid) {
+      return
+    }
+
+    this.arfServive.save(arf).subscribe(arf => {
+      console.log(arf)
+    })
   }
 
 

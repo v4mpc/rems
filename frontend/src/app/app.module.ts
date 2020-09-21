@@ -58,6 +58,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { ArfCreateComponent } from './pages/arf-create/arf-create.component';
+import { HttpClientModule } from '@angular/common/http';
+
 
 import { ReactiveFormsModule } from "@angular/forms";
 
@@ -75,6 +77,7 @@ import { ReactiveFormsModule } from "@angular/forms";
     BrowserAnimationsModule,
     LayoutModule,
     ReactiveFormsModule,
+    HttpClientModule,
 
 
     A11yModule,
