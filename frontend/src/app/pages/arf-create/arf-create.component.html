@@ -4,7 +4,9 @@
         <mat-card-title>
             Trip Info
         </mat-card-title>
-        <mat-form-field class="example-full-width">
+        <mat-divider></mat-divider>
+
+        <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Travel Purpose</mat-label>
             <textarea matInput formControlName="purpose"></textarea>
             <mat-error>
@@ -45,7 +47,11 @@
 
         <br>
         <div formArrayName="mes">
-            <!-- <h2>M&IE</h2> -->
+            <h2>M&IE
+                <mat-divider></mat-divider>
+
+            </h2>
+
             <table>
                 <thead>
                 </thead>
@@ -112,6 +118,8 @@
                     <tr>
                         <td></td>
                         <td></td>
+
+                        <td></td>
                         <td></td>
                         <td>Total</td>
                         <td>{{mesSum()|number}}</td>
@@ -123,7 +131,10 @@
         </div>
 
         <div formArrayName="lodgings">
-            <h2>Lodging</h2>
+            <h2>Lodging
+                <mat-divider></mat-divider>
+
+            </h2>
             <table>
                 <thead>
                 </thead>
@@ -190,6 +201,8 @@
                     <tr>
                         <td></td>
                         <td></td>
+
+                        <td></td>
                         <td></td>
                         <td>Total</td>
                         <td>{{lodgingsSum()|number}}</td>
@@ -201,7 +214,10 @@
         </div>
 
         <div formArrayName="otherCosts">
-            <h2>Other Costs</h2>
+            <h2>Other Costs
+                <mat-divider></mat-divider>
+
+            </h2>
 
 
             <table>
@@ -257,6 +273,7 @@
                     </ng-container>
                     <tr>
 
+                        <td></td>
 
                         <td>Total</td>
                         <td>{{otherCostsSum()|number}}</td>
@@ -267,9 +284,9 @@
             </table>
         </div>
 
-        <mat-divider></mat-divider>
         <br>
         <section>
+            <mat-divider></mat-divider>
 
             <div class="example-button-row">
 
