@@ -62,6 +62,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 
 import { ReactiveFormsModule } from "@angular/forms";
+import { SpinnerComponent } from './pages/spinner/spinner.component';
 
 
 @NgModule({
@@ -70,6 +71,7 @@ import { ReactiveFormsModule } from "@angular/forms";
     LayoutComponent,
     ArfIndexComponent,
     ArfCreateComponent,
+    SpinnerComponent,
   ],
   imports: [
     BrowserModule,

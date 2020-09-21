@@ -8,7 +8,9 @@ import { OtherCost } from "../../interfaces/other-cost";
 import { ArfService } from "../../services/arf.service";
 import { LocationService } from "../../services/location.service";
 import { formatDate } from '@angular/common';
+import { SpinnerService } from "../../services/spinner.service";
 // import { Location } from '@angular/common';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 
 interface Food {
@@ -54,6 +56,8 @@ export class ArfCreateComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private arfServive: ArfService,
     private locationService: LocationService,
+    public dialog: MatDialog,
+    private spinnerService: SpinnerService,
   ) {
     const currentYear = new Date().getFullYear();
     this.minDate = new Date(currentYear - 1, 0, 1);
@@ -281,9 +285,13 @@ export class ArfCreateComponent implements OnInit {
 
   save() {
 
+
+
     if (!this.arfForm.valid) {
       return
     }
+
+    let spinnerRef = this.spinnerService.start();
 
     let arf = {
       user: 1,
@@ -333,9 +341,10 @@ export class ArfCreateComponent implements OnInit {
     arf.other_costs = apiOtherCosts
 
     this.arfServive.save(arf).subscribe(arf => {
-      console.log(arf)
+      this.spinnerService.stop(spinnerRef);
     }, (error) => {
-      this.displaySnackBar("Error,Try Again Later")
+      this.displaySnackBar("Error, Try Again Later")
+      this.spinnerService.stop(spinnerRef);
     })
   }
 
