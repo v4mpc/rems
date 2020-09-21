@@ -26,6 +26,7 @@ interface Food {
 
 export class ArfCreateComponent implements OnInit {
   meLimit = 10
+  lodgingLimit = 10
   panelOpenState = false;
   locations: Location[]
 
@@ -86,7 +87,9 @@ export class ArfCreateComponent implements OnInit {
       this.mes.push(group)
 
     } else {
-      this._snackBar.open("10 is the limit")
+      this._snackBar.open("M&IE can only have " + this.meLimit + " row(s)", 'Close', {
+        duration: 3000
+      })
     }
 
   }

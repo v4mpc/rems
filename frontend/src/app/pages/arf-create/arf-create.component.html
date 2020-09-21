@@ -53,6 +53,7 @@
                     <ng-container *ngFor="let me of mes.controls; let i=index">
                         <ng-container [formGroupName]="i">
                             <tr>
+                                <td>{{i+1}}</td>
                                 <td>
                                     <mat-form-field>
                                         <mat-label>Destination</mat-label>
@@ -130,6 +131,7 @@
                     <ng-container *ngFor="let lodging of lodgings.controls; let i=index">
                         <ng-container [formGroupName]="i">
                             <tr>
+                                <td>{{i+1}}</td>
                                 <td>
                                     <mat-form-field>
                                         <mat-label>Destination</mat-label>
@@ -212,6 +214,7 @@
                     <ng-container *ngFor="let otherCost of otherCosts.controls; let i=index">
                         <ng-container [formGroupName]="i">
                             <tr>
+                                <td>{{i+1}}</td>
                                 <td>
                                     <mat-form-field>
                                         <mat-label>Purpose</mat-label>
