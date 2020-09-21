@@ -287,7 +287,7 @@ export class ArfCreateComponent implements OnInit {
 
     let arf = {
       user: 1,
-      location: 1,
+      location: this.arfForm.value.region.pk,
       address: "JSI TZ",
       purpose: this.arfForm.value.purpose,
       start_date: formatDate(this.arfForm.value.startTravelDate, 'yyyy-MM-dd', 'en-US'),
@@ -296,7 +296,7 @@ export class ArfCreateComponent implements OnInit {
       status: "Pending",
       mes: null,
       lodgings: null,
-      other_costs: this.arfForm.value.otherCosts
+      other_costs: null,
     }
     let apiMes = []
     this.arfForm.value.mes.forEach(me => {
@@ -318,8 +318,24 @@ export class ArfCreateComponent implements OnInit {
       })
     });
     arf.lodgings = apiLodgings
+
+
+    let apiOtherCosts = []
+    this.arfForm.value.otherCosts.forEach(otherCost => {
+      if (otherCost.amount != null) {
+        apiOtherCosts.push({
+          purpose: otherCost.purpose,
+          amount: otherCost.amount
+        })
+      }
+
+    });
+    arf.other_costs = apiOtherCosts
+
     this.arfServive.save(arf).subscribe(arf => {
       console.log(arf)
+    }, (error) => {
+      this.displaySnackBar("Error,Try Again Later")
     })
   }
 

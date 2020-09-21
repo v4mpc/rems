@@ -35,7 +35,7 @@ class OtherCostSerializer(serializers.ModelSerializer):
 class ArfSerializer(serializers.ModelSerializer):
     mes = MeSerializer(many=True)
     lodgings = LodgingSerializer(many=True)
-    other_costs = OtherCostSerializer(many=True)
+    other_costs = OtherCostSerializer(many=True, required=False)
 
     class Meta:
         model = Arf

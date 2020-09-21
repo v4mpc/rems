@@ -134,8 +134,9 @@ class WorkBook:
             'lodge_rate', lodging['percentage_of_daily_rate'])
         # other costs
         other_cost = self.transform_for_write(self.other_costs)
-        self.write_field_data('other_purpose', other_cost['purpose'])
-        self.write_field_data('other_amount', other_cost['amount'])
+        if "purpose" in other_cost and "amount" in other_cost:
+            self.write_field_data('other_purpose', other_cost['purpose'])
+            self.write_field_data('other_amount', other_cost['amount'])
 
         self.write_field_data('signature_date', self.signature_date)
         self.save()
