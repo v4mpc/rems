@@ -8,6 +8,7 @@ import { OtherCost } from "../../interfaces/other-cost";
 import { ArfService } from "../../services/arf.service";
 import { LocationService } from "../../services/location.service";
 import { formatDate } from '@angular/common';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { SpinnerService } from "../../services/spinner.service";
 // import { Location } from '@angular/common';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -58,6 +59,7 @@ export class ArfCreateComponent implements OnInit {
     private locationService: LocationService,
     public dialog: MatDialog,
     private spinnerService: SpinnerService,
+    private router: Router
   ) {
     const currentYear = new Date().getFullYear();
     this.minDate = new Date(currentYear - 1, 0, 1);
@@ -341,9 +343,11 @@ export class ArfCreateComponent implements OnInit {
     arf.other_costs = apiOtherCosts
 
     this.arfServive.save(arf).subscribe(arf => {
+      this.router.navigate(['/arfs']);
       this.spinnerService.stop(spinnerRef);
+      this.displaySnackBar("Success, Advance Request Created")
     }, (error) => {
-      this.displaySnackBar("Error, Try Again Later")
+      this.displaySnackBar("Error, Contact System Admin")
       this.spinnerService.stop(spinnerRef);
     })
   }
