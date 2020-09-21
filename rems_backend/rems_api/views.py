@@ -5,8 +5,9 @@ from rest_framework.authentication import TokenAuthentication
 from rems_api.serializers import LocationSerializer, ArfSerializer
 from rems_api.models import Location, Arf
 from rest_framework import status
-from django.http import Http404
-
+from django.http import Http404, HttpResponse, HttpResponseNotFound
+import os
+from pathlib import Path
 # TODO: Make authenication work
 
 
@@ -104,3 +105,22 @@ class LocationDetail(APIView):
         location = self.get_object(pk)
         location.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class DownloadArf(APIView):
+
+    def get(self, request, pk):
+        module_dir = os.path.dirname(__file__)
+        sample_arf_path = os.path.join(module_dir, 'static/rems_api/arf.xlsx')
+        try:
+            with open(sample_arf_path, 'r') as f:
+                file_data = f.read()
+                # sending response
+                response = HttpResponse(
+                    file_data, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+                response['Content-Disposition'] = 'attachment; filename="foo.xlsx"'
+
+        except IOError:
+            response = HttpResponseNotFound('<h1>File not exist</h1>')
+
+        return response
