@@ -12,7 +12,7 @@ urlpatterns = [
 
     path('arfs/', views.ArfList.as_view(), name='arf_list'),
     path('arfs/<int:pk>/', views.ArfDetail.as_view()),
-    path('download-arf/<int:pk>/', views.DownloadArf.as_view()),
+    path('download-arf/<str:file_name>/', views.DownloadArf.as_view()),
 
 
 

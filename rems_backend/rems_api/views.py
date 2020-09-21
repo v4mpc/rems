@@ -115,18 +115,16 @@ class DownloadArf(APIView):
         except Arf.DoesNotExist:
             raise Http404
 
-    def get(self, request, pk):
-        arf = self.get_object(pk)
+    def get(self, request, file_name):
         module_dir = os.path.dirname(__file__)
-        sample_arf_path = os.path.join(module_dir, 'static/rems_api/arf.xlsx')
+        arf_path = os.path.join(module_dir, 'static/rems_api/')
+        file_path = os.path.join(arf_path, file_name)
         try:
-            with open(sample_arf_path, 'rb') as f:
+            with open(file_path, 'rb') as f:
                 file_data = f.read()
                 response = HttpResponse(
                     file_data, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-                response['Content-Disposition'] = 'attachment; filename="foo.xlsx"'
-
+                response['Content-Disposition'] = f'attachment; filename="{file_name}"'
         except IOError:
-            response = HttpResponseNotFound('<h1>File not exist</h1>')
-
+            response = Response(status=status.HTTP_204_NO_CONTENT)
         return response

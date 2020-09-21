@@ -84,4 +84,8 @@ export class ArfIndexComponent implements OnInit {
 
   }
 
+  downloadArf(file_name) {
+    window.open(`http://127.0.0.1:8000/download-arf/${file_name}/`, "_blank")
+  }
+
 }

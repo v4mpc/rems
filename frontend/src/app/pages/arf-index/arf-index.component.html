@@ -64,7 +64,9 @@
     <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef> Action </th>
         <td mat-cell *matCellDef="let element">
-            <button color="primary" mat-icon-button matTooltip="Download">
+            <button color="primary" mat-icon-button matTooltip="Download" *ngIf="element.excel_sheet"
+                (click)="downloadArf(element.excel_sheet)">
+                <!-- <span>{{}}</span> -->
                 <mat-icon>cloud_download</mat-icon>
             </button>
             <button color="warn" mat-icon-button matTooltip="Delete">
