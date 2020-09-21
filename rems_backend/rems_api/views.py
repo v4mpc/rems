@@ -109,13 +109,19 @@ class LocationDetail(APIView):
 
 class DownloadArf(APIView):
 
+    def get_object(self, pk):
+        try:
+            return Arf.objects.get(pk=pk)
+        except Arf.DoesNotExist:
+            raise Http404
+
     def get(self, request, pk):
+        arf = self.get_object(pk)
         module_dir = os.path.dirname(__file__)
         sample_arf_path = os.path.join(module_dir, 'static/rems_api/arf.xlsx')
         try:
-            with open(sample_arf_path, 'r') as f:
+            with open(sample_arf_path, 'rb') as f:
                 file_data = f.read()
-                # sending response
                 response = HttpResponse(
                     file_data, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
                 response['Content-Disposition'] = 'attachment; filename="foo.xlsx"'
