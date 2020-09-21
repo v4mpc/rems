@@ -15,7 +15,7 @@ export class ArfService {
 
   getAll() {
 
-    // return this.http.get();
+    return this.http.get(this.url);
 
   }
 
@@ -29,5 +29,9 @@ export class ArfService {
 
   getOne() {
     // return this.http.get();
+  }
+
+  transformToApi() {
+
   }
 }

@@ -68,7 +68,7 @@ export class ArfCreateComponent implements OnInit {
     // get all the locations
     this.locationService.getAll().subscribe((locations: Location[]) => {
       this.locations = locations
-      console.log(locations)
+
     })
 
   }
@@ -144,9 +144,6 @@ export class ArfCreateComponent implements OnInit {
 
   }
 
-  isComplete(rangePicker) {
-    console.log(rangePicker.isComplete())
-  }
 
 
   fillMes() {
@@ -230,7 +227,7 @@ export class ArfCreateComponent implements OnInit {
     const date1 = new Date(startDate);
     const date2 = new Date(endDate);
     const diffTime = Math.abs(date2.getTime() - date1.getTime());
-    console.log(Math.ceil(diffTime / (1000 * 60 * 60 * 24)))
+
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
   }
@@ -283,9 +280,6 @@ export class ArfCreateComponent implements OnInit {
       return
     }
 
-
-    console.log(this.arfForm.value)
-
     let arf = {
       user: 1,
       location: 1,
@@ -319,19 +313,6 @@ export class ArfCreateComponent implements OnInit {
       })
     });
     arf.lodgings = apiLodgings
-
-    // let apiOtherCosts=[]
-    // this.arfForm.value.otherCosts.forEach(otherCost => {
-    //   apiOtherCosts.push(
-    //     {
-    //       purpose: "Food",
-    //       amount": 10000
-    //     }
-    //   )
-    // });
-
-
-
     this.arfServive.save(arf).subscribe(arf => {
       console.log(arf)
     })

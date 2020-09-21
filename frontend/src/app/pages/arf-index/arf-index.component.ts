@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { ArfService } from "../../services/arf.service";
+
 
 export interface PeriodicElement {
   name: string;
@@ -27,16 +29,28 @@ const ELEMENT_DATA: PeriodicElement[] = [
   templateUrl: './arf-index.component.html',
   styleUrls: ['./arf-index.component.scss']
 })
-// export class TableBasicExample {
-
-// }
 
 export class ArfIndexComponent implements OnInit {
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   dataSource = ELEMENT_DATA;
-  constructor() { }
+  arfs = []
+  constructor(
+    private arfService: ArfService,
+  ) { }
 
   ngOnInit(): void {
+    this.getAll()
+  }
+
+  getAll() {
+    this.arfService.getAll().subscribe(arfs => {
+      this.arfs = arfs
+      console.log(arfs)
+    })
+  }
+
+  calculateTotalAmount(index) {
+    let singleArf = this.arfs[index]
   }
 
 }

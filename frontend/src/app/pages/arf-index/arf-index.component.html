@@ -1,27 +1,25 @@
-<table mat-table [dataSource]="dataSource" class="">
+<table>
 
-
-    <ng-container matColumnDef="position">
-        <th mat-header-cell *matHeaderCellDef> No. </th>
-        <td mat-cell *matCellDef="let element"> {{element.position}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef> Name </th>
-        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-    </ng-container>
-
-
-    <ng-container matColumnDef="weight">
-        <th mat-header-cell *matHeaderCellDef> Weight </th>
-        <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="symbol">
-        <th mat-header-cell *matHeaderCellDef> Symbol </th>
-        <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Date</th>
+            <th>Location</th>
+            <th>Purpose</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let arf of arfs">
+            <td>{{arf.pk}}</td>
+            <td>{{arf.date_of_request}}</td>
+            <td>{{arf.location}}</td>
+            <td>{{arf.purpose}}</td>
+            <td>{{"total"}}</td>
+            <td>{{arf.status}}</td>
+            <td></td>
+        </tr>
+    </tbody>
 </table>
