@@ -26,8 +26,8 @@ interface Food {
 
 export class ArfCreateComponent implements OnInit {
   meLimit = 10
-  lodgingLimit = 10
-  panelOpenState = false;
+  lodgingLimit = 9
+  otherCostLimit = 6
   locations: Location[]
 
   arfForm = new FormGroup({
@@ -75,7 +75,7 @@ export class ArfCreateComponent implements OnInit {
   }
 
   addMe(me: Me) {
-    if (this.mes.length <= 9) {
+    if (this.mes.length <= this.meLimit - 1) {
       const group = new FormGroup({
         destination: new FormControl(me.destination, [Validators.required]),
         days: new FormControl(me.days, [Validators.required]),
@@ -87,9 +87,8 @@ export class ArfCreateComponent implements OnInit {
       this.mes.push(group)
 
     } else {
-      this._snackBar.open("M&IE can only have " + this.meLimit + " row(s)", 'Close', {
-        duration: 3000
-      })
+
+      this.displaySnackBar("M&IE can only have " + this.meLimit + " row(s)")
     }
 
   }
@@ -103,14 +102,16 @@ export class ArfCreateComponent implements OnInit {
 
 
   addOtherCost(otherCost: OtherCost) {
-    const group = new FormGroup({
-      purpose: new FormControl(otherCost.purpose),
-      amount: new FormControl(otherCost.amount),
-    })
+    if (this.otherCosts.length <= this.otherCostLimit - 1) {
+      const group = new FormGroup({
+        purpose: new FormControl(otherCost.purpose),
+        amount: new FormControl(otherCost.amount),
+      })
+      this.otherCosts.push(group)
+    } else {
+      this.displaySnackBar("Other Costs can only have " + this.otherCostLimit + " row(s)")
 
-
-
-    this.otherCosts.push(group)
+    }
   }
 
 
@@ -124,7 +125,7 @@ export class ArfCreateComponent implements OnInit {
 
 
   addLodging(lodging: Lodging) {
-    if (this.mes.length <= 9) {
+    if (this.lodgings.length <= this.lodgingLimit - 1) {
       const group = new FormGroup({
         destination: new FormControl(lodging.destination, [Validators.required]),
         nights: new FormControl(lodging.nights, [Validators.required]),
@@ -136,7 +137,8 @@ export class ArfCreateComponent implements OnInit {
       this.lodgings.push(group)
 
     } else {
-      this._snackBar.open("10 is the limit")
+      this.displaySnackBar("Lodging can only have " + this.lodgingLimit + " row(s)")
+
     }
 
   }
@@ -268,6 +270,12 @@ export class ArfCreateComponent implements OnInit {
 
 
 
+  }
+
+  displaySnackBar(message) {
+    this._snackBar.open(message, 'Close', {
+      duration: 3000
+    })
   }
 
 
