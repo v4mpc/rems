@@ -45,12 +45,43 @@ export class ArfIndexComponent implements OnInit {
   getAll() {
     this.arfService.getAll().subscribe(arfs => {
       this.arfs = arfs
-      console.log(arfs)
+      // console.log(arfs)
     })
   }
 
   calculateTotalAmount(index) {
+
+    if (this.arfs.length == 0) {
+      return 0
+    }
     let singleArf = this.arfs[index]
+
+
+    let mesSum = 0
+    singleArf.mes.forEach(me => {
+      mesSum += ((me.daily_rate * me.no_of_nights * me.percentage_of_daily_rate) / 100)
+    });
+
+
+
+    let lodgingSum = 0
+    singleArf.lodgings.forEach(lodging => {
+
+      lodgingSum += ((lodging.daily_rate * lodging.no_of_nights * lodging.percentage_of_daily_rate) / 100)
+    });
+
+
+    let otherCostsSum = 0
+    singleArf.other_costs.forEach(otherCost => {
+      otherCostsSum += otherCost.amount
+    });
+
+
+
+    return mesSum + lodgingSum + otherCostsSum
+
+
+
   }
 
 }

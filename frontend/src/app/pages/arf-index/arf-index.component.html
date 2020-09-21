@@ -12,12 +12,12 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let arf of arfs">
+        <tr *ngFor="let arf of arfs; let i=index">
             <td>{{arf.pk}}</td>
             <td>{{arf.date_of_request}}</td>
             <td>{{arf.location}}</td>
             <td>{{arf.purpose}}</td>
-            <td>{{"total"}}</td>
+            <td>{{calculateTotalAmount(i)|number}}</td>
             <td>{{arf.status}}</td>
             <td></td>
         </tr>

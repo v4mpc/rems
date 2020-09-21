@@ -73,12 +73,6 @@ export class ArfCreateComponent implements OnInit {
 
   }
 
-  // locations: Location[] = [
-  //   { pk: 1, name: 'Dar Es Salaam', lodging: 150000, me: 60000 },
-  //   { pk: 2, name: 'Bagamoyo', lodging: 120000, me: 50000 },
-  //   { pk: 3, name: 'Morogoro', lodging: 100000, me: 40000 },
-  // ];
-
   addMe(me: Me) {
     if (this.mes.length <= 9) {
       const group = new FormGroup({
