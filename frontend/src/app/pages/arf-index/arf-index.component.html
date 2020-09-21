@@ -1,4 +1,4 @@
-<table>
+<!-- <table>
 
     <thead>
         <tr>
@@ -22,4 +22,60 @@
             <td></td>
         </tr>
     </tbody>
+</table> -->
+
+
+
+
+<table mat-table [dataSource]="arfs">
+    <ng-container matColumnDef="pk">
+        <th mat-header-cell *matHeaderCellDef> # </th>
+        <td mat-cell *matCellDef="let element ; let i=index;"> {{i+1}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="date_of_request">
+        <th mat-header-cell *matHeaderCellDef> Date </th>
+        <td mat-cell *matCellDef="let element"> {{element.date_of_request}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="location">
+        <th mat-header-cell *matHeaderCellDef> Location </th>
+        <td mat-cell *matCellDef="let element"> {{element.location}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="purpose">
+        <th mat-header-cell *matHeaderCellDef> Purpose </th>
+        <td mat-cell *matCellDef="let element" [matTooltip]="element.purpose">
+            {{(element.purpose.length>10)? (element.purpose | slice:0:10)+'..':(element.purpose)}} </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="amount">
+        <th mat-header-cell *matHeaderCellDef> Amount(TZS) </th>
+        <td mat-cell *matCellDef="let element; let i=index;"> {{calculateTotalAmount(i)|number}} </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef> Status </th>
+        <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Action </th>
+        <td mat-cell *matCellDef="let element">
+            <button color="primary" mat-icon-button matTooltip="Download">
+                <mat-icon>cloud_download</mat-icon>
+            </button>
+            <button color="warn" mat-icon-button matTooltip="Delete">
+                <mat-icon>delete_forever</mat-icon>
+            </button>
+
+
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
 </table>

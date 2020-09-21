@@ -31,8 +31,8 @@ const ELEMENT_DATA: PeriodicElement[] = [
 })
 
 export class ArfIndexComponent implements OnInit {
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = ELEMENT_DATA;
+  displayedColumns: string[] = ['pk', 'date_of_request', 'location', 'purpose', 'amount', 'status', 'actions'];
+  // dataSource = ELEMENT_DATA;
   arfs = []
   constructor(
     private arfService: ArfService,
