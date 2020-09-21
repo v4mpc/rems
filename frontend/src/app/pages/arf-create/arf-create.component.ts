@@ -6,6 +6,9 @@ import { Location } from "../../interfaces/location";
 import { Lodging } from "../../interfaces/lodging";
 import { OtherCost } from "../../interfaces/other-cost";
 import { ArfService } from "../../services/arf.service";
+import { LocationService } from "../../services/location.service";
+import { formatDate } from '@angular/common';
+// import { Location } from '@angular/common';
 
 
 interface Food {
@@ -24,6 +27,7 @@ interface Food {
 export class ArfCreateComponent implements OnInit {
   meLimit = 10
   panelOpenState = false;
+  locations: Location[]
 
   arfForm = new FormGroup({
     purpose: new FormControl('', [Validators.required, Validators.max(2)]),
@@ -48,6 +52,7 @@ export class ArfCreateComponent implements OnInit {
   constructor(
     private _snackBar: MatSnackBar,
     private arfServive: ArfService,
+    private locationService: LocationService,
   ) {
     const currentYear = new Date().getFullYear();
     this.minDate = new Date(currentYear - 1, 0, 1);
@@ -60,14 +65,19 @@ export class ArfCreateComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // get all the locations
+    this.locationService.getAll().subscribe((locations: Location[]) => {
+      this.locations = locations
+      console.log(locations)
+    })
 
   }
 
-  locations: Location[] = [
-    { pk: 1, name: 'Dar Es Salaam', lodging: 150000, me: 60000 },
-    { pk: 2, name: 'Bagamoyo', lodging: 120000, me: 50000 },
-    { pk: 3, name: 'Morogoro', lodging: 100000, me: 40000 },
-  ];
+  // locations: Location[] = [
+  //   { pk: 1, name: 'Dar Es Salaam', lodging: 150000, me: 60000 },
+  //   { pk: 2, name: 'Bagamoyo', lodging: 120000, me: 50000 },
+  //   { pk: 3, name: 'Morogoro', lodging: 100000, me: 40000 },
+  // ];
 
   addMe(me: Me) {
     if (this.mes.length <= 9) {
@@ -267,11 +277,60 @@ export class ArfCreateComponent implements OnInit {
   }
 
 
-  save(arf) {
+  save() {
 
     if (!this.arfForm.valid) {
       return
     }
+
+
+    console.log(this.arfForm.value)
+
+    let arf = {
+      user: 1,
+      location: 1,
+      address: "JSI TZ",
+      purpose: this.arfForm.value.purpose,
+      start_date: formatDate(this.arfForm.value.startTravelDate, 'yyyy-MM-dd', 'en-US'),
+      end_date: formatDate(this.arfForm.value.endTravelDate, 'yyyy-MM-dd', 'en-US'),
+      date_of_request: formatDate(new Date(), 'yyyy-MM-dd', 'en-US'),
+      status: "Pending",
+      mes: null,
+      lodgings: null,
+      other_costs: this.arfForm.value.otherCosts
+    }
+    let apiMes = []
+    this.arfForm.value.mes.forEach(me => {
+      apiMes.push({
+        destination: me.destination,
+        no_of_nights: me.days,
+        daily_rate: me.rate,
+        percentage_of_daily_rate: me.pRate,
+      })
+    });
+    arf.mes = apiMes
+    let apiLodgings = []
+    this.arfForm.value.lodgings.forEach(lodging => {
+      apiLodgings.push({
+        destination: lodging.destination,
+        no_of_nights: lodging.nights,
+        daily_rate: lodging.rate,
+        percentage_of_daily_rate: lodging.pRate,
+      })
+    });
+    arf.lodgings = apiLodgings
+
+    // let apiOtherCosts=[]
+    // this.arfForm.value.otherCosts.forEach(otherCost => {
+    //   apiOtherCosts.push(
+    //     {
+    //       purpose: "Food",
+    //       amount": 10000
+    //     }
+    //   )
+    // });
+
+
 
     this.arfServive.save(arf).subscribe(arf => {
       console.log(arf)
