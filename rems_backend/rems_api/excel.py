@@ -39,7 +39,8 @@ class WorkBook:
         pass
 
     def init(self, validated_data):
-        # print(validated_data['purpose'])
+        # print(validated_data)
+
         self.region = validated_data['location'].name
         self.date_of_request = validated_data['date_of_request']
         self.user = validated_data['user']

@@ -61,6 +61,14 @@ class ArfDetail(APIView):
     def delete(self, request, pk):
         arf = self.get_object(pk)
         # TODO: Delete file too
+        if arf.excel_sheet:
+            module_dir = os.path.dirname(__file__)
+            arf_path = os.path.join(module_dir, 'static/rems_api/')
+            file_path = os.path.join(arf_path, arf.excel_sheet)
+            try:
+                os.remove(file_path)
+            except OSError:
+                pass
         arf.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 

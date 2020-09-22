@@ -36,10 +36,12 @@ class ArfSerializer(serializers.ModelSerializer):
     mes = MeSerializer(many=True)
     lodgings = LodgingSerializer(many=True)
     other_costs = OtherCostSerializer(many=True, required=False)
+    location_name = serializers.StringRelatedField(source="location.name")
 
     class Meta:
         model = Arf
-        fields = ['pk', 'user', 'location', 'address', 'purpose',
+        # depth = 1
+        fields = ['pk', 'user', 'location', 'location_name', 'address', 'purpose',
                   'start_date', 'end_date', 'date_of_request', 'status', 'mes', 'lodgings', 'other_costs', 'excel_sheet']
 
     def create(self, validated_data):
