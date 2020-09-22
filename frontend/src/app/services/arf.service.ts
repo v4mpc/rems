@@ -23,8 +23,9 @@ export class ArfService {
     return this.http.post(this.url, arf);
   }
 
-  deleteOne() {
-    // return this.http.delete();
+  deleteOne(pk) {
+    let end_point = `${pk}/`
+    return this.http.delete(this.url + end_point);
   }
 
   getOne() {

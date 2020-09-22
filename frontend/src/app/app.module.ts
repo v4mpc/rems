@@ -63,6 +63,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { ReactiveFormsModule } from "@angular/forms";
 import { SpinnerComponent } from './pages/spinner/spinner.component';
+import { DeleteDialogComponent } from './pages/delete-dialog/delete-dialog.component';
 
 
 @NgModule({
@@ -72,6 +73,7 @@ import { SpinnerComponent } from './pages/spinner/spinner.component';
     ArfIndexComponent,
     ArfCreateComponent,
     SpinnerComponent,
+    DeleteDialogComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,27 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+
+
 
 import { ArfService } from "../../services/arf.service";
+import { SnackbarService } from "../../services/snackbar.service";
+import { DeleteDialogService } from "../../services/delete-dialog.service";
+// import {  } from "../../services/";
+import { SpinnerService } from "../../services/spinner.service";
+import { MatTable } from '@angular/material/table';
 
 
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
-  { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
-  { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
-  { position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be' },
-  { position: 5, name: 'Boron', weight: 10.811, symbol: 'B' },
-  { position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C' },
-  { position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
-  { position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' },
-  { position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
-  { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' },
-];
 
 
 @Component({
@@ -33,14 +22,20 @@ const ELEMENT_DATA: PeriodicElement[] = [
 export class ArfIndexComponent implements OnInit {
   displayedColumns: string[] = ['pk', 'date_of_request', 'location', 'purpose', 'amount', 'status', 'actions'];
   // dataSource = ELEMENT_DATA;
-  arfs = []
+  arfs: any[] = []
   constructor(
     private arfService: ArfService,
+    public deleteDialog: DeleteDialogService,
+    private spinnerService: SpinnerService,
+    public snackbar: SnackbarService,
+
   ) { }
 
   ngOnInit(): void {
     this.getAll()
   }
+
+  @ViewChild(MatTable) table: MatTable<any>;
 
   getAll() {
     this.arfService.getAll().subscribe(arfs => {
@@ -86,6 +81,29 @@ export class ArfIndexComponent implements OnInit {
 
   downloadArf(file_name) {
     window.open(`http://127.0.0.1:8000/download-arf/${file_name}/`, "_blank")
+  }
+
+
+  openDeleteDialog(index, pk) {
+    this.deleteDialog.openDialog().afterClosed().subscribe(result => {
+      // console.log(result)
+      if (result) {
+        let spinnerRef = this.spinnerService.start();
+        this.arfService.deleteOne(pk).subscribe(result => {
+          if (index > -1) {
+            this.arfs.splice(index, 1);
+          }
+          this.table.renderRows()
+          this.spinnerService.stop(spinnerRef);
+          this.snackbar.display("Success,Advance Request deleted")
+        }, (error) => {
+          this.spinnerService.stop(spinnerRef);
+          this.snackbar.display("Error,Contact System Admin")
+          console.log(error)
+        })
+      }
+    })
+
   }
 
 }
