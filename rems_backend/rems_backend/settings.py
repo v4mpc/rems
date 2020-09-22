@@ -131,3 +131,10 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ]
 }
+
+
+EMAIL_HOST = 'in-v3.mailjet.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = '4a5e3cf99ae8f1fbfceb734f4d33b313'
+EMAIL_HOST_PASSWORD = '9ea55c9646171774cb0595afee434691'
+EMAIL_USE_TLS = True

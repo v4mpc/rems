@@ -8,6 +8,8 @@ from rest_framework import status
 from django.http import Http404, HttpResponse, HttpResponseNotFound
 import os
 from pathlib import Path
+from django.core.mail import send_mail
+
 # TODO: Make authenication work
 
 
@@ -60,7 +62,6 @@ class ArfDetail(APIView):
 
     def delete(self, request, pk):
         arf = self.get_object(pk)
-        # TODO: Delete file too
         if arf.excel_sheet:
             module_dir = os.path.dirname(__file__)
             arf_path = os.path.join(module_dir, 'static/rems_api/')
@@ -136,3 +137,15 @@ class DownloadArf(APIView):
         except IOError:
             response = Response(status=status.HTTP_204_NO_CONTENT)
         return response
+
+
+class PrintArf(APIView):
+
+    def get(self, request):
+        send_mail(
+            'Subject here',
+            'Here is the message.',
+            'from@example.com',
+            ['to@example.com'],
+            fail_silently=False,
+        )
