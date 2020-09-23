@@ -15,7 +15,7 @@ from django.core.mail import send_mail
 
 class HelloView(APIView, TokenAuthentication):
     # permission_classes = (IsAuthenticated, )
-    keyword = "Bearer"
+    # keyword = "Bearer"
 
     def get(self, request):
         print(request.user)
@@ -23,7 +23,8 @@ class HelloView(APIView, TokenAuthentication):
         return Response(content)
 
 
-class ArfList(APIView):
+class ArfList(APIView, TokenAuthentication):
+    permission_classes = (IsAuthenticated, )
 
     def get(self, request):
         # TODO: List file according to lodgin user

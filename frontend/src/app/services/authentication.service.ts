@@ -10,11 +10,24 @@ export class AuthenticationService {
   url = 'login/'
   private API_URL = environment.API_URL
 
-  constructor() { }
+  constructor(public http: HttpClient) { }
 
 
-  login(username: string, passowrd: string) {
+  login(username: string, password: string) {
+    return this.http.post(this.API_URL + this.url, { username, password })
+  }
 
+  logout() {
+    localStorage.removeItem('currentUser');
+  }
+
+
+  loggedIn() {
+    return localStorage.getItem('currentUser') == null
+  }
+
+  getToken() {
+    return JSON.parse(localStorage.getItem('currentUser')).token
   }
 
 

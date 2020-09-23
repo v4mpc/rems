@@ -38,7 +38,7 @@ export class ArfIndexComponent implements OnInit {
   @ViewChild(MatTable) table: MatTable<any>;
 
   getAll() {
-    this.arfService.getAll().subscribe(arfs => {
+    this.arfService.getAll().subscribe((arfs: any[]) => {
       this.arfs = arfs
       // console.log(arfs)
     })

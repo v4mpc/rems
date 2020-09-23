@@ -58,13 +58,13 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { ArfCreateComponent } from './pages/arf-create/arf-create.component';
-import { HttpClientModule } from '@angular/common/http';
-
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptor } from "./interceptors/token-interceptor";
 
 import { ReactiveFormsModule } from "@angular/forms";
 import { SpinnerComponent } from './pages/spinner/spinner.component';
 import { DeleteDialogComponent } from './pages/delete-dialog/delete-dialog.component';
-import { AuthenticationComponent } from './services/authentication/authentication.component';
+import { LoginComponent } from './pages/login/login.component';
 
 
 @NgModule({
@@ -75,7 +75,7 @@ import { AuthenticationComponent } from './services/authentication/authenticatio
     ArfCreateComponent,
     SpinnerComponent,
     DeleteDialogComponent,
-    AuthenticationComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -131,7 +131,9 @@ import { AuthenticationComponent } from './services/authentication/authenticatio
     PortalModule,
     ScrollingModule,
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
