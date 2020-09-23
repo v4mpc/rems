@@ -3,7 +3,8 @@ import { FormControl, Validator, FormArray, FormGroup, Validators } from '@angul
 import { AuthenticationService } from "../../services/authentication.service";
 import { SpinnerService } from "../../services/spinner.service";
 import { SnackbarService } from "../../services/snackbar.service";
-import { SpinnerComponent } from '../spinner/spinner.component';
+import { Router } from '@angular/router';
+
 
 
 @Component({
@@ -22,6 +23,7 @@ export class LoginComponent implements OnInit {
     public authService: AuthenticationService,
     public snackBar: SnackbarService,
     public spinner: SpinnerService,
+    public router: Router
   ) { }
 
   ngOnInit(): void {
@@ -37,7 +39,10 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.loginForm.value.username, this.loginForm.value.password).subscribe((data: any) => {
       localStorage.setItem('currentUser', JSON.stringify(data))
       this.spinner.stop(spinnerRef)
+      console.log(this.authService.getToken())
       // redirect to dashboard
+      const redirectUrl = '/arfs';
+      this.router.navigate([redirectUrl]);
 
 
     }, (error) => {

@@ -12,7 +12,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { LayoutModule } from '@angular/cdk/layout';
-import { LayoutComponent } from './layout/layout.component';
+import { LayoutComponent } from './pages/layout/layout.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
@@ -65,6 +65,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { SpinnerComponent } from './pages/spinner/spinner.component';
 import { DeleteDialogComponent } from './pages/delete-dialog/delete-dialog.component';
 import { LoginComponent } from './pages/login/login.component';
+import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 
 
 @NgModule({
@@ -76,6 +77,7 @@ import { LoginComponent } from './pages/login/login.component';
     SpinnerComponent,
     DeleteDialogComponent,
     LoginComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,
