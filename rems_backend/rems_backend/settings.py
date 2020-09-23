@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'corsheaders',
 
 
     'rems_api',
@@ -52,6 +53,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'rems_backend.urls'
@@ -138,3 +141,9 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = '4a5e3cf99ae8f1fbfceb734f4d33b313'
 EMAIL_HOST_PASSWORD = '9ea55c9646171774cb0595afee434691'
 EMAIL_USE_TLS = True
+
+
+CORS_ALLOWED_ORIGINS = [
+
+    "http://localhost:4200"
+]
