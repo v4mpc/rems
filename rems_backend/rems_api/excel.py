@@ -4,6 +4,7 @@ import datetime
 from django.conf import settings
 import os
 from pathlib import Path
+from openpyxl.drawing.image import Image
 
 
 class WorkBook:
@@ -140,6 +141,16 @@ class WorkBook:
             self.write_field_data('other_amount', other_cost['amount'])
 
         self.write_field_data('signature_date', self.signature_date)
+        self.save()
+
+    def sign(self, file_name):
+        image_path = os.path.join(
+            self.module_dir, 'static/rems_api')
+        image_path = os.path.join(image_path, file_name)
+        signature = Image(image_path)
+        signature.height = 54
+        signature.widhth = 96
+        self.sheet.add_image(signature)
         self.save()
 
     def transform_for_write(self, list_of_costs):

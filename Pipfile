@@ -10,6 +10,7 @@ openpyxl = "*"
 django = "*"
 djangorestframework = "*"
 django-cors-headers = "*"
+pillow = "*"
 
 [requires]
 python_version = "3.6"

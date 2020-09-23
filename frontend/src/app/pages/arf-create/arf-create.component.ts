@@ -40,7 +40,8 @@ export class ArfCreateComponent implements OnInit {
     endTravelDate: new FormControl('', Validators.required),
     mes: new FormArray([]),
     lodgings: new FormArray([]),
-    otherCosts: new FormArray([])
+    otherCosts: new FormArray([]),
+    sign: new FormControl(true)
 
 
 

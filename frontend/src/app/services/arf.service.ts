@@ -36,6 +36,6 @@ export class ArfService {
   }
 
   download(file_name) {
-    // window.open(`${this.API_URL}download-arf/${file_name}/`, "_blank")
+    window.open(`${this.API_URL}download-arf/${file_name}/`, "_blank")
   }
 }

@@ -1,6 +1,7 @@
 from openpyxl import load_workbook
 import logging
 import datetime
+from openpyxl.drawing.image import Image
 
 
 class WorkBook:
@@ -78,10 +79,17 @@ class WorkBook:
 
 if __name__ == "__main__":
     arf = WorkBook()
+    logo = Image("logo.png")
+    logo.height = 54
+    logo.width = 96
+
+    arf.sheet.add_image(logo, "C64")
+    arf.save('test.xlsx')
+
     # # arf.write_cell('C27', 1)
     # data = 'Yona'
     # field_type = 'purpose'
     # arf.write_field_data(field_type, data)
     # file_name = arf.generate_file_name()
     # arf.save(file_name)
-    print(arf.get_number_of_nights('21-09-2020', '27-09-2020'))
+    # print(arf.get_number_of_nights('21-09-2020', '27-09-2020'))
