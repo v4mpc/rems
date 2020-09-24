@@ -66,6 +66,7 @@ import { SpinnerComponent } from './pages/spinner/spinner.component';
 import { DeleteDialogComponent } from './pages/delete-dialog/delete-dialog.component';
 import { LoginComponent } from './pages/login/login.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
+import { UserProfileComponent } from './pages/user-profile/user-profile.component';
 
 
 @NgModule({
@@ -78,6 +79,7 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
     DeleteDialogComponent,
     LoginComponent,
     PageNotFoundComponent,
+    UserProfileComponent,
   ],
   imports: [
     BrowserModule,
