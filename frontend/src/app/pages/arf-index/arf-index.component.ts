@@ -44,12 +44,13 @@ export class ArfIndexComponent implements OnInit {
     })
   }
 
-  calculateTotalAmount(index) {
+  calculateTotalAmount(reportType) {
 
-    if (this.arfs.length == 0) {
-      return 0
-    }
-    let singleArf = this.arfs[index]
+    // if (!reportType) {
+    //   return 0
+    // }
+    console.log(reportType)
+    let singleArf = reportType
 
 
     let mesSum = 0

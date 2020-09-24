@@ -53,7 +53,6 @@ class ArfDetail(APIView):
         return Response(serializer.data)
 
     def put(self, request, pk):
-        # TODO: Finish put method check this(https://www.django-rest-framework.org/api-guide/serializers/)
         arf = self.get_object(pk)
         serializer = ArfSerializer(arf, data=request.data)
         if serializer.is_valid():

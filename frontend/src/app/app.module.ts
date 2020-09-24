@@ -23,7 +23,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { PortalModule } from '@angular/cdk/portal';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CdkStepperModule } from '@angular/cdk/stepper';
-import { CdkTableModule } from '@angular/cdk/table';
+// import { CdkTableModule } from '@angular/cdk/table';
 import { CdkTreeModule } from '@angular/cdk/tree';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatBadgeModule } from '@angular/material/badge';
@@ -51,7 +51,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSortModule } from '@angular/material/sort';
-import { MatTableModule } from '@angular/material/table';
+// import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -67,6 +67,8 @@ import { DeleteDialogComponent } from './pages/delete-dialog/delete-dialog.compo
 import { LoginComponent } from './pages/login/login.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { UserProfileComponent } from './pages/user-profile/user-profile.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 
 
 @NgModule({
@@ -93,7 +95,7 @@ import { UserProfileComponent } from './pages/user-profile/user-profile.componen
     A11yModule,
     ClipboardModule,
     CdkStepperModule,
-    CdkTableModule,
+    // CdkTableModule,
     CdkTreeModule,
     DragDropModule,
     MatAutocompleteModule,
@@ -126,7 +128,7 @@ import { UserProfileComponent } from './pages/user-profile/user-profile.componen
     MatSlideToggleModule,
     MatSnackBarModule,
     MatSortModule,
-    MatTableModule,
+    // MatTableModule,
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
@@ -134,6 +136,7 @@ import { UserProfileComponent } from './pages/user-profile/user-profile.componen
     OverlayModule,
     PortalModule,
     ScrollingModule,
+    NgbModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
