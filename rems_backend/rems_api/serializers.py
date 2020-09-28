@@ -111,6 +111,14 @@ class ArfSerializer(serializers.ModelSerializer):
         return arf
 
     def update(self, instance, validated_data):
+
+        arf_sheet = WorkBook("Advance Request")
+        arf_sheet.init(validated_data)
+        arf_sheet.delete(instance.excel_sheet)
+        arf_sheet.write_and_save()
+        file_name = arf_sheet.get_file_name()
+        validated_data['excel_sheet'] = file_name
+
         instance.location = validated_data.get('location', instance.location)
         instance.address = validated_data.get('address', instance.address)
         instance.purpose = validated_data.get('purpose', instance.purpose)
@@ -121,6 +129,8 @@ class ArfSerializer(serializers.ModelSerializer):
             'date_of_request', instance.date_of_request)
         instance.status = validated_data.get(
             'status', instance.status)
+        instance.excel_sheet = validated_data.get(
+            'excel_sheet', instance.excel_sheet)
         instance.save()
 
         # delete all mes
@@ -142,4 +152,6 @@ class ArfSerializer(serializers.ModelSerializer):
 
         for lodging_data in lodgings_data:
             Lodging.objects.create(arf=instance, **lodging_data)
+
+        # TODO: Update expense database and excel sheet
         return instance

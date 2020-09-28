@@ -35,8 +35,8 @@ class WorkBook:
     def exists(self):
         return Path(self.generate_file_name()).is_file()
 
-    def delete(self):
-        pass
+    def delete(self, file_name=None):
+        os.remove(self.generate_file_name(file_name))
 
     def init(self, validated_data):
         self.region = validated_data['location'].name
@@ -75,10 +75,11 @@ class WorkBook:
             'approve_date': 'G68'
         }
 
-    def generate_file_name(self):
+    def generate_file_name(self, file_name=None):
         # region = self.region
+        file_name = file_name if file_name is not None else self.get_file_name()
         return os.path.join(
-            self.module_dir, f'static/rems_api/{self.get_file_name()}')
+            self.module_dir, f'static/rems_api/{file_name}')
 
     def get_file_name(self):
         region = "_".join(self.region.split(' '))
@@ -173,9 +174,9 @@ class Erf(WorkBook):
             'address': 'D4',
             'purpose': 'C14',
             'me_date': ['A26', 'A27', 'A28', 'A29', 'A30', 'A31', 'A32'],
-            'me_destination': ['I26', 'I27', 'I28', 'I29', 'I30', 'I31', 'I32']
+            'me_destination': ['I26', 'I27', 'I28', 'I29', 'I30', 'I31', 'I32'],
             'me_no_of_days': ['M26', 'M27', 'M28', 'M29', 'M30', 'M31', 'M32'],
-            'me_mount':  ['L26', 'L27', 'L28', 'L29', 'L30', 'L31', 'L32'],
+            'me_amount':  ['L26', 'L27', 'L28', 'L29', 'L30', 'L31', 'L32'],
 
             'lodge_date': ['A38', 'A39', 'A40', 'A41', 'A42', 'A43', 'A44'],
             'lodge_destination': ['C38', 'C39', 'C40', 'C41', 'C42', 'C43', 'C44'],
@@ -185,7 +186,7 @@ class Erf(WorkBook):
 
             'other_date': ['A68', 'A69'],
             'other_purpose': ['C68', 'C69'],
-            'other_cost': ['G68', 'G69']
+            'other_cost': ['G68', 'G69'],
             'other_receipt_no': ['I68', 'I69'],
 
 
@@ -194,6 +195,29 @@ class Erf(WorkBook):
             'confirmed_by': 'C19',
             'confirmed_date': 'M19'
         }
+
+    def write__and_save(self):
+        me = self.transform_for_write(self.mes)
+
+        self.write_fild_data('me_date', me['date'])
+        self.write_fild_data('me_destination', me['destination'])
+        self.write_fild_data('me_no_of_days', me['no_of_days'])
+        self.write_fild_data('me_amount', me['amount'])
+
+        lodging = self.transform_for_write(self.lodgings)
+        self.write_fild_data('lodge_date', lodging['date'])
+        self.write_fild_data('lodge_destination', lodging['destination'])
+        self.write_fild_data('lodge_no_of_nights', lodging['no_of_days'])
+        self.write_fild_data('lodge_actual_cost', lodging['actual_cost'])
+        self.write_fild_data('lodge_max', lodging['max'])
+
+        other_cost = self.transform_for_write(self.other_costs)
+        if "purpose" in other_cost and "cost" in other_cost:
+            self.write_field_data('other_purpose', other_cost['purpose'])
+            self.write_field_data('other_cost', other_cost['cost'])
+            self.write_field_data('other_receipt_no', other_cost['receipt_no'])
+
+            self.save()
 
 
 if __name__ == "__main__":
