@@ -27,7 +27,6 @@ class WorkBook:
         return delta_date.days
 
     def save(self):
-        # print(self.generate_file_name())
         self.wb.save(self.generate_file_name())
 
     def read_cell(self, cell_address):
@@ -40,8 +39,6 @@ class WorkBook:
         pass
 
     def init(self, validated_data):
-        # print(validated_data)
-
         self.region = validated_data['location'].name
         self.date_of_request = validated_data['date_of_request']
         self.user = validated_data['user']
@@ -164,6 +161,39 @@ class WorkBook:
                     dict_of_costs[key].append(value)
 
         return dict_of_costs
+
+
+class Erf(WorkBook):
+    def __init__(self):
+        super(WorkBook, self).__init__('Tanzania Expense Report')
+
+    def init(self, validated_data):
+        this.fields = {
+            'name': 'D3',
+            'address': 'D4',
+            'purpose': 'C14',
+            'me_date': ['A26', 'A27', 'A28', 'A29', 'A30', 'A31', 'A32'],
+            'me_destination': ['I26', 'I27', 'I28', 'I29', 'I30', 'I31', 'I32']
+            'me_no_of_days': ['M26', 'M27', 'M28', 'M29', 'M30', 'M31', 'M32'],
+            'me_mount':  ['L26', 'L27', 'L28', 'L29', 'L30', 'L31', 'L32'],
+
+            'lodge_date': ['A38', 'A39', 'A40', 'A41', 'A42', 'A43', 'A44'],
+            'lodge_destination': ['C38', 'C39', 'C40', 'C41', 'C42', 'C43', 'C44'],
+            'lodge_max': ['H38', 'H39', 'H40', 'H41', 'H42', 'H43', 'H44'],
+            'lodge_no_of_nights': ['K38', 'K39', 'K40', 'K41', 'K42', 'K43', 'K44'],
+            'lodge_actual_cost': ['J38', 'J39', 'J40', 'J41', 'J42', 'J43', 'J44'],
+
+            'other_date': ['A68', 'A69'],
+            'other_purpose': ['C68', 'C69'],
+            'other_cost': ['G68', 'G69']
+            'other_receipt_no': ['I68', 'I69'],
+
+
+            'signature_of_traveler': 'C18',
+            'traveler_signature_date': 'M18',
+            'confirmed_by': 'C19',
+            'confirmed_date': 'M19'
+        }
 
 
 if __name__ == "__main__":
