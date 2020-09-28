@@ -46,10 +46,6 @@ export class ArfIndexComponent implements OnInit {
 
   calculateTotalAmount(reportType) {
 
-    // if (!reportType) {
-    //   return 0
-    // }
-    console.log(reportType)
     let singleArf = reportType
 
 
@@ -68,9 +64,12 @@ export class ArfIndexComponent implements OnInit {
 
 
     let otherCostsSum = 0
-    singleArf.other_costs.forEach(otherCost => {
-      otherCostsSum += otherCost.amount
-    });
+    if (singleArf.other_costs) {
+      singleArf.other_costs.forEach(otherCost => {
+        otherCostsSum += otherCost.amount
+      });
+    }
+
 
 
 
@@ -94,7 +93,7 @@ export class ArfIndexComponent implements OnInit {
           if (index > -1) {
             this.arfs.splice(index, 1);
           }
-          this.table.renderRows()
+          // this.table.renderRows()
           this.spinnerService.stop(spinnerRef);
           this.snackbar.display("Success,Advance Request deleted")
         }, (error) => {

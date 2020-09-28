@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, Validator, FormArray, FormGroup, Validators } from '@angular/forms';
+import { FormControl, Validator, FormArray, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Me } from "../../interfaces/me";
 import { Location } from "../../interfaces/location";
@@ -8,16 +8,14 @@ import { OtherCost } from "../../interfaces/other-cost";
 import { ArfService } from "../../services/arf.service";
 import { LocationService } from "../../services/location.service";
 import { formatDate } from '@angular/common';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap, Params } from '@angular/router';
 import { SpinnerService } from "../../services/spinner.service";
 // import { Location } from '@angular/common';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { switchMap } from 'rxjs/operators';
+import { timeStamp } from 'console';
 
 
-interface Food {
-  value: string;
-  viewValue: string;
-}
 
 
 
@@ -31,7 +29,21 @@ export class ArfCreateComponent implements OnInit {
   meLimit = 10
   lodgingLimit = 9
   otherCostLimit = 6
+  selectedId: number
   locations: Location[]
+  editMode = false
+  selectedLocation: any
+
+
+
+  // arfForm: FormGroup
+  minDate: Date;
+  maxDate: Date;
+
+  // mes: FormArray
+  // otherCosts: FormArray
+  // lodgings: FormArray
+
 
   arfForm = new FormGroup({
     purpose: new FormControl('', [Validators.required, Validators.max(2)]),
@@ -42,17 +54,12 @@ export class ArfCreateComponent implements OnInit {
     lodgings: new FormArray([]),
     otherCosts: new FormArray([]),
     sign: new FormControl(true)
-
-
-
-
   })
-  minDate: Date;
-  maxDate: Date;
 
   mes = this.arfForm.get('mes') as FormArray
   otherCosts = this.arfForm.get('otherCosts') as FormArray
   lodgings = this.arfForm.get('lodgings') as FormArray
+
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -60,7 +67,9 @@ export class ArfCreateComponent implements OnInit {
     private locationService: LocationService,
     public dialog: MatDialog,
     private spinnerService: SpinnerService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
+    private fb: FormBuilder,
   ) {
     const currentYear = new Date().getFullYear();
     this.minDate = new Date(currentYear - 1, 0, 1);
@@ -70,16 +79,93 @@ export class ArfCreateComponent implements OnInit {
     this.addOtherCost({ purpose: '', amount: null })
 
 
+
   }
 
   ngOnInit(): void {
+
     // get all the locations
     this.locationService.getAll().subscribe((locations: Location[]) => {
       this.locations = locations
 
     })
 
+
+    this.route.params.subscribe((params: Params) => {
+      this.selectedId = +params['id']
+      this.editMode = params['id'] != null
+
+      if (this.editMode) {
+        this.arfServive.getOne(this.selectedId).subscribe((arf: any) => {
+          this.selectedLocation = this.getSelectedLocation(arf.location)[0]
+          this.arfForm.patchValue({
+            purpose: arf.purpose,
+            startTravelDate: new Date(arf.start_date),
+            endTravelDate: new Date(arf.end_date),
+            region: this.selectedLocation,
+          })
+          let lodgingList = arf.lodgings.map(this.transformLodging)
+          let meList = arf.mes.map(this.transformMe)
+          let otherCostList = arf.other_costs.map(this.transformOtherCost)
+          this.lodgings.clear()
+          lodgingList.forEach(lodging => {
+            this.addLodging(lodging)
+          })
+          this.mes.clear()
+          meList.forEach(me => {
+            this.addMe(me)
+          })
+          if (otherCostList.length > 0) {
+
+            this.otherCosts.clear()
+            otherCostList.forEach(otherCost => {
+              this.addOtherCost(otherCost)
+            })
+          }
+
+        })
+      }
+    })
+
+
+
+
+
   }
+
+
+
+
+  compareFn(c1: any, c2: any): boolean {
+    return c1 && c2 ? c1.pk === c2.pk : c1 === c2;
+  }
+
+
+  transformMe(me) {
+    console.log(me)
+    return {
+      destination: me.destination,
+      days: me.no_of_nights,
+      rate: me.daily_rate,
+      pRate: me.percentage_of_daily_rate,
+    }
+
+  }
+
+  transformLodging(lodging) {
+    return {
+      destination: lodging.destination,
+      nights: lodging.no_of_nights,
+      rate: lodging.daily_rate,
+      pRate: lodging.percentage_of_daily_rate
+    }
+  }
+
+
+  transformOtherCost(oc) {
+    return oc
+  }
+
 
   addMe(me: Me) {
     if (this.mes.length <= this.meLimit - 1) {
@@ -98,6 +184,13 @@ export class ArfCreateComponent implements OnInit {
       this.displaySnackBar("M&IE can only have " + this.meLimit + " row(s)")
     }
 
+  }
+
+  getSelectedLocation(serverLocationPk) {
+
+    return this.locations.filter(location => {
+      return location.pk == serverLocationPk
+    })
   }
 
   removeMe(index: number) {
@@ -144,7 +237,7 @@ export class ArfCreateComponent implements OnInit {
       this.lodgings.push(group)
 
     } else {
-      this.displaySnackBar("Lodging can only have " + this.lodgingLimit + " row(s)")
+      // this.displaySnackBar("Lodging can only have " + this.lodgingLimit + " row(s)")
 
     }
 
@@ -343,14 +436,31 @@ export class ArfCreateComponent implements OnInit {
     });
     arf.other_costs = apiOtherCosts
 
-    this.arfServive.save(arf).subscribe(arf => {
-      this.router.navigate(['/arfs']);
-      this.spinnerService.stop(spinnerRef);
-      this.displaySnackBar("Success, Advance Request Created")
-    }, (error) => {
-      this.displaySnackBar("Error, Contact System Admin")
-      this.spinnerService.stop(spinnerRef);
-    })
+
+    if (this.editMode) {
+
+      this.arfServive.update(this.selectedId, arf).subscribe(arf => {
+        this.router.navigate(['/arfs']);
+        this.spinnerService.stop(spinnerRef);
+        this.displaySnackBar("Success, Advance Request Updated")
+      }, (error) => {
+        this.displaySnackBar("Error, Contact System Admin")
+        this.spinnerService.stop(spinnerRef);
+      })
+
+    } else {
+      this.arfServive.save(arf).subscribe(arf => {
+        this.router.navigate(['/arfs']);
+        this.spinnerService.stop(spinnerRef);
+        this.displaySnackBar("Success, Advance Request Created")
+      }, (error) => {
+        this.displaySnackBar("Error, Contact System Admin")
+        this.spinnerService.stop(spinnerRef);
+      })
+
+    }
+
+
   }
 
 

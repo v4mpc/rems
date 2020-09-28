@@ -120,7 +120,7 @@ class ArfSerializer(serializers.ModelSerializer):
         instance.date_of_request = validated_data.get(
             'date_of_request', instance.date_of_request)
         instance.status = validated_data.get(
-            'date_of_request', instance.status)
+            'status', instance.status)
         instance.save()
 
         # delete all mes

@@ -31,11 +31,21 @@ export class ArfService {
     return this.http.delete(this.API_URL + this.url + end_point);
   }
 
-  getOne() {
-    // return this.http.get();
+  getOne(pk) {
+    let end_point = `${pk}/`
+    return this.http.get(this.API_URL + this.url + end_point);
+
   }
 
   download(file_name) {
     window.open(`${this.API_URL}download-arf/${file_name}/`, "_blank")
+  }
+
+
+  update(pk, arf) {
+    let end_point = `${pk}/`
+    return this.http.put(this.API_URL + this.url + end_point, arf);
+
+
   }
 }

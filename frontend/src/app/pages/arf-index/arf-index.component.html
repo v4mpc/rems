@@ -92,8 +92,7 @@
                 <td>{{calculateTotalAmount(arf)|number}}</td>
                 <td>{{arf.status}}</td>
                 <td>
-                    <button color="primary" mat-icon-button matTooltip="Edit" *ngIf="arf.excel_sheet"
-                        (click)="downloadArf(arf.excel_sheet)">
+                    <button color="primary" mat-icon-button matTooltip="Edit" [routerLink]="['/arfs-edit', arf.pk]">
                         <mat-icon>edit</mat-icon>
                     </button>
                     <button color="primary" mat-icon-button matTooltip="Download" *ngIf="arf.excel_sheet"
@@ -114,10 +113,7 @@
                     <td>{{calculateTotalAmount(arf.erf)|number}}</td>
                     <td>{{arf.erf.status}}</td>
                     <td>
-                        <button color="accent" mat-icon-button matTooltip="Edit" *ngIf="arf.excel_sheet"
-                            (click)="downloadArf(arf.excel_sheet)">
-                            <mat-icon>edit</mat-icon>
-                        </button>
+
                         <button color="accent" mat-icon-button matTooltip="Download" *ngIf="arf.excel_sheet"
                             (click)="downloadArf(arf.excel_sheet)">
                             <mat-icon>cloud_download</mat-icon>

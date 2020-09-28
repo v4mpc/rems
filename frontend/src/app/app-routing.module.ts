@@ -12,6 +12,8 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'arfs', component: ArfIndexComponent, canActivate: [AuthGuard], },
   { path: 'arfs-create', component: ArfCreateComponent, canActivate: [AuthGuard], },
+  { path: 'arfs-edit/:id', component: ArfCreateComponent, canActivate: [AuthGuard], },
+
   // {
   //   path: 'admin',
   //   component: LayoutComponent,
