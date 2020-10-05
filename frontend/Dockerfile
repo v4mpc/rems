@@ -24,4 +24,4 @@ CMD ng serve --host 0.0.0.0
 # docker run -v ${PWD}:/app -v /app/node_modules -p 4201:4200 --rm example:dev
 
 
-# more info https://mherman.org/blog/dockerizing-an-angular-app/
+# more info

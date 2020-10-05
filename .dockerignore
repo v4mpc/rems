@@ -1,0 +1,5 @@
+*.xlsx
+logo.png
+.gitignore
+.sqlite3
+frontend
