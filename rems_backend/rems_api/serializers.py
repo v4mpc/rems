@@ -93,6 +93,7 @@ class ArfSerializer(serializers.ModelSerializer):
         other_costs_data = validated_data.pop('other_costs')
         arf = Arf.objects.create(**validated_data)
 
+        # TODO Fill expense report excel sheet
         # lets create erf here
         # remove excel_sheet, we will use arf one
         validated_data.pop('excel_sheet')

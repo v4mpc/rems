@@ -13,7 +13,7 @@ import { SpinnerService } from "../../services/spinner.service";
 // import { Location } from '@angular/common';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { switchMap } from 'rxjs/operators';
-import { timeStamp } from 'console';
+// import { timeStamp } from 'console';
 
 
 
@@ -263,7 +263,7 @@ export class ArfCreateComponent implements OnInit {
     // second row
     const me2 = {
       destination: this.arfForm.value.region.name,
-      days: this.diffDays(this.arfForm.value.startTravelDate, this.arfForm.value.endTravelDate) - 2,
+      days: this.diffDays(this.arfForm.value.startTravelDate, this.arfForm.value.endTravelDate) - 1,
       rate: this.arfForm.value.region.me,
       pRate: 100
     }
