@@ -5,7 +5,7 @@ import { Me } from "../../interfaces/me";
 import { Location } from "../../interfaces/location";
 import { Lodging } from "../../interfaces/lodging";
 import { OtherCost } from "../../interfaces/other-cost";
-import { ArfService } from "../../services/arf.service";
+import { ErfService } from "../../services/erf.service";
 import { LocationService } from "../../services/location.service";
 import { formatDate } from '@angular/common';
 import { Router, ActivatedRoute, ParamMap, Params } from '@angular/router';
@@ -49,7 +49,7 @@ export class ErfEditComponent implements OnInit {
 
   constructor(
     private _snackBar: MatSnackBar,
-    private arfServive: ArfService,
+    private erfServive: ErfService,
     private locationService: LocationService,
     public dialog: MatDialog,
     private spinnerService: SpinnerService,
@@ -71,7 +71,7 @@ export class ErfEditComponent implements OnInit {
       this.editMode = params['id'] != null
 
       if (this.editMode) {
-        this.arfServive.getOne(this.selectedId).subscribe((arf: any) => {
+        this.erfServive.getOne(this.selectedId).subscribe((arf: any) => {
           this.selectedLocation = this.getSelectedLocation(arf.location)[0]
           console.log(this.selectedLocation)
           this.erfForm.patchValue({
