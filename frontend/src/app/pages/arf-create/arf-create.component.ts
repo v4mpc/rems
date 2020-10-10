@@ -10,10 +10,8 @@ import { LocationService } from "../../services/location.service";
 import { formatDate } from '@angular/common';
 import { Router, ActivatedRoute, ParamMap, Params } from '@angular/router';
 import { SpinnerService } from "../../services/spinner.service";
-// import { Location } from '@angular/common';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { switchMap } from 'rxjs/operators';
-// import { timeStamp } from 'console';
 
 
 
@@ -33,17 +31,8 @@ export class ArfCreateComponent implements OnInit {
   locations: Location[]
   editMode = false
   selectedLocation: any
-
-
-
-  // arfForm: FormGroup
   minDate: Date;
   maxDate: Date;
-
-  // mes: FormArray
-  // otherCosts: FormArray
-  // lodgings: FormArray
-
 
   arfForm = new FormGroup({
     purpose: new FormControl('', [Validators.required, Validators.max(2)]),
@@ -83,8 +72,6 @@ export class ArfCreateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    // get all the locations
     this.locationService.getAll().subscribe((locations: Location[]) => {
       this.locations = locations
 
@@ -98,6 +85,7 @@ export class ArfCreateComponent implements OnInit {
       if (this.editMode) {
         this.arfServive.getOne(this.selectedId).subscribe((arf: any) => {
           this.selectedLocation = this.getSelectedLocation(arf.location)[0]
+          console.log(this.selectedLocation)
           this.arfForm.patchValue({
             purpose: arf.purpose,
             startTravelDate: new Date(arf.start_date),

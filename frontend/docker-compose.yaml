@@ -1,0 +1,2 @@
+[Service]
+Environment=HTTP_PROXY=http://lemy:2020@172.16.10.1:8090/

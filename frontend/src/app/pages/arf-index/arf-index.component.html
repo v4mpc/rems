@@ -1,68 +1,3 @@
-<!-- <table mat-table [dataSource]="arfs">
-    <ng-container matColumnDef="pk">
-        <th mat-header-cell *matHeaderCellDef> # </th>
-        <td mat-cell *matCellDef="let element ; let i=index;"> {{i+1}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="date_of_request">
-        <th mat-header-cell *matHeaderCellDef> Date </th>
-        <td mat-cell *matCellDef="let element"> {{element.date_of_request}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="location">
-        <th mat-header-cell *matHeaderCellDef> Location </th>
-        <td mat-cell *matCellDef="let element"> {{element.location_name}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="purpose">
-        <th mat-header-cell *matHeaderCellDef> Purpose </th>
-        <td mat-cell *matCellDef="let element" [matTooltip]="element.purpose">
-            {{(element.purpose.length>10)? (element.purpose | slice:0:10)+'..':(element.purpose)}} </td>
-    </ng-container>
-
-
-    <ng-container matColumnDef="amount">
-        <th mat-header-cell *matHeaderCellDef> Amount(TZS) </th>
-        <td mat-cell *matCellDef="let element; let i=index;"> {{calculateTotalAmount(i)|number}} </td>
-    </ng-container>
-
-
-    <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef> Status </th>
-        <td mat-cell *matCellDef="let element"> {{element.status}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef> Action </th>
-        <td mat-cell *matCellDef="let element; let i=index;">
-            <button color="primary" mat-icon-button matTooltip="Download" *ngIf="element.excel_sheet"
-                (click)="downloadArf(element.excel_sheet)">
-                <mat-icon>cloud_download</mat-icon>
-            </button>
-            <button color="primary" mat-icon-button matTooltip="Print" (click)="openDeleteDialog(i,element.pk)">
-                <mat-icon>print</mat-icon>
-            </button>
-            <button color="warn" mat-icon-button matTooltip="Delete" (click)="openDeleteDialog(i,element.pk)">
-                <mat-icon>delete_forever</mat-icon>
-            </button>
-
-
-
-
-
-        </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-
-</table> -->
-
-
-
-
-
-
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -113,6 +48,11 @@
                     <td>{{calculateTotalAmount(arf.erf)|number}}</td>
                     <td>{{arf.erf.status}}</td>
                     <td>
+
+                        <button color="accent" mat-icon-button matTooltip="Edit"
+                            [routerLink]="['/erfs-edit', arf.erf.pk]">
+                            <mat-icon>edit</mat-icon>
+                        </button>
 
                         <button color="accent" mat-icon-button matTooltip="Download" *ngIf="arf.excel_sheet"
                             (click)="downloadArf(arf.excel_sheet)">

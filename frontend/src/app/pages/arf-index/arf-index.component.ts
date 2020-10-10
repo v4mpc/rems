@@ -5,7 +5,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ArfService } from "../../services/arf.service";
 import { SnackbarService } from "../../services/snackbar.service";
 import { DeleteDialogService } from "../../services/delete-dialog.service";
-// import {  } from "../../services/";
 import { SpinnerService } from "../../services/spinner.service";
 import { MatTable } from '@angular/material/table';
 
@@ -20,8 +19,6 @@ import { MatTable } from '@angular/material/table';
 })
 
 export class ArfIndexComponent implements OnInit {
-  displayedColumns: string[] = ['pk', 'date_of_request', 'location', 'purpose', 'amount', 'status', 'actions'];
-  // dataSource = ELEMENT_DATA;
   arfs: any[] = []
   constructor(
     private arfService: ArfService,
@@ -40,7 +37,6 @@ export class ArfIndexComponent implements OnInit {
   getAll() {
     this.arfService.getAll().subscribe((arfs: any[]) => {
       this.arfs = arfs
-      // console.log(arfs)
     })
   }
 

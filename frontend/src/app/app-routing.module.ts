@@ -6,6 +6,7 @@ import { LoginComponent } from "./pages/login/login.component";
 import { LayoutComponent } from "./pages/layout/layout.component";
 import { AuthGuard } from "./guards/auth.guard";
 import { PageNotFoundComponent } from "./pages/page-not-found/page-not-found.component";
+import { ErfEditComponent } from "./pages/erf-edit/erf-edit.component";
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -13,23 +14,7 @@ const routes: Routes = [
   { path: 'arfs', component: ArfIndexComponent, canActivate: [AuthGuard], },
   { path: 'arfs-create', component: ArfCreateComponent, canActivate: [AuthGuard], },
   { path: 'arfs-edit/:id', component: ArfCreateComponent, canActivate: [AuthGuard], },
-
-  // {
-  //   path: 'admin',
-  //   component: LayoutComponent,
-  //   canActivate: [AuthGuard],
-  //   children: [
-  //     {
-  //       path: '',
-  //       canActivateChild: [AuthGuard],
-  //       children: [
-  //         { path: 'arfs', component: ArfIndexComponent },
-  //         { path: 'arfs-create', component: ArfCreateComponent }
-  //       ]
-  //     }
-  //   ]
-  // },
-
+  { path: 'erfs-edit/:id', component: ErfEditComponent, canActivate: [AuthGuard], },
   { path: '**', component: PageNotFoundComponent },
 
 
