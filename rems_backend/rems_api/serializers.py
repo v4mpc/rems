@@ -13,7 +13,7 @@ class LocationSerializer(serializers.ModelSerializer):
 class MeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Me
-        fields = ['destination', 'no_of_nights',
+        fields = ['date', 'destination', 'no_of_nights',
                   'daily_rate', 'percentage_of_daily_rate', 'pk']
 
 
@@ -21,7 +21,7 @@ class LodgingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lodging
-        fields = ['destination', 'no_of_nights',
+        fields = ['date', 'destination', 'no_of_nights',
                   'daily_rate', 'percentage_of_daily_rate', 'pk']
 
 
@@ -29,7 +29,7 @@ class OtherCostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OtherCost
-        fields = ['purpose', 'amount', 'pk']
+        fields = ['date', 'purpose', 'amount', 'pk']
 
 
 class ErfSerializer(serializers.ModelSerializer):
