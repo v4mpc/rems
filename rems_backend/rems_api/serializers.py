@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rems_api.models import Location, Arf, Me, Lodging, OtherCost, Erf
 from rems_api.excel import WorkBook
 from django.contrib.auth.models import User
+from datetime import timedelta
 
 
 class LocationSerializer(serializers.ModelSerializer):
@@ -81,6 +82,7 @@ class ArfSerializer(serializers.ModelSerializer):
                   'start_date', 'end_date', 'date_of_request', 'status', 'mes', 'lodgings', 'other_costs', 'excel_sheet', 'erf']
 
     def create(self, validated_data):
+        self.mutate(validated_data)
         arf_sheet = WorkBook("Advance Request")
         arf_sheet.init(validated_data)
         if arf_sheet.exists():
@@ -100,6 +102,7 @@ class ArfSerializer(serializers.ModelSerializer):
         erf = Erf.objects.create(arf=arf, **validated_data)
         for me_data in mes_data:
             Me.objects.create(arf=arf, **me_data)
+            # we have to modify **me_data before saving
             Me.objects.create(erf=erf, **me_data)
 
         for other_cost_data in other_costs_data:
@@ -108,8 +111,19 @@ class ArfSerializer(serializers.ModelSerializer):
 
         for lodging_data in lodgings_data:
             Lodging.objects.create(arf=arf, **lodging_data)
+            # we have to modify **lodging_data before saving
             Lodging.objects.create(erf=erf, **lodging_data)
         return arf
+
+    def mutate(self, validated_data):
+        print()
+        locatin_name = validated_data['location'].name
+        start_date = validated_data['start_date']
+        end_date = validated_data['end_date']
+        print(end_date+timedelta(days=1))
+        # if dar to location> date=start_date
+        # elif location == location ->start_date+timedelta(days=1)-end_date-timedelta(days=1)
+        exit()
 
     def update(self, instance, validated_data):
 

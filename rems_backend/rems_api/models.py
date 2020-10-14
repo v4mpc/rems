@@ -33,7 +33,8 @@ class Arf(models.Model):
 class Me(models.Model):
     arf = models.ForeignKey(
         'Arf', on_delete=models.CASCADE, blank=True, null=True, related_name='mes')
-    date = models.DateField(blank=True, null=True)
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
     destination = models.TextField()
     no_of_nights = models.SmallIntegerField()
     daily_rate = models.IntegerField()
@@ -46,7 +47,8 @@ class Me(models.Model):
 class Lodging(models.Model):
     arf = models.ForeignKey(
         'Arf', on_delete=models.CASCADE, blank=True, null=True, related_name='lodgings')
-    date = models.DateField(blank=True, null=True)
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
     destination = models.TextField()
     no_of_nights = models.SmallIntegerField()
     daily_rate = models.IntegerField()

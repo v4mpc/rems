@@ -68,6 +68,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { UserProfileComponent } from './pages/user-profile/user-profile.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ErfEditComponent } from './pages/erf-edit/erf-edit.component';
 
 
 
@@ -82,6 +83,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     LoginComponent,
     PageNotFoundComponent,
     UserProfileComponent,
+    ErfEditComponent
   ],
   imports: [
     BrowserModule,

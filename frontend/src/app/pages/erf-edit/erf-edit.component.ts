@@ -31,10 +31,10 @@ export class ErfEditComponent implements OnInit {
 
 
   erfForm = new FormGroup({
-    purpose: new FormControl('', [Validators.required, Validators.max(2)]),
-    region: new FormControl('', Validators.required),
-    startTravelDate: new FormControl('', Validators.required),
-    endTravelDate: new FormControl('', Validators.required),
+    purpose: new FormControl({ value: '', disabled: true }, [Validators.required, Validators.max(2)]),
+    region: new FormControl({ value: '', disabled: true }, Validators.required),
+    startTravelDate: new FormControl({ value: '', disabled: true }, Validators.required),
+    endTravelDate: new FormControl({ value: '', disabled: true }, Validators.required),
     mes: new FormArray([]),
     lodgings: new FormArray([]),
     otherCosts: new FormArray([]),
@@ -71,18 +71,18 @@ export class ErfEditComponent implements OnInit {
       this.editMode = params['id'] != null
 
       if (this.editMode) {
-        this.erfServive.getOne(this.selectedId).subscribe((arf: any) => {
-          this.selectedLocation = this.getSelectedLocation(arf.location)[0]
+        this.erfServive.getOne(this.selectedId).subscribe((erf: any) => {
+          this.selectedLocation = this.getSelectedLocation(erf.location)[0]
           console.log(this.selectedLocation)
           this.erfForm.patchValue({
-            purpose: arf.purpose,
-            startTravelDate: new Date(arf.start_date),
-            endTravelDate: new Date(arf.end_date),
+            purpose: erf.purpose,
+            startTravelDate: new Date(erf.start_date),
+            endTravelDate: new Date(erf.end_date),
             region: this.selectedLocation,
           })
-          let lodgingList = arf.lodgings.map(this.transformLodging)
-          let meList = arf.mes.map(this.transformMe)
-          let otherCostList = arf.other_costs.map(this.transformOtherCost)
+          let lodgingList = erf.lodgings.map(this.transformLodging)
+          let meList = erf.mes.map(this.transformMe)
+          let otherCostList = erf.other_costs.map(this.transformOtherCost)
           this.lodgings.clear()
           lodgingList.forEach(lodging => {
             this.addLodging(lodging)
@@ -236,6 +236,11 @@ export class ErfEditComponent implements OnInit {
 
 
 
+  }
+
+  save() {
+
+    return;
   }
 
 
