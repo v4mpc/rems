@@ -139,7 +139,8 @@ class ArfSerializer(serializers.ModelSerializer):
                     if value == compare_value:
                         new_dict_of_lodging['start_date'] = start_date
                         new_dict_of_lodging['end_date'] = end_date
-                        new_dict_of_lodging['date'] = f'{start_date} - {end_date}'
+                        new_dict_of_lodging[
+                            'date'] = f"{start_date.strftime('%b-%d-%Y')} - {end_date.strftime('%b-%d-%Y')}"
             new_lodgings_data.append(new_dict_of_lodging)
         for dict_of_me in mes_data:
             new_dict_of_me = OrderedDict()
@@ -147,21 +148,26 @@ class ArfSerializer(serializers.ModelSerializer):
                 new_dict_of_me[key] = value
                 if key == 'destination':
                     value = value.lower().strip().split()
+
                     compare_value = 'dar es salaam - '+location_name
                     compare_value = compare_value.lower().split()
                     if value == compare_value:
                         new_dict_of_me['start_date'] = start_date
                         new_dict_of_me['date'] = start_date
-                    compare_value = location_name+' - dar es salaam'
-                    compare_value = compare_value.lower().split()
-                    if value == compare_value:
+
+                    if value == location_name.lower().split():
                         new_dict_of_me['start_date'] = start_date + \
                             timedelta(days=1)
                         new_dict_of_me['end_date'] = end_date-timedelta(days=1)
-                        new_dict_of_me['date'] = f"{new_dict_of_me['start_date']} - {new_dict_of_me['end_date']}"
-                    if value == location_name.lower().split():
+                        new_dict_of_me[
+                            'date'] = f"{new_dict_of_me['start_date'].strftime('%b-%d-%Y')} - {new_dict_of_me['end_date'].strftime('%b-%d-%Y')}"
+
+                    compare_value = location_name+' - dar es salaam'
+                    compare_value = compare_value.lower().split()
+                    if value == compare_value:
                         new_dict_of_me['end_date'] = end_date
                         new_dict_of_me['date'] = end_date
+
             new_mes_data.append(new_dict_of_me)
 
         return new_mes_data, new_lodgings_data

@@ -170,12 +170,16 @@ class Erf(WorkBook):
     def __init__(self, file_to_edit):
         # super(WorkBook, self).__init__('Tanzania Expense Report')
         self.module_dir = os.path.dirname(__file__)
+        self.file_to_edit = file_to_edit
         self.sample_arf_path = os.path.join(
             self.module_dir, f'static/rems_api/'+file_to_edit)  # "arf.xlsx"  # erf.xlsx
         self.wb = load_workbook(filename=self.sample_arf_path)
         # "Advance Request"  # Tanzania Expense Report
         self.sheet_name = 'Tanzania Expense Report'
         self.sheet = self.wb[self.sheet_name]
+
+    def save(self):
+        self.wb.save(self.generate_file_name(self.file_to_edit))
 
     def init(self, validated_data, mes_data, lodgings_data, other_costs_data):
         self.region = validated_data['location'].name
@@ -220,8 +224,9 @@ class Erf(WorkBook):
         }
 
     def write_and_save(self):
-        me = self.transform_for_write(self.mes)
 
+        self.write_field_data('purpose', self.purpose)
+        me = self.transform_for_write(self.mes)
         self.write_field_data('me_date', me['date'])
         self.write_field_data('me_destination', me['destination'])
         self.write_field_data('me_no_of_days', me['no_of_nights'])
