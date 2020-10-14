@@ -155,6 +155,8 @@ class WorkBook:
         dict_of_costs = {}
         for dict_of_cost in list_of_costs:
             for key, value in dict_of_cost.items():
+                if key == 'start_date' or key == 'end_date':
+                    continue
                 try:
                     dict_of_costs[key].append(value)
                 except KeyError:
@@ -165,11 +167,32 @@ class WorkBook:
 
 
 class Erf(WorkBook):
-    def __init__(self):
-        super(WorkBook, self).__init__('Tanzania Expense Report')
+    def __init__(self, file_to_edit):
+        # super(WorkBook, self).__init__('Tanzania Expense Report')
+        self.module_dir = os.path.dirname(__file__)
+        self.sample_arf_path = os.path.join(
+            self.module_dir, f'static/rems_api/'+file_to_edit)  # "arf.xlsx"  # erf.xlsx
+        self.wb = load_workbook(filename=self.sample_arf_path)
+        # "Advance Request"  # Tanzania Expense Report
+        self.sheet_name = 'Tanzania Expense Report'
+        self.sheet = self.wb[self.sheet_name]
 
-    def init(self, validated_data):
-        this.fields = {
+    def init(self, validated_data, mes_data, lodgings_data, other_costs_data):
+        self.region = validated_data['location'].name
+        self.date_of_request = validated_data['date_of_request']
+        self.user = validated_data['user']
+        self.name = self.user.profile.name
+        self.address = validated_data['address']
+        self.purpose = validated_data['purpose']
+        self.period_of_travel_from = validated_data['start_date']
+        self.period_of_travel_to = validated_data['end_date']
+        self.signature = ''
+        self.mes = mes_data
+        self.lodgings = lodgings_data
+        self.logding_max = validated_data['location'].lodging
+        self.other_costs = other_costs_data
+        self.signature_date = self.date_of_request
+        self.fields = {
             'name': 'D3',
             'address': 'D4',
             'purpose': 'C14',
@@ -196,20 +219,21 @@ class Erf(WorkBook):
             'confirmed_date': 'M19'
         }
 
-    def write__and_save(self):
+    def write_and_save(self):
         me = self.transform_for_write(self.mes)
 
-        self.write_fild_data('me_date', me['date'])
-        self.write_fild_data('me_destination', me['destination'])
-        self.write_fild_data('me_no_of_days', me['no_of_days'])
-        self.write_fild_data('me_amount', me['amount'])
+        self.write_field_data('me_date', me['date'])
+        self.write_field_data('me_destination', me['destination'])
+        self.write_field_data('me_no_of_days', me['no_of_nights'])
+        self.write_field_data('me_amount', me['daily_rate'])
 
         lodging = self.transform_for_write(self.lodgings)
-        self.write_fild_data('lodge_date', lodging['date'])
-        self.write_fild_data('lodge_destination', lodging['destination'])
-        self.write_fild_data('lodge_no_of_nights', lodging['no_of_days'])
-        self.write_fild_data('lodge_actual_cost', lodging['actual_cost'])
-        self.write_fild_data('lodge_max', lodging['max'])
+        self.write_field_data('lodge_date', lodging['date'])
+        self.write_field_data('lodge_destination', lodging['destination'])
+        self.write_field_data('lodge_no_of_nights', lodging['no_of_nights'])
+        self.write_field_data('lodge_actual_cost', lodging['daily_rate'])
+        self.write_field_data(
+            'lodge_max', [self.logding_max]*len(self.lodgings))
 
         other_cost = self.transform_for_write(self.other_costs)
         if "purpose" in other_cost and "cost" in other_cost:
@@ -217,7 +241,7 @@ class Erf(WorkBook):
             self.write_field_data('other_cost', other_cost['cost'])
             self.write_field_data('other_receipt_no', other_cost['receipt_no'])
 
-            self.save()
+        self.save()
 
 
 if __name__ == "__main__":

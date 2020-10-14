@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rems_api.models import Location, Arf, Me, Lodging, OtherCost, Erf
-from rems_api.excel import WorkBook
+from rems_api.excel import WorkBook, Erf
 from django.contrib.auth.models import User
 from datetime import timedelta
 from collections import OrderedDict
@@ -95,6 +95,13 @@ class ArfSerializer(serializers.ModelSerializer):
         arf = Arf.objects.create(**validated_data)
 
         # TODO Fill expense report excel sheet
+
+        erf_sheet = Erf(validated_data['excel_sheet'])
+        erf_sheet.init(validated_data, mes_data,
+                       lodgings_data, other_costs_data)
+        print(lodgings_data)
+        erf_sheet.write_and_save()
+
         # lets create erf here
         # remove excel_sheet, we will use arf one
         validated_data.pop('excel_sheet')
@@ -132,6 +139,7 @@ class ArfSerializer(serializers.ModelSerializer):
                     if value == compare_value:
                         new_dict_of_lodging['start_date'] = start_date
                         new_dict_of_lodging['end_date'] = end_date
+                        new_dict_of_lodging['date'] = f'{start_date} - {end_date}'
             new_lodgings_data.append(new_dict_of_lodging)
         for dict_of_me in mes_data:
             new_dict_of_me = OrderedDict()
@@ -143,14 +151,17 @@ class ArfSerializer(serializers.ModelSerializer):
                     compare_value = compare_value.lower().split()
                     if value == compare_value:
                         new_dict_of_me['start_date'] = start_date
+                        new_dict_of_me['date'] = start_date
                     compare_value = location_name+' - dar es salaam'
                     compare_value = compare_value.lower().split()
                     if value == compare_value:
                         new_dict_of_me['start_date'] = start_date + \
                             timedelta(days=1)
                         new_dict_of_me['end_date'] = end_date-timedelta(days=1)
+                        new_dict_of_me['date'] = f"{new_dict_of_me['start_date']} - {new_dict_of_me['end_date']}"
                     if value == location_name.lower().split():
                         new_dict_of_me['end_date'] = end_date
+                        new_dict_of_me['date'] = end_date
             new_mes_data.append(new_dict_of_me)
 
         return new_mes_data, new_lodgings_data
