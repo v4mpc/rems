@@ -104,6 +104,11 @@ export class ErfEditComponent implements OnInit {
     })
   }
 
+  compareFn(c1: any, c2: any): boolean {
+    return c1 && c2 ? c1.pk === c2.pk : c1 === c2;
+  }
+
+
 
   getSelectedLocation(serverLocationPk) {
 

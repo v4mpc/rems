@@ -3,6 +3,7 @@ from rems_api.models import Location, Arf, Me, Lodging, OtherCost, Erf
 from rems_api.excel import WorkBook
 from django.contrib.auth.models import User
 from datetime import timedelta
+from collections import OrderedDict
 
 
 class LocationSerializer(serializers.ModelSerializer):
@@ -14,7 +15,7 @@ class LocationSerializer(serializers.ModelSerializer):
 class MeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Me
-        fields = ['date', 'destination', 'no_of_nights',
+        fields = ['start_date', 'end_date', 'destination', 'no_of_nights',
                   'daily_rate', 'percentage_of_daily_rate', 'pk']
 
 
@@ -22,7 +23,7 @@ class LodgingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lodging
-        fields = ['date', 'destination', 'no_of_nights',
+        fields = ['start_date', 'end_date', 'destination', 'no_of_nights',
                   'daily_rate', 'percentage_of_daily_rate', 'pk']
 
 
@@ -82,7 +83,6 @@ class ArfSerializer(serializers.ModelSerializer):
                   'start_date', 'end_date', 'date_of_request', 'status', 'mes', 'lodgings', 'other_costs', 'excel_sheet', 'erf']
 
     def create(self, validated_data):
-        self.mutate(validated_data)
         arf_sheet = WorkBook("Advance Request")
         arf_sheet.init(validated_data)
         if arf_sheet.exists():
@@ -90,8 +90,7 @@ class ArfSerializer(serializers.ModelSerializer):
         arf_sheet.write_and_save()
         file_name = arf_sheet.get_file_name()
         validated_data['excel_sheet'] = file_name
-        mes_data = validated_data.pop('mes')
-        lodgings_data = validated_data.pop('lodgings')
+        mes_data, lodgings_data = self.mutate(validated_data)
         other_costs_data = validated_data.pop('other_costs')
         arf = Arf.objects.create(**validated_data)
 
@@ -116,14 +115,45 @@ class ArfSerializer(serializers.ModelSerializer):
         return arf
 
     def mutate(self, validated_data):
-        print()
-        locatin_name = validated_data['location'].name
+        location_name = validated_data['location'].name
         start_date = validated_data['start_date']
         end_date = validated_data['end_date']
-        print(end_date+timedelta(days=1))
-        # if dar to location> date=start_date
-        # elif location == location ->start_date+timedelta(days=1)-end_date-timedelta(days=1)
-        exit()
+        mes_data = validated_data.pop('mes')
+        lodgings_data = validated_data.pop('lodgings')
+        new_mes_data = []
+        new_lodgings_data = []
+        for dict_of_lodging in lodgings_data:
+            new_dict_of_lodging = OrderedDict()
+            for key, value in dict_of_lodging.items():
+                new_dict_of_lodging[key] = value
+                if key == 'destination':
+                    value = value.lower().strip()
+                    compare_value = location_name.lower().strip()
+                    if value == compare_value:
+                        new_dict_of_lodging['start_date'] = start_date
+                        new_dict_of_lodging['end_date'] = end_date
+            new_lodgings_data.append(new_dict_of_lodging)
+        for dict_of_me in mes_data:
+            new_dict_of_me = OrderedDict()
+            for key, value in dict_of_me.items():
+                new_dict_of_me[key] = value
+                if key == 'destination':
+                    value = value.lower().strip().split()
+                    compare_value = 'dar es salaam - '+location_name
+                    compare_value = compare_value.lower().split()
+                    if value == compare_value:
+                        new_dict_of_me['start_date'] = start_date
+                    compare_value = location_name+' - dar es salaam'
+                    compare_value = compare_value.lower().split()
+                    if value == compare_value:
+                        new_dict_of_me['start_date'] = start_date + \
+                            timedelta(days=1)
+                        new_dict_of_me['end_date'] = end_date-timedelta(days=1)
+                    if value == location_name.lower().split():
+                        new_dict_of_me['end_date'] = end_date
+            new_mes_data.append(new_dict_of_me)
+
+        return new_mes_data, new_lodgings_data
 
     def update(self, instance, validated_data):
 
