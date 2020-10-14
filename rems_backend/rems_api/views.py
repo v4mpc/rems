@@ -71,7 +71,7 @@ class ArfDetail(APIView):
                 os.remove(file_path)
             except OSError:
                 pass
-        arf.delete()
+        arf.delete()  # erf-> on_delete_cascade
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 

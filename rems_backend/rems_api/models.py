@@ -83,7 +83,8 @@ class Erf(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-    arf = models.OneToOneField('Arf', models.SET_NULL, blank=True, null=True)
+    arf = models.OneToOneField(
+        'Arf', blank=True, null=True, related_name='erf', on_delete=models.CASCADE)
     location = models.ForeignKey(
         'Location', models.SET_NULL, blank=True, null=True)
     address = models.TextField()
