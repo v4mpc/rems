@@ -62,7 +62,6 @@ class ArfDetail(APIView):
 
     def delete(self, request, pk):
         arf = self.get_object(pk)
-        # TODO: Delte erf in database and file in server
         if arf.excel_sheet:
             module_dir = os.path.dirname(__file__)
             arf_path = os.path.join(module_dir, 'static/rems_api/')

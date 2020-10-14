@@ -101,18 +101,19 @@
                                 <td>
                                     {{((mes.value[i].rate*mes.value[i].days*mes.value[i].pRate)/100)|number}}
                                 </td>
-                                <td *ngIf="i+1==mes.length">
-                                    <button mat-icon-button color="primary" (click)="addMe({destination:''})"
-                                        aria-label="Example icon button with a home icon">
-                                        <mat-icon>add_circle</mat-icon>
-                                    </button>
-                                </td>
                                 <td *ngIf="mes.length>1">
                                     <button mat-icon-button color="warn" (click)="removeMe(i)"
                                         aria-label="Example icon button with a home icon">
                                         <mat-icon>remove_circle</mat-icon>
                                     </button>
                                 </td>
+                                <td *ngIf="i+1==mes.length">
+                                    <button mat-icon-button color="primary" (click)="addMe({destination:''})"
+                                        aria-label="Example icon button with a home icon">
+                                        <mat-icon>add_circle</mat-icon>
+                                    </button>
+                                </td>
+
                             </tr>
                         </ng-container>
                     </ng-container>
@@ -184,16 +185,17 @@
                                 <td>
                                     {{((lodgings.value[i].rate*lodgings.value[i].nights*lodgings.value[i].pRate)/100)|number}}
                                 </td>
-                                <td *ngIf="i+1==lodgings.length">
-                                    <button mat-icon-button color="primary" (click)="addLodging({destination:''})"
-                                        aria-label="Example icon button with a home icon">
-                                        <mat-icon>add_circle</mat-icon>
-                                    </button>
-                                </td>
+
                                 <td *ngIf="lodgings.length>1">
                                     <button mat-icon-button color="warn" (click)="removeLodging(i)"
                                         aria-label="Example icon button with a home icon">
                                         <mat-icon>remove_circle</mat-icon>
+                                    </button>
+                                </td>
+                                <td *ngIf="i+1==lodgings.length">
+                                    <button mat-icon-button color="primary" (click)="addLodging({destination:''})"
+                                        aria-label="Example icon button with a home icon">
+                                        <mat-icon>add_circle</mat-icon>
                                     </button>
                                 </td>
                             </tr>
@@ -252,16 +254,18 @@
                                 </td>
 
 
-                                <td *ngIf="i+1==otherCosts.length">
-                                    <button mat-icon-button color="primary" (click)="addOtherCost({destination:''})"
-                                        aria-label="Example icon button with a home icon">
-                                        <mat-icon>add_circle</mat-icon>
-                                    </button>
-                                </td>
+
                                 <td *ngIf="otherCosts.length>1">
                                     <button mat-icon-button color="warn" (click)="removeOtherCost(i)"
                                         aria-label="Example icon button with a home icon">
                                         <mat-icon>remove_circle</mat-icon>
+                                    </button>
+                                </td>
+
+                                <td *ngIf="i+1==otherCosts.length">
+                                    <button mat-icon-button color="primary" (click)="addOtherCost({destination:''})"
+                                        aria-label="Example icon button with a home icon">
+                                        <mat-icon>add_circle</mat-icon>
                                     </button>
                                 </td>
 
