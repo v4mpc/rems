@@ -40,7 +40,7 @@ class Me(models.Model):
     daily_rate = models.IntegerField()
     percentage_of_daily_rate = models.SmallIntegerField()
     created_on = models.DateField(auto_now=True, auto_now_add=False)
-    erf = models.ForeignKey('Erf', models.SET_NULL,
+    erf = models.ForeignKey('Erf', on_delete=models.CASCADE,
                             blank=True, null=True, related_name='mes')
 
 
@@ -54,18 +54,19 @@ class Lodging(models.Model):
     daily_rate = models.IntegerField()
     percentage_of_daily_rate = models.SmallIntegerField()
     created_on = models.DateField(auto_now=True, auto_now_add=False)
-    erf = models.ForeignKey('Erf', models.SET_NULL,
+    erf = models.ForeignKey('Erf', on_delete=models.CASCADE,
                             blank=True, null=True, related_name='lodgings')
 
 
 class OtherCost(models.Model):
-    arf = models.ForeignKey('Arf', models.SET_NULL,
+    arf = models.ForeignKey('Arf', on_delete=models.CASCADE,
                             blank=True, null=True, related_name='other_costs')
     date = models.DateField(blank=True, null=True)
     purpose = models.TextField()
     amount = models.IntegerField()
     created_on = models.DateField(auto_now=True, auto_now_add=False)
-    erf = models.ForeignKey('Erf', models.SET_NULL, blank=True, null=True)
+    erf = models.ForeignKey(
+        'Erf', on_delete=models.CASCADE, blank=True, null=True, related_name='other_costs')
 
 
 class Profile(models.Model):

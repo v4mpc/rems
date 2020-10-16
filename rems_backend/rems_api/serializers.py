@@ -94,13 +94,12 @@ class ArfSerializer(serializers.ModelSerializer):
         other_costs_data = validated_data.pop('other_costs')
         arf = Arf.objects.create(**validated_data)
 
-        # TODO Fill expense report excel sheet
-
         erf_sheet = ErfExcel(validated_data['excel_sheet'])
         erf_sheet.init(validated_data, mes_data,
                        lodgings_data, other_costs_data)
         erf_sheet.write_and_save()
-        validated_data.pop('excel_sheet')
+        # validated_data.pop('excel_sheet')
+        # TODO: Days in expense report should be in terms of 0.75 and >=1
         erf = Erf.objects.create(arf=arf, **validated_data)
         for me_data in mes_data:
             me_data.pop('date')
@@ -205,7 +204,7 @@ class ArfSerializer(serializers.ModelSerializer):
         erf_sheet.init(validated_data, mes_data,
                        lodgings_data, other_costs_data)
         erf_sheet.write_and_save()
-        validated_data.pop('excel_sheet')
+        # validated_data.pop('excel_sheet')
         erf = Erf.objects.create(arf=instance, **validated_data)
         for me_data in mes_data:
             me_data.pop('date')
@@ -221,5 +220,4 @@ class ArfSerializer(serializers.ModelSerializer):
             Lodging.objects.create(arf=instance, **lodging_data)
             Lodging.objects.create(erf=erf, **lodging_data)
 
-        # TODO: Update expense database and excel sheet
         return instance
