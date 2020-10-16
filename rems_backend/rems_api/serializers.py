@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rems_api.models import Location, Arf, Me, Lodging, OtherCost, Erf
-from rems_api.excel import WorkBook, Erf
+from rems_api.excel import WorkBook, Erf as ErfExcel
 from django.contrib.auth.models import User
 from datetime import timedelta
 from collections import OrderedDict
@@ -96,19 +96,15 @@ class ArfSerializer(serializers.ModelSerializer):
 
         # TODO Fill expense report excel sheet
 
-        erf_sheet = Erf(validated_data['excel_sheet'])
+        erf_sheet = ErfExcel(validated_data['excel_sheet'])
         erf_sheet.init(validated_data, mes_data,
                        lodgings_data, other_costs_data)
-        print(lodgings_data)
         erf_sheet.write_and_save()
-
-        # lets create erf here
-        # remove excel_sheet, we will use arf one
         validated_data.pop('excel_sheet')
         erf = Erf.objects.create(arf=arf, **validated_data)
         for me_data in mes_data:
+            me_data.pop('date')
             Me.objects.create(arf=arf, **me_data)
-            # we have to modify **me_data before saving
             Me.objects.create(erf=erf, **me_data)
 
         for other_cost_data in other_costs_data:
@@ -116,8 +112,8 @@ class ArfSerializer(serializers.ModelSerializer):
             OtherCost.objects.create(erf=erf, **other_cost_data)
 
         for lodging_data in lodgings_data:
+            lodging_data.pop('date')
             Lodging.objects.create(arf=arf, **lodging_data)
-            # we have to modify **lodging_data before saving
             Lodging.objects.create(erf=erf, **lodging_data)
         return arf
 
