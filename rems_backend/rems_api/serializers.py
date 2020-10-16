@@ -191,25 +191,35 @@ class ArfSerializer(serializers.ModelSerializer):
             'excel_sheet', instance.excel_sheet)
         instance.save()
 
-        # delete all mes
         instance.mes.all().delete()
-        # delete all lodgings
         instance.lodgings.all().delete()
-        # delete all other
         instance.other_costs.all().delete()
 
+        instance.erf.delete()
+
         # save new ones
-        mes_data = validated_data.pop('mes')
-        lodgings_data = validated_data.pop('lodgings')
+        mes_data, lodgings_data = self.mutate(validated_data)
         other_costs_data = validated_data.pop('other_costs')
+
+        erf_sheet = ErfExcel(validated_data['excel_sheet'])
+        erf_sheet.init(validated_data, mes_data,
+                       lodgings_data, other_costs_data)
+        erf_sheet.write_and_save()
+        validated_data.pop('excel_sheet')
+        erf = Erf.objects.create(arf=instance, **validated_data)
         for me_data in mes_data:
+            me_data.pop('date')
             Me.objects.create(arf=instance, **me_data)
+            Me.objects.create(erf=erf, **me_data)
 
         for other_cost_data in other_costs_data:
             OtherCost.objects.create(arf=instance, **other_cost_data)
+            OtherCost.objects.create(erf=erf, **other_cost_data)
 
         for lodging_data in lodgings_data:
+            lodging_data.pop('date')
             Lodging.objects.create(arf=instance, **lodging_data)
+            Lodging.objects.create(erf=erf, **lodging_data)
 
         # TODO: Update expense database and excel sheet
         return instance
