@@ -3,5 +3,7 @@ export interface Lodging {
     nights: number,
     rate: number,
     pRate: number,
+    start_date: Date,
+    end_date: Date
 
 }

@@ -135,6 +135,8 @@ export class ErfEditComponent implements OnInit {
   addLodging(lodging: Lodging) {
     if (this.lodgings.length <= this.lodgingLimit - 1) {
       const group = new FormGroup({
+        start_date: new FormControl(new Date(lodging.start_date), [Validators.required]),
+        end_date: new FormControl(new Date(lodging.end_date), [Validators.required]),
         destination: new FormControl(lodging.destination, [Validators.required]),
         nights: new FormControl(lodging.nights, [Validators.required]),
         rate: new FormControl(lodging.rate, [Validators.required]),
@@ -160,6 +162,8 @@ export class ErfEditComponent implements OnInit {
   addMe(me: Me) {
     if (this.mes.length <= this.meLimit - 1) {
       const group = new FormGroup({
+        start_date: new FormControl(null, [Validators.required]),
+        end_date: new FormControl(null),
         destination: new FormControl(me.destination, [Validators.required]),
         days: new FormControl(me.days, [Validators.required]),
         rate: new FormControl(me.rate, [Validators.required]),

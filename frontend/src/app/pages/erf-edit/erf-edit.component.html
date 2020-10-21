@@ -6,7 +6,7 @@
         </mat-card-title>
         <mat-divider></mat-divider>
 
-        <mat-form-field class="example-full-width" appearance="fill">
+        <mat-form-field class="example-full-width">
             <mat-label>Travel Purpose</mat-label>
             <textarea matInput formControlName="purpose"></textarea>
             <mat-error>
@@ -16,7 +16,7 @@
 
 
         <br>
-        <mat-form-field appearance="fill">
+        <mat-form-field>
             <mat-label>Select Region</mat-label>
             <mat-select formControlName="region" [compareWith]="compareFn">
                 <mat-option *ngFor="let location of locations" [value]="location">
@@ -30,7 +30,7 @@
 
 
 
-        <mat-form-field appearance="fill">
+        <mat-form-field>
             <mat-label>Travel Date Range</mat-label>
             <mat-date-range-input [rangePicker]="picker">
                 <input formControlName="startTravelDate" matStartDate placeholder="Start date">
@@ -58,6 +58,20 @@
                         <ng-container [formGroupName]="i">
                             <tr>
                                 <td>{{i+1}}</td>
+                                <td>
+                                    <mat-form-field>
+                                        <mat-label>Date (Range)</mat-label>
+                                        <mat-date-range-input [rangePicker]="picker">
+                                            <input formControlName="start_date" matStartDate placeholder="Start date">
+                                            <input formControlName="end_date" matEndDate placeholder="End date">
+                                        </mat-date-range-input>
+                                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                        <mat-date-range-picker #picker></mat-date-range-picker>
+                                        <mat-error>
+                                            Please fill date(range)
+                                        </mat-error>
+                                    </mat-form-field>
+                                </td>
                                 <td>
                                     <mat-form-field>
                                         <mat-label>Destination</mat-label>
@@ -141,6 +155,20 @@
                         <ng-container [formGroupName]="i">
                             <tr>
                                 <td>{{i+1}}</td>
+                                <td>
+                                    <mat-form-field>
+                                        <mat-label>Date (Range)</mat-label>
+                                        <mat-date-range-input [rangePicker]="picker">
+                                            <input formControlName="start_date" matStartDate placeholder="Start date">
+                                            <input formControlName="end_date" matEndDate placeholder="End date">
+                                        </mat-date-range-input>
+                                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                        <mat-date-range-picker #picker></mat-date-range-picker>
+                                        <mat-error>
+                                            Please fill date(range)
+                                        </mat-error>
+                                    </mat-form-field>
+                                </td>
                                 <td>
                                     <mat-form-field>
                                         <mat-label>Destination</mat-label>
