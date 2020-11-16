@@ -1,0 +1,248 @@
+<div class="row">
+    <div class="col-md-12">
+      <nb-card>
+        <!-- <nb-card-header>Using the Grid</nb-card-header> -->
+    
+        <nb-card-body>
+            <h6>
+                Trip Info
+            </h6>
+            <hr>
+          <form [formGroup]="arfForm">
+            <div class="form-group row">
+              <label class="label col-sm-3 col-form-label">Trip Purpose</label>
+              <div class="col-sm-9">
+
+                <textarea nbInput fullWidth placeholder="..."></textarea>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="inputPassword2" class="label col-sm-3 col-form-label">Traveling to</label>
+              <div class="col-sm-9">
+                <nb-select placeholder="Select Region" fullWidth>
+                    <nb-option value="1">Option 1</nb-option>
+                    <nb-option value="2">Option 2</nb-option>
+                    <nb-option value="3">Option 3</nb-option>
+                    <nb-option value="4">Option 4</nb-option>
+                  </nb-select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-3 label">Trip Date</label>
+              <div class="col-sm-9">
+                <input [nbDatepicker]="rangepicker" nbInput fullWidth >
+<nb-rangepicker #rangepicker></nb-rangepicker>
+              </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="label col-sm-3 col-form-label">Sign Document</label>
+                <div class="col-sm-9">
+  
+                    <nb-toggle labelPosition="end" formControlName="sign"> {{arfForm.value.sign?"Yes":"No"}}</nb-toggle>
+                </div>
+              </div>
+          
+
+    <h6>
+        M&IE
+    </h6>
+    <hr>
+
+
+            <table class="table table-borderless" formArrayName="mes">
+                <thead>
+                  <tr>
+                    <th scope="col" style="width: 5%;"><label class="label"> #</label></th>
+                    <th scope="col" style="width: 37%;"><label class="label"> Destination</label></th>
+                    <th scope="col" style="width: 8%;"><label class="label"> # of  Days</label></th>
+                    <th scope="col" style="width: 15%;"><label class="label"> Daily Rate</label></th>
+                    <th scope="col" style="width: 12%;"><label class="label"> % Daily Rate</label></th>
+                    <th scope="col" style="width: 15%;"><label class="label"> Advance Amount</label></th>
+                    <th scope="col" style="width: 8%;" colspan="2"><label class="label"> Action</label></th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let me of mes.controls; let i=index">
+                        <ng-container [formGroupName]="i">
+                  <tr>
+                    <th class="align-middle">{{i+1}}</th>
+                    <td>        <input type="text" formControlName="destination" fullWidth nbInput>
+                    </td>
+                    <td>        <input type="text" formControlName="days" mask="separator" thousandSeparator="," style="text-align:right;" fullWidth nbInput>
+                    </td>
+                    <td>        <input type="text" formControlName="rate"  mask="separator" thousandSeparator=","  style="text-align:right;" fullWidth nbInput>
+                    </td>
+                    <td>       
+                        <nb-form-field>
+                            <nb-icon nbSuffix icon="percent" pack="eva"></nb-icon>
+                            <input type="text" formControlName="pRate" style="text-align:right;" mask="separator" thousandSeparator=","  nbInput>
+                          </nb-form-field>
+                    </td>
+                                  
+                                    <td class="align-middle" style="text-align:right;">    {{((mes.value[i].rate*mes.value[i].days*mes.value[i].pRate)/100)|number}} 
+                                           <!-- <input type="text" disabled fullWidth nbInput [value]="((mes.value[i].rate*mes.value[i].days*mes.value[i].pRate)/100)|number"> -->
+                    </td>
+                   
+                    <td class="align-middle" *ngIf="mes.length>1">
+                        <button nbButton outline status="danger" (click)="removeMe(i)" nbTooltip="Delete" nbTooltipStatus="primary" size="small"><nb-icon icon="trash-2"></nb-icon></button>
+                    </td>
+
+                    <td class="align-middle" *ngIf="i+1==mes.length">
+                        <button nbButton outline status="primary" (click)="addMe({destination:''})" nbTooltip="Add" nbTooltipStatus="primary" size="small"><nb-icon icon="plus"></nb-icon></button>
+                        
+
+
+                    </td>
+                  </tr>
+
+                </ng-container>
+            </ng-container>
+            <tr>
+                <td></td>
+                <td></td>
+
+                <td></td>
+                <td></td>
+                <th>Total</th>
+                <th style="text-align:right;">{{mesSum()|number}}</th>
+                <td></td>
+                <td></td>
+            </tr>
+                  
+                </tbody>
+              </table>
+
+              <h6>
+                Lodging 
+            </h6>
+            <hr>
+
+
+            <table class="table table-borderless" formArrayName="lodgings">
+                <thead>
+                  <tr>
+                    <th scope="col" style="width: 5%;"><label class="label">#</label></th>
+                    <th scope="col" style="width: 37%;"><label class="label"> Destination</label></th>
+                    <th scope="col" style="width: 8%;"><label class="label"># of  nights</label></th>
+                    <th scope="col" style="width: 15%;"><label class="label"> Daily Rate</label></th>
+                    <th scope="col" style="width: 12%;"><label class="label"> % Daily Rate</label></th>
+                    <th scope="col" style="width: 15%;"><label class="label"> Advance Amount</label></th>
+                    <th scope="col" style="width: 8%;" colspan="2"><label class="label"> Action</label></th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let lodging of lodgings.controls; let i=index">
+                        <ng-container [formGroupName]="i">
+                  <tr>
+                    <th class="align-middle">{{i+1}}</th>
+                    <td>        <input type="text" formControlName="destination" fullWidth nbInput>
+                    </td>
+                    <td>        <input type="text" formControlName="nights" mask="separator" thousandSeparator="," style="text-align:right;" fullWidth nbInput>
+                    </td>
+                    <td>        <input type="text" formControlName="rate"  mask="separator" thousandSeparator=","  style="text-align:right;" fullWidth nbInput>
+                    </td>
+                    <td>       
+                        <nb-form-field>
+                            <nb-icon nbSuffix icon="percent" pack="eva"></nb-icon>
+                            <input type="text" formControlName="pRate" style="text-align:right;" mask="separator" thousandSeparator=","  nbInput>
+                          </nb-form-field>
+                    </td>
+                                  
+                                    <td class="align-middle" style="text-align:right;"> 
+                                        {{((lodgings.value[i].rate*lodgings.value[i].nights*lodgings.value[i].pRate)/100)|number}}
+
+                    </td>
+                   
+                    <td class="align-middle" *ngIf="lodgings.length>1">
+                        <button nbButton outline status="danger" (click)="removeLodging(i)" nbTooltip="Delete" nbTooltipStatus="primary" size="small"><nb-icon icon="trash-2"></nb-icon></button>
+                    </td>
+
+                    <td class="align-middle" *ngIf="i+1==lodgings.length">
+                        <button nbButton outline status="primary" (click)="addLodging({destination:''})" nbTooltip="Add" nbTooltipStatus="primary" size="small"><nb-icon icon="plus"></nb-icon></button>
+                        
+
+
+                    </td>
+                  </tr>
+
+                </ng-container>
+            </ng-container>
+            <tr>
+                <td></td>
+                <td></td>
+
+                <td></td>
+                <td></td>
+                <th>Total</th>
+                <th style="text-align:right;">{{lodgingsSum()|number}}</th>
+                <td></td>
+                <td></td>
+            </tr>
+                  
+                </tbody>
+              </table>
+
+
+            <h6>
+                Other Costs
+            </h6>
+            
+              <hr>
+
+              <table class="table table-borderless" formArrayName="otherCosts">
+                <thead>
+                  <tr>
+                    <th scope="col" style="width: 5%;"><label class="label"> #</label></th>
+                    <th scope="col" style="width: 55%;"><label class="label"> Purpose</label></th>
+                    <th scope="col" style="width: 32%;"><label class="label"> Amount</label></th>
+
+                    <th scope="col" style="width: 8%;" colspan="2"><label class="label">Action</label></th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let otherCost of otherCosts.controls; let i=index">
+                        <ng-container [formGroupName]="i">
+                  <tr>
+                    <th class="align-middle">{{i+1}}</th>
+                    <td>        <input type="text" formControlName="purpose" fullWidth nbInput>
+                    </td>
+                    <td>        <input type="text" formControlName="amount" mask="separator" thousandSeparator="," style="text-align:right;" fullWidth nbInput>
+                    </td>
+               
+                   
+                 
+                   
+                    <td class="align-middle" *ngIf="otherCosts.length>1">
+                        <button nbButton outline status="danger" (click)="removeOtherCost(i)" nbTooltip="Delete" nbTooltipStatus="primary" size="small"><nb-icon icon="trash-2"></nb-icon></button>
+                    </td>
+
+                    <td class="align-middle" *ngIf="i+1==otherCosts.length">
+                        <button nbButton outline status="primary" (click)="addOtherCost({destination:''})" nbTooltip="Add" nbTooltipStatus="primary" size="small"><nb-icon icon="plus"></nb-icon></button>
+                        
+
+
+                    </td>
+                  </tr>
+
+                </ng-container>
+            </ng-container>
+            <tr>
+               
+                <td></td>
+                <th>Total</th>
+                <th style="text-align:right;">{{otherCostsSum()|number}}</th>
+                <td></td>
+                <td></td>
+            </tr>
+                  
+                </tbody>
+              </table>
+              <div class="form-group row">
+                <div class="offset-sm-3 col-sm-9">
+                  <button type="submit" nbButton status="primary">Save</button>
+                </div>
+              </div>
+          </form>
+        </nb-card-body>
+      </nb-card>

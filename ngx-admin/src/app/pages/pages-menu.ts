@@ -8,6 +8,11 @@ export const MENU_ITEMS: NbMenuItem[] = [
     home: true,
   },
   {
+    title: 'Arf',
+    icon: 'file-text-outline',
+    link: '/pages/arf',
+  },
+  {
     title: 'FEATURES',
     group: true,
   },

@@ -11,6 +11,13 @@ const routes: Routes = [{
     {
       path: 'dashboard',
       component: DashboardComponent,
+    }
+    ,
+
+    {
+      path: 'arf',
+      loadChildren: () => import('./arf/arf.module')
+        .then(m => m.ArfModule),
     },
     {
       path: '',
