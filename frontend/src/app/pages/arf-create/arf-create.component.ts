@@ -63,8 +63,8 @@ export class ArfCreateComponent implements OnInit {
     const currentYear = new Date().getFullYear();
     this.minDate = new Date(currentYear - 1, 0, 1);
     this.maxDate = new Date(currentYear + 1, 11, 31);
-    this.addMe({ destination: '', days: null, rate: null, pRate: null })
-    this.addLodging({ destination: '', nights: null, rate: null, pRate: null })
+    this.addMe({ start_date: new Date(), end_date: new Date(), destination: '', days: null, rate: null, pRate: null })
+    this.addLodging({ start_date: new Date(), end_date: new Date(), destination: '', nights: null, rate: null, pRate: null })
     this.addOtherCost({ purpose: '', amount: null })
 
 
@@ -245,7 +245,9 @@ export class ArfCreateComponent implements OnInit {
       destination: `Dar Es Salaam - ${this.arfForm.value.region.name}`,
       days: 1,
       rate: this.arfForm.value.region.me,
-      pRate: 75
+      pRate: 75,
+      start_date: new Date(),
+      end_date: new Date()
     }
     this.addMe(me)
     // second row
@@ -253,7 +255,9 @@ export class ArfCreateComponent implements OnInit {
       destination: this.arfForm.value.region.name,
       days: this.diffDays(this.arfForm.value.startTravelDate, this.arfForm.value.endTravelDate) - 1,
       rate: this.arfForm.value.region.me,
-      pRate: 100
+      pRate: 100,
+      start_date: new Date(),
+      end_date: new Date()
     }
     this.addMe(me2)
     // third row
@@ -261,7 +265,9 @@ export class ArfCreateComponent implements OnInit {
       destination: `${this.arfForm.value.region.name} - Dar Es Salaam `,
       days: 1,
       rate: this.arfForm.value.region.me,
-      pRate: 75
+      pRate: 75,
+      start_date: new Date(),
+      end_date: new Date()
     }
     this.addMe(me3)
 
@@ -279,7 +285,10 @@ export class ArfCreateComponent implements OnInit {
       destination: this.arfForm.value.region.name,
       nights: this.diffDays(this.arfForm.value.startTravelDate, this.arfForm.value.endTravelDate),
       rate: this.arfForm.value.region.lodging,
-      pRate: 100
+      pRate: 100,
+      start_date: new Date(),
+      end_date: new Date()
+
     }
     this.addLodging(lodging)
   }
