@@ -19,19 +19,21 @@
             <div class="form-group row">
               <label for="inputPassword2" class="label col-sm-3 col-form-label">Traveling to</label>
               <div class="col-sm-9">
-                <nb-select placeholder="Select Region" fullWidth>
-                    <nb-option value="1">Option 1</nb-option>
-                    <nb-option value="2">Option 2</nb-option>
-                    <nb-option value="3">Option 3</nb-option>
-                    <nb-option value="4">Option 4</nb-option>
+                <nb-select placeholder="Select Region" formControlName="region" (selectedChange)="regionChanged()" fullWidth>
+                    <nb-option *ngFor="let location of locations" [value]="location">
+
+                    {{location.name}}
+
+                    </nb-option>
+
                   </nb-select>
               </div>
             </div>
             <div class="form-group row">
               <label class="col-sm-3 label">Trip Date</label>
               <div class="col-sm-9">
-                <input [nbDatepicker]="rangepicker" nbInput fullWidth >
-<nb-rangepicker #rangepicker></nb-rangepicker>
+                <input [nbDatepicker]="rangepicker"   nbInput fullWidth >
+<nb-rangepicker (rangeChange)="rangeCanged($event)" #rangepicker></nb-rangepicker>
               </div>
             </div>
 

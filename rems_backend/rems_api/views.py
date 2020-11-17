@@ -24,7 +24,7 @@ class HelloView(APIView, TokenAuthentication):
 
 
 class ArfList(APIView, TokenAuthentication):
-    permission_classes = (IsAuthenticated, )
+    # permission_classes = (IsAuthenticated, )
 
     def get(self, request):
         # TODO: List file according to lodgin user
@@ -75,7 +75,7 @@ class ArfDetail(APIView):
 
 
 class ErfList(APIView, TokenAuthentication):
-    permission_classes = (IsAuthenticated, )
+    # permission_classes = (IsAuthenticated, )
 
     def get(self, request):
         # TODO: List file according to lodgin user

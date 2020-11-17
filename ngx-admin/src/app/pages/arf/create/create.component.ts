@@ -4,6 +4,10 @@ import { Me } from "../../../interfaces/me";
 import { OtherCost } from "../../../interfaces/other-cost";
 import { Lodging } from "../../../interfaces/lodging";
 import { NotifyService } from "../../../services/notify.service";
+import { Location } from "../../../interfaces/location";
+import { LocationService } from "../../../services/location.service";
+
+
 
 
 
@@ -45,7 +49,10 @@ export class CreateComponent implements OnInit {
   otherCosts = this.arfForm.get('otherCosts') as FormArray
   lodgings = this.arfForm.get('lodgings') as FormArray
 
-  constructor(private toastrService: NotifyService) {
+  constructor(private toastrService: NotifyService,
+    private locationService: LocationService,
+
+  ) {
     this.signChanged()
     const currentYear = new Date().getFullYear();
     this.minDate = new Date(currentYear - 1, 0, 1);
@@ -56,6 +63,26 @@ export class CreateComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.locationService.getAll().subscribe((locations: Location[]) => {
+      this.locations = locations
+
+    })
+  }
+
+
+  rangeCanged(event) {
+    if ('start' in event) {
+      this.arfForm.patchValue({ startTravelDate: event.start })
+    }
+
+    if ('end' in event) {
+      this.arfForm.patchValue({ endTravelDate: event.end })
+    }
+
+
+    this.fillMes()
+    this.fillLodgings()
+
   }
 
 
@@ -165,6 +192,104 @@ export class CreateComponent implements OnInit {
     } else {
       this.arfForm.patchValue({ signatureDate: '' })
     }
+  }
+
+
+
+  fillMes() {
+
+    if (!this.validInputs()) {
+      return;
+    }
+    // clear the mes array
+    this.mes.clear()
+    // first row
+    const me = {
+      destination: `Dar Es Salaam - ${this.arfForm.value.region.name}`,
+      days: 1,
+      rate: this.arfForm.value.region.me,
+      pRate: 75,
+      start_date: new Date(),
+      end_date: new Date()
+    }
+    this.addMe(me)
+    // second row
+    const me2 = {
+      destination: this.arfForm.value.region.name,
+      days: this.diffDays(this.arfForm.value.startTravelDate, this.arfForm.value.endTravelDate) - 1,
+      rate: this.arfForm.value.region.me,
+      pRate: 100,
+      start_date: new Date(),
+      end_date: new Date()
+    }
+    this.addMe(me2)
+    // third row
+    const me3 = {
+      destination: `${this.arfForm.value.region.name} - Dar Es Salaam `,
+      days: 1,
+      rate: this.arfForm.value.region.me,
+      pRate: 75,
+      start_date: new Date(),
+      end_date: new Date()
+    }
+    this.addMe(me3)
+
+
+
+  }
+
+
+  fillLodgings() {
+    if (!this.validInputs()) {
+      return;
+    }
+    this.lodgings.clear()
+    const lodging = {
+      destination: this.arfForm.value.region.name,
+      nights: this.diffDays(this.arfForm.value.startTravelDate, this.arfForm.value.endTravelDate),
+      rate: this.arfForm.value.region.lodging,
+      pRate: 100,
+      start_date: new Date(),
+      end_date: new Date()
+
+    }
+    this.addLodging(lodging)
+  }
+
+
+  regionChanged() {
+
+    this.fillMes()
+    this.fillLodgings()
+  }
+
+  startDateChanged() {
+    this.fillMes()
+    this.fillLodgings()
+
+
+  }
+
+  endDateChanged() {
+    this.fillMes()
+    this.fillLodgings()
+
+
+  }
+
+  validInputs() {
+    console.log(this.arfForm.get('startTravelDate').valid)
+    return this.arfForm.get('region').valid && this.arfForm.get('startTravelDate').valid && this.arfForm.get('endTravelDate').valid
+  }
+
+
+  diffDays(startDate, endDate) {
+    const date1 = new Date(startDate);
+    const date2 = new Date(endDate);
+    const diffTime = Math.abs(date2.getTime() - date1.getTime());
+
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
   }
 
 
