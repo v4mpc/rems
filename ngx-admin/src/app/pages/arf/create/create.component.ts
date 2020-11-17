@@ -30,10 +30,13 @@ export class CreateComponent implements OnInit {
     region: new FormControl('', Validators.required),
     startTravelDate: new FormControl('', Validators.required),
     endTravelDate: new FormControl('', Validators.required),
+    signatureDate: new FormControl(''),
+    approvalDate: new FormControl(''),
+    approve: new FormControl(''),
     mes: new FormArray([]),
     lodgings: new FormArray([]),
     otherCosts: new FormArray([]),
-    sign: new FormControl(true)
+    sign: new FormControl(false)
   })
 
 
@@ -43,6 +46,7 @@ export class CreateComponent implements OnInit {
   lodgings = this.arfForm.get('lodgings') as FormArray
 
   constructor(private toastrService: NotifyService) {
+    this.signChanged()
     const currentYear = new Date().getFullYear();
     this.minDate = new Date(currentYear - 1, 0, 1);
     this.maxDate = new Date(currentYear + 1, 11, 31);
@@ -149,6 +153,30 @@ export class CreateComponent implements OnInit {
 
   removeMe(index: number) {
     this.mes.removeAt(index)
+  }
+
+  signChanged() {
+    if (this.arfForm.value.sign) {
+      // let currentDate=new Date()
+      // let year = currentDate.getFullYear()
+      // let month = currentDate.
+      this.arfForm.patchValue({ signatureDate: new Date() })
+
+    } else {
+      this.arfForm.patchValue({ signatureDate: '' })
+    }
+  }
+
+
+  approveChanged() {
+    console.log('am here')
+    if (this.arfForm.value.approve == "1") {
+
+      this.arfForm.patchValue({ approvalDate: new Date() })
+
+    } else {
+      this.arfForm.patchValue({ approvalDate: '' })
+    }
   }
 
   addMe(me: Me) {

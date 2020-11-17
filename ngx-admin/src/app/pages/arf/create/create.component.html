@@ -37,10 +37,16 @@
 
             <div class="form-group row">
                 <label class="label col-sm-3 col-form-label">Sign Document</label>
-                <div class="col-sm-9">
+                <div class="col-sm-3">
   
-                    <nb-toggle labelPosition="end" formControlName="sign"> {{arfForm.value.sign?"Yes":"No"}}</nb-toggle>
+                    <nb-toggle labelPosition="end" formControlName="sign" (change)="signChanged()"> {{arfForm.value.sign?"Yes":"No"}}</nb-toggle>
                 </div>
+                <label class="label col-sm-3 col-form-label">Signature Date</label>
+
+                <div class="col-sm-3">
+                  <input type="text" disabled formControlName="signatureDate" fullWidth nbInput>
+                </div>
+
               </div>
           
 
@@ -238,6 +244,51 @@
                   
                 </tbody>
               </table>
+
+              <h6>
+                Approval
+            </h6>
+            <hr>
+
+
+            <div class="form-group row">
+              <label class="label col-sm-3 col-form-label">Supervisor Name</label>
+              <div class="col-sm-9">
+
+                <input nbInput fullWidth placeholder="name">
+              </div>
+            </div>
+  
+        
+
+            <div class="form-group row">
+                <label class="label col-sm-3 col-form-label">Approval Status</label>
+                <div class="col-sm-3">
+                  <nb-select placeholder="Pending" formControlName="approve" (selectedChange)="approveChanged()" fullWidth >
+
+      <nb-select-label>
+        {{ arfForm.value.approve=="1"?"Approved":"Rejected" }}
+      </nb-select-label>
+                    <nb-option value="1">Approve</nb-option>
+                    <nb-option value="0">Reject</nb-option>
+
+                  </nb-select>
+                    <!-- <nb-toggle labelPosition="end" formControlName="sign" (change)="signChanged()"> {{arfForm.value.sign?"Approved":"Rejected"}}</nb-toggle> -->
+                </div>
+                <label class="label col-sm-3 col-form-label">Approval Date</label>
+
+                <div class="col-sm-3">
+                  <input type="text" disabled formControlName="approvalDate" fullWidth nbInput>
+                </div>
+
+              </div>
+              <div class="form-group row">
+                <label class="label col-sm-3 col-form-label">Comments</label>
+                <div class="col-sm-9">
+  
+                  <textarea nbInput fullWidth placeholder="..."></textarea>
+                </div>
+              </div>
               <div class="form-group row">
                 <div class="offset-sm-3 col-sm-9">
                   <button type="submit" nbButton status="primary">Save</button>
