@@ -6,6 +6,10 @@ import { Lodging } from "../../../interfaces/lodging";
 import { NotifyService } from "../../../services/notify.service";
 import { Location } from "../../../interfaces/location";
 import { LocationService } from "../../../services/location.service";
+import { Router, ActivatedRoute, ParamMap, Params } from '@angular/router';
+import { ArfService } from "../../../services/arf.service";
+
+
 
 
 
@@ -52,6 +56,12 @@ export class CreateComponent implements OnInit {
   constructor(private toastrService: NotifyService,
     private locationService: LocationService,
 
+    private router: Router,
+    private route: ActivatedRoute,
+    private arfService: ArfService,
+
+
+
   ) {
     this.signChanged()
     const currentYear = new Date().getFullYear();
@@ -67,8 +77,76 @@ export class CreateComponent implements OnInit {
       this.locations = locations
 
     })
+
+
+    this.route.params.subscribe((params: Params) => {
+      this.selectedId = +params['id']
+      this.editMode = params['id'] != null
+
+      if (this.editMode) {
+        this.arfService.getOne(this.selectedId).subscribe((arf: any) => {
+          this.selectedLocation = this.getSelectedLocation(arf.location)[0]
+          console.log(this.selectedLocation)
+          this.arfForm.patchValue({
+            purpose: arf.purpose,
+            startTravelDate: new Date(arf.start_date),
+            endTravelDate: new Date(arf.end_date),
+            region: this.selectedLocation,
+          })
+          let lodgingList = arf.lodgings.map(this.transformLodging)
+          let meList = arf.mes.map(this.transformMe)
+          let otherCostList = arf.other_costs.map(this.transformOtherCost)
+          this.lodgings.clear()
+          lodgingList.forEach(lodging => {
+            this.addLodging(lodging)
+          })
+          this.mes.clear()
+          meList.forEach(me => {
+            this.addMe(me)
+          })
+          if (otherCostList.length > 0) {
+
+            this.otherCosts.clear()
+            otherCostList.forEach(otherCost => {
+              this.addOtherCost(otherCost)
+            })
+          }
+
+        })
+      }
+    })
+  }
+  transformMe(me) {
+    console.log(me)
+    return {
+      destination: me.destination,
+      days: me.no_of_nights,
+      rate: me.daily_rate,
+      pRate: me.percentage_of_daily_rate,
+    }
+
   }
 
+  getSelectedLocation(serverLocationPk) {
+
+    return this.locations.filter(location => {
+      return location.pk == serverLocationPk
+    })
+  }
+
+  transformLodging(lodging) {
+    return {
+      destination: lodging.destination,
+      nights: lodging.no_of_nights,
+      rate: lodging.daily_rate,
+      pRate: lodging.percentage_of_daily_rate
+    }
+  }
+
+
+  transformOtherCost(oc) {
+    return oc
+  }
 
   rangeCanged(event) {
     if ('start' in event) {

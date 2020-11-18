@@ -18,6 +18,11 @@ const routes: Routes = [{
     }
     ,
     {
+      path: 'edit/:id',
+      component: CreateComponent,
+    }
+    ,
+    {
       path: '',
       redirectTo: 'list',
       pathMatch: 'full',

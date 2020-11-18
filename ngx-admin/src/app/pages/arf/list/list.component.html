@@ -4,41 +4,109 @@
 
   <div class="row">
     <div class="col-md-12">
-      <nb-card>
-        <nb-card-header>Using the Grid
-          <a (click)="onClick()" outline routerLink="../create" status="primary" class="float-right" nbButton>New Advance request</a>
+      <nb-card >
+        <nb-card-header>List of Advance requests
+          <a outline routerLink="../create" status="primary" size="small" class="float-right" nbButton>New Advance request</a>
         </nb-card-header>
         <nb-card-body>
          
-            <table class="table">
+            <table class="table table-bordered">
                 <thead>
                   <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Handle</th>
-                  </tr>
+                    <th style="width: 4%;" scope="col">#</th>
+                    <th style="width: 10%;" scope="col">Requested</th>
+                    <th style="width: 13%;" scope="col">Location</th>
+                    <th style="width: 18%;" scope="col">Purpose</th>
+                    <th style="width: 5%;" scope="col">Type</th>
+                    <th style="width: 10%;" scope="col">Amount(TZS)</th>
+                    <th style="width: 5%;" scope="col">Status</th>
+                    <th style="width: 15%;" scope="col">Action</th>
+                </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter</td>
-                  </tr>
-                </tbody>
+                  <ng-container *ngFor="let arf of arfs; let i=index">
+                      <tr>
+                          <td [attr.rowspan]="arf.erf?'2':'1'">{{i+1}}</td>
+                          <td [attr.rowspan]="arf.erf?'2':'1'">{{arf.date_of_request}}</td>
+                          <td [attr.rowspan]="arf.erf?'2':'1'">{{arf.location_name}}</td>
+                          <td [attr.rowspan]="arf.erf?'2':'1'">
+                              {{(arf.purpose.length>40)? (arf.purpose | slice:0:40)+'...':(arf.purpose)}}
+                          </td>
+                          <td>Advance</td>
+                          <td>{{calculateTotalAmount(arf)|number}}</td>
+                          <td> <span class="badge badge-warning"> {{arf.status}}</span> </td>
+                          <td>
+
+                            <div class="row">
+                              <div class="col-sm-4">
+                                <a outline [routerLink]="['../edit', arf.pk]" size="small"  status="success" nbTooltip="Edit" nbTooltipStatus="success"  nbButton><nb-icon icon="edit-outline"></nb-icon></a>
+
+                              </div>
+                              <div class="col-sm-4">
+                                <a outline routerLink="../create" status="primary" size="small" status="info" nbTooltip="View" nbTooltipStatus="primary" nbButton><nb-icon icon="eye-outline"></nb-icon></a>
+                              
+                              </div>
+                              <div class="col-sm-4">
+                                <button outline status="danger" size="small" nbTooltip="Delete" nbTooltipStatus="danger"  nbButton><nb-icon icon="trash-2-outline"></nb-icon></button>
+                              
+                              </div>
+
+                            </div>
+
+                            
+                          </td>
+                      </tr>
+                      <ng-container *ngIf="arf.erf">
+                          <tr>
+                              <td>Expense </td>
+                              <td>{{calculateTotalAmount(arf.erf)|number}}</td>
+                              <td> <span class="badge badge-warning">{{arf.erf.status}}</span></td>
+                              <td>
+
+                                <div class="row">
+                                  <div class="col-sm-4">
+                                    <a outline routerLink="../create" status="success" size="small" nbTooltip="Edit" nbTooltipStatus="success"  nbButton><nb-icon icon="edit-outline"></nb-icon></a>
+    
+                                  </div>
+                                  <div class="col-sm-4">
+                                    <a outline routerLink="../create" status="primary" size="small" nbTooltip="View" nbTooltipStatus="primary" nbButton><nb-icon icon="eye-outline"></nb-icon></a>
+                                  
+                                  </div>
+                                  <div class="col-sm-4">
+                                    <button outline status="danger" size="small" nbTooltip="Delete" nbTooltipStatus="danger"  nbButton><nb-icon icon="trash-2-outline"></nb-icon></button>
+                                  
+                                  </div>
+    
+                                </div>
+          
+                                  <!-- <button color="accent" mat-icon-button matTooltip="Edit"
+                                      [routerLink]="['/erfs-edit', arf.erf.pk]">
+                                      <mat-icon>edit</mat-icon>
+                                  </button>
+          
+                                  <button color="accent" mat-icon-button matTooltip="Download" *ngIf="arf.excel_sheet"
+                                      (click)="downloadArf(arf.excel_sheet)">
+                                      <mat-icon>cloud_download</mat-icon>
+                                  </button>
+                                  <button color="accent" mat-icon-button matTooltip="Print" (click)="openDeleteDialog(i,arft.pk)">
+                                      <mat-icon>print</mat-icon>
+                                  </button>
+                                  <button color="warn" mat-icon-button matTooltip="Delete" (click)="openDeleteDialog(i,arf.pk)">
+                                      <mat-icon>delete_forever</mat-icon>
+                                  </button> -->
+                              </td>
+                          </tr>
+                      </ng-container>
+          
+          
+          
+                  </ng-container>
+          
+          
+          
+          
+          
+              </tbody>
               </table>
         </nb-card-body>
       </nb-card>
