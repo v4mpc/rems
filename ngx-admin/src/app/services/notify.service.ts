@@ -13,4 +13,9 @@ export class NotifyService {
     this.toastrService.show(message, `Error`, { status: 'danger', preventDuplicates: true });
 
   }
+
+  succMessage(message) {
+    this.toastrService.show(message, `Success`, { status: 'success', preventDuplicates: true });
+
+  }
 }

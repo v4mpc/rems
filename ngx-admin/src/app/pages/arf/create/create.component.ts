@@ -8,6 +8,9 @@ import { Location } from "../../../interfaces/location";
 import { LocationService } from "../../../services/location.service";
 import { Router, ActivatedRoute, ParamMap, Params } from '@angular/router';
 import { ArfService } from "../../../services/arf.service";
+import { LoaderDialogService } from "../../../services/loader-dialog.service";
+import { formatDate } from '@angular/common';
+
 
 
 
@@ -55,7 +58,7 @@ export class CreateComponent implements OnInit {
 
   constructor(private toastrService: NotifyService,
     private locationService: LocationService,
-
+    private loader: LoaderDialogService,
     private router: Router,
     private route: ActivatedRoute,
     private arfService: ArfService,
@@ -115,7 +118,110 @@ export class CreateComponent implements OnInit {
         })
       }
     })
+
   }
+
+  save() {
+
+
+    if (this.arfForm.valid) {
+      this.loader.show()
+
+      let arf = {
+        user: 1,
+        location: this.arfForm.value.region.pk,
+        address: "JSI TZ",
+        purpose: this.arfForm.value.purpose,
+        start_date: formatDate(this.arfForm.value.startTravelDate, 'yyyy-MM-dd', 'en-US'),
+        end_date: formatDate(this.arfForm.value.endTravelDate, 'yyyy-MM-dd', 'en-US'),
+        date_of_request: formatDate(new Date(), 'yyyy-MM-dd', 'en-US'),
+        status: "Pending",
+        mes: null,
+        lodgings: null,
+        other_costs: null,
+      }
+      let apiMes = []
+      this.arfForm.value.mes.forEach(me => {
+        apiMes.push({
+          destination: me.destination,
+          no_of_nights: me.days,
+          daily_rate: me.rate,
+          percentage_of_daily_rate: me.pRate,
+        })
+      });
+      arf.mes = apiMes
+      let apiLodgings = []
+      this.arfForm.value.lodgings.forEach(lodging => {
+        apiLodgings.push({
+          destination: lodging.destination,
+          no_of_nights: lodging.nights,
+          daily_rate: lodging.rate,
+          percentage_of_daily_rate: lodging.pRate,
+        })
+      });
+      arf.lodgings = apiLodgings
+
+
+      let apiOtherCosts = []
+      this.arfForm.value.otherCosts.forEach(otherCost => {
+        if (otherCost.amount != null) {
+          apiOtherCosts.push({
+            purpose: otherCost.purpose,
+            amount: otherCost.amount
+          })
+        }
+
+      });
+      arf.other_costs = apiOtherCosts
+
+
+      if (this.editMode) {
+
+        this.arfService.update(this.selectedId, arf).subscribe(arf => {
+          this.router.navigate(['../arf']);
+          this.loader.close();
+          this.toastrService.succMessage('Advance Request Updated');
+
+        }, (error) => {
+          console.log(error)
+          this.toastrService.errMessage('Contact System Admin');
+          this.loader.close();
+        })
+
+      } else {
+        this.arfService.save(arf).subscribe(arf => {
+          this.toastrService.succMessage('Advance Request Created');
+
+          this.router.navigate(['../arf']);
+          this.loader.close();
+
+        }, (error) => {
+          console.log(error)
+          this.loader.close();
+          this.toastrService.errMessage('Contact System Admin');
+
+
+
+
+        })
+
+      }
+
+
+    }
+
+    else {
+      this.toastrService.errMessage(`The Form has Erros!`);
+
+      this.arfForm.markAllAsTouched()
+    }
+
+
+
+  }
+
+
+
   transformMe(me) {
     console.log(me)
     return {
@@ -149,6 +255,7 @@ export class CreateComponent implements OnInit {
   }
 
   rangeCanged(event) {
+
     if ('start' in event) {
       this.arfForm.patchValue({ startTravelDate: event.start })
     }

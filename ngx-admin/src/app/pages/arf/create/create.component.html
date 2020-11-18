@@ -28,12 +28,17 @@
               <div class="col-sm-9">
 
                 <textarea nbInput fullWidth formControlName="purpose" placeholder="..."></textarea>
+                <small  class="form-text text-danger" *ngIf="arfForm.controls.purpose.invalid && arfForm.controls.purpose.touched">
+                 Trip Purpose is required
+                </small>
               </div>
+
+              
             </div>
             <div class="form-group row">
               <label for="inputPassword2" class="label col-sm-3 col-form-label">Traveling to</label>
               <div class="col-sm-9">
-                <nb-select placeholder="Select Region" formControlName="region" (selectedChange)="regionChanged()" fullWidth>
+                <nb-select placeholder="Select Location" formControlName="region" (selectedChange)="regionChanged()" fullWidth>
                     <nb-option *ngFor="let location of locations" [value]="location">
 
                     {{location.name}}
@@ -41,6 +46,9 @@
                     </nb-option>
 
                   </nb-select>
+                  <small  class="form-text text-danger" *ngIf="arfForm.controls.region.invalid && arfForm.controls.region.touched">
+                    Location is required
+                   </small>
               </div>
             </div>
             <div class="form-group row">
@@ -48,6 +56,9 @@
               <div class="col-sm-9">
                 <input [nbDatepicker]="rangepicker"   nbInput fullWidth >
 <nb-rangepicker (rangeChange)="rangeCanged($event)" #rangepicker></nb-rangepicker>
+<small  class="form-text text-danger"  *ngIf="arfForm.controls.startTravelDate.invalid && arfForm.controls.startTravelDate.touched">
+  From and To date is Required
+ </small>
               </div>
             </div>
 
@@ -89,17 +100,33 @@
                         <ng-container [formGroupName]="i">
                   <tr>
                     <th class="align-middle">{{i+1}}</th>
-                    <td>        <input type="text" formControlName="destination" fullWidth nbInput>
+                    <td>        
+                      <input type="text" formControlName="destination" fullWidth nbInput>
+                      <small  class="form-text text-danger" *ngIf="arfForm.controls.mes.controls[i].controls.destination.invalid && arfForm.controls.mes.controls[i].controls.destination.touched">
+                        Please fill this field
+                       </small>
                     </td>
-                    <td>        <input type="text" formControlName="days" mask="separator" thousandSeparator="," style="text-align:right;" fullWidth nbInput>
+                    <td>       
+                       <input type="text" formControlName="days" mask="separator" thousandSeparator="," style="text-align:right;" fullWidth nbInput>
+                       <small  class="form-text text-danger" *ngIf="arfForm.controls.mes.controls[i].controls.days.invalid && arfForm.controls.mes.controls[i].controls.days.touched">
+                        Please fill this field
+                       </small>
                     </td>
-                    <td>        <input type="text" formControlName="rate"  mask="separator" thousandSeparator=","  style="text-align:right;" fullWidth nbInput>
+                    <td>        
+                      <input type="text" formControlName="rate"  mask="separator" thousandSeparator=","  style="text-align:right;" fullWidth nbInput>
+                      <small  class="form-text text-danger" *ngIf="arfForm.controls.mes.controls[i].controls.rate.invalid && arfForm.controls.mes.controls[i].controls.rate.touched">
+                        Please fill this field
+                       </small>
                     </td>
                     <td>       
                         <nb-form-field>
                             <nb-icon nbSuffix icon="percent" pack="eva"></nb-icon>
                             <input type="text" formControlName="pRate" style="text-align:right;" mask="separator" thousandSeparator=","  nbInput>
+                            
                           </nb-form-field>
+                          <small  class="form-text text-danger" *ngIf="arfForm.controls.mes.controls[i].controls.pRate.invalid && arfForm.controls.mes.controls[i].controls.pRate.touched">
+                            Please fill this field
+                           </small>
                     </td>
                                   
                                     <td class="align-middle" style="text-align:right;">    {{((mes.value[i].rate*mes.value[i].days*mes.value[i].pRate)/100)|number}} 
@@ -158,17 +185,33 @@
                         <ng-container [formGroupName]="i">
                   <tr>
                     <th class="align-middle">{{i+1}}</th>
-                    <td>        <input type="text" formControlName="destination" fullWidth nbInput>
+                    <td>       
+                       <input type="text" formControlName="destination" fullWidth nbInput>
+                       <small  class="form-text text-danger" *ngIf="arfForm.controls.lodgings.controls[i].controls.destination.invalid && arfForm.controls.lodgings.controls[i].controls.destination.touched">
+                        Please fill this field
+                       </small>
                     </td>
-                    <td>        <input type="text" formControlName="nights" mask="separator" thousandSeparator="," style="text-align:right;" fullWidth nbInput>
+                    <td>       
+                       <input type="text" formControlName="nights" mask="separator" thousandSeparator="," style="text-align:right;" fullWidth nbInput>
+                       <small  class="form-text text-danger" *ngIf="arfForm.controls.lodgings.controls[i].controls.nights.invalid && arfForm.controls.lodgings.controls[i].controls.nights.touched">
+                        Please fill this field
+                       </small>
                     </td>
-                    <td>        <input type="text" formControlName="rate"  mask="separator" thousandSeparator=","  style="text-align:right;" fullWidth nbInput>
+                    <td>        
+                      <input type="text" formControlName="rate"  mask="separator" thousandSeparator=","  style="text-align:right;" fullWidth nbInput>
+                      <small  class="form-text text-danger" *ngIf="arfForm.controls.lodgings.controls[i].controls.rate.invalid && arfForm.controls.lodgings.controls[i].controls.rate.touched">
+                        Please fill this field
+                       </small>
                     </td>
                     <td>       
                         <nb-form-field>
                             <nb-icon nbSuffix icon="percent" pack="eva"></nb-icon>
                             <input type="text" formControlName="pRate" style="text-align:right;" mask="separator" thousandSeparator=","  nbInput>
+                           
                           </nb-form-field>
+                          <small  class="form-text text-danger" *ngIf="arfForm.controls.lodgings.controls[i].controls.pRate.invalid && arfForm.controls.lodgings.controls[i].controls.pRate.touched">
+                            Please fill this field
+                           </small>
                     </td>
                                   
                                     <td class="align-middle" style="text-align:right;"> 
@@ -315,7 +358,7 @@
                   <a routerLink="/pages/arf" nbButton>Back</a>
                 </div>
                 <div class="col-sm-3">
-                  <button type="submit" nbButton status="primary">Save</button>
+                  <button type="submit" nbButton (click)="save()" status="primary">Save</button>
                 </div>
               </div>
           </form>
