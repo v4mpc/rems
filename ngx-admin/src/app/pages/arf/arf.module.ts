@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from "@angular/forms";
+import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 
 import {
   NbActionsModule,
@@ -51,6 +51,7 @@ import { DeleteDialogComponent } from '../../components/delete-dialog/delete-dia
     NbContextMenuModule,
     NbBadgeModule,
     NbButtonModule,
+    FormsModule,
 
     NgxMaskModule.forRoot(),
     NbToggleModule,

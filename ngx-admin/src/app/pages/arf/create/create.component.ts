@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormControl, Validator, FormArray, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Me } from "../../../interfaces/me";
 import { OtherCost } from "../../../interfaces/other-cost";
@@ -10,6 +10,8 @@ import { Router, ActivatedRoute, ParamMap, Params, NavigationExtras } from '@ang
 import { ArfService } from "../../../services/arf.service";
 import { LoaderDialogService } from "../../../services/loader-dialog.service";
 import { formatDate, Location } from '@angular/common';
+import { NbCalendarRange } from "@nebular/theme";
+
 
 
 
@@ -25,6 +27,7 @@ import { formatDate, Location } from '@angular/common';
 })
 export class CreateComponent implements OnInit {
 
+  @ViewChild('rangepicker') rangepicker: ElementRef;
 
   meLimit = 10
   lodgingLimit = 9
@@ -35,19 +38,23 @@ export class CreateComponent implements OnInit {
   selectedLocation: any
   minDate: Date;
   maxDate: Date;
+  selectedRange: NbCalendarRange<Date>;
+  datePickerRange: any;
+
 
   arfForm = new FormGroup({
     purpose: new FormControl('', [Validators.required, Validators.max(2)]),
     region: new FormControl('', Validators.required),
     startTravelDate: new FormControl('', Validators.required),
     endTravelDate: new FormControl('', Validators.required),
-    signatureDate: new FormControl(''),
-    approvalDate: new FormControl(''),
+    signatureDate: new FormControl({ value: null, disabled: true }),
+    approvalDate: new FormControl({ value: null, disabled: true }),
     approve: new FormControl(''),
     mes: new FormArray([]),
     lodgings: new FormArray([]),
     otherCosts: new FormArray([]),
-    sign: new FormControl(false)
+    sign: new FormControl(false),
+    // datePickerRange: new FormControl(null)
   })
 
 
@@ -97,7 +104,15 @@ export class CreateComponent implements OnInit {
             startTravelDate: new Date(arf.start_date),
             endTravelDate: new Date(arf.end_date),
             region: this.selectedLocation,
+            // datePickerRange: `${arf.start_date} - ${arf.end_date}`
           })
+
+          // console.log(`${arf.start_date} - ${arf.end_date}`)
+          this.datePickerRange = `${formatDate(arf.start_date, 'MMM dd, yyyy', 'en-US')} - ${arf.end_date}`
+          this.selectedRange = {
+            start: new Date(arf.start_date),
+            end: new Date(arf.end_date)
+          }
           let lodgingList = arf.lodgings.map(this.transformLodging)
           let meList = arf.mes.map(this.transformMe)
           let otherCostList = arf.other_costs.map(this.transformOtherCost)
@@ -262,6 +277,8 @@ export class CreateComponent implements OnInit {
 
   rangeCanged(event) {
 
+    console.log(this.rangepicker)
+
     if ('start' in event) {
       this.arfForm.patchValue({ startTravelDate: event.start })
     }
@@ -378,7 +395,7 @@ export class CreateComponent implements OnInit {
       // let currentDate=new Date()
       // let year = currentDate.getFullYear()
       // let month = currentDate.
-      this.arfForm.patchValue({ signatureDate: new Date() })
+      this.arfForm.patchValue({ signatureDate: formatDate(new Date(), 'MMM dd, yyyy', 'en-US') })
 
     } else {
       this.arfForm.patchValue({ signatureDate: '' })

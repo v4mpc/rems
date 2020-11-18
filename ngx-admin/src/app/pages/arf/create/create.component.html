@@ -54,8 +54,8 @@
             <div class="form-group row">
               <label class="col-sm-3 label">Trip Date</label>
               <div class="col-sm-9">
-                <input [nbDatepicker]="rangepicker"   nbInput fullWidth >
-<nb-rangepicker (rangeChange)="rangeCanged($event)" #rangepicker></nb-rangepicker>
+                <input [nbDatepicker]="rangepicker" [value]="datePickerRange"   nbInput fullWidth >
+<nb-rangepicker (rangeChange)="rangeCanged($event)" [range]="selectedRange" #rangepicker></nb-rangepicker>
 <small  class="form-text text-danger"  *ngIf="arfForm.controls.startTravelDate.invalid && arfForm.controls.startTravelDate.touched">
   From and To date is Required
  </small>
@@ -71,7 +71,7 @@
                 <label class="label col-sm-3 col-form-label">Signature Date</label>
 
                 <div class="col-sm-3">
-                  <input type="text" class="disabled-bold" disabled formControlName="signatureDate" fullWidth nbInput>
+                  <input type="text" class="disabled-bold" formControlName="signatureDate" fullWidth nbInput>
                 </div>
 
               </div>
@@ -339,7 +339,7 @@
                 <label class="label col-sm-3 col-form-label">Approval Date</label>
 
                 <div class="col-sm-3">
-                  <input type="text" class="disabled-bold" disabled formControlName="approvalDate" fullWidth nbInput>
+                  <input type="text" class="disabled-bold" formControlName="approvalDate" fullWidth nbInput>
                 </div>
 
               </div>
