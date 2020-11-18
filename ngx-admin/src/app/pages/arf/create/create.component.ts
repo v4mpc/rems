@@ -39,7 +39,7 @@ export class CreateComponent implements OnInit {
   minDate: Date;
   maxDate: Date;
   selectedRange: NbCalendarRange<Date>;
-  datePickerRange: any;
+  datePickerRange = null;
 
 
   arfForm = new FormGroup({
@@ -350,6 +350,7 @@ export class CreateComponent implements OnInit {
 
     let sum = 0
     this.lodgings.value.forEach(lodging => {
+
       sum += ((lodging.rate * lodging.nights * lodging.pRate) / 100)
     });
 
@@ -363,9 +364,9 @@ export class CreateComponent implements OnInit {
   otherCostsSum() {
 
     let sum = 0
-    this.otherCosts.value.forEach(otherCost => {
-      sum += otherCost.amount
-    });
+    // this.otherCosts.value.forEach(otherCost => {
+    //   sum += otherCost.amount
+    // });
 
     return sum
 
@@ -505,7 +506,7 @@ export class CreateComponent implements OnInit {
     console.log('am here')
     if (this.arfForm.value.approve == "1") {
 
-      this.arfForm.patchValue({ approvalDate: new Date() })
+      this.arfForm.patchValue({ approvalDate: formatDate(new Date(), 'MMM dd, yyyy', 'en-US') })
 
     } else {
       this.arfForm.patchValue({ approvalDate: '' })

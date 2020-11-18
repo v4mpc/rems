@@ -5,7 +5,16 @@
     
         <nb-card-body>
             <div>
-                <h6 style="display: inline;">Trip Info</h6>
+              <ng-container *ngIf="editMode; else elseTemplate">
+                <h6 style="display: inline;">Edit Advance Request</h6>
+
+              </ng-container>
+              <ng-template #elseTemplate>
+                <h6 style="display: inline;">Create Advance Request</h6>
+              </ng-template>
+              
+               
+               
 
                 <span class="float-right"><label class="label">Grand Total:&nbsp;&nbsp;</label>
                   <!-- <nb-badge text="badgeText"></nb-badge> -->
