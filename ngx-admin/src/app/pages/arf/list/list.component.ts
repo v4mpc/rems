@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ArfService } from "../../../services/arf.service";
 import { LoaderDialogService } from "../../../services/loader-dialog.service";
+import { NotifyService } from "../../../services/notify.service";
 
 
 
@@ -16,7 +17,9 @@ export class ListComponent implements OnInit {
 
   constructor(
     private arfService: ArfService,
-    private loader: LoaderDialogService
+    private loader: LoaderDialogService,
+    private toastrService: NotifyService,
+
 
   ) { }
   ngOnInit(): void {
@@ -32,17 +35,6 @@ export class ListComponent implements OnInit {
       this.arfs = arfs
     })
   }
-
-
-
-  // addMenuItem() {
-  //   this.menuService.addItems([{
-  //     title: '@nebular/theme',
-  //     target: '_blank',
-  //     icon: 'plus-outline',
-  //     url: 'https://github.com/akveo/ngx-admin',
-  //   }], 'list-menu');
-  // }
 
   calculateTotalAmount(reportType) {
 
@@ -81,6 +73,29 @@ export class ListComponent implements OnInit {
 
   downloadArf(file_name) {
     this.arfService.download(file_name)
+  }
+
+
+  openDeleteDialog(index, pk) {
+    this.loader.showDialog().onClose.subscribe(result => {
+      // console.log(result)
+      if (result) {
+        this.loader.show();
+        this.arfService.deleteOne(pk).subscribe(result => {
+          if (index > -1) {
+            this.arfs.splice(index, 1);
+          }
+          this.loader.close();
+
+          this.toastrService.succMessage("Success,Advance Request deleted")
+        }, (error) => {
+          this.loader.close();
+          this.toastrService.errMessage("Error,Contact System Admin")
+          console.log(error)
+        })
+      }
+    })
+
   }
 
 

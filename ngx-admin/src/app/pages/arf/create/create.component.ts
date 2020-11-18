@@ -56,7 +56,8 @@ export class CreateComponent implements OnInit {
   otherCosts = this.arfForm.get('otherCosts') as FormArray
   lodgings = this.arfForm.get('lodgings') as FormArray
 
-  constructor(private toastrService: NotifyService,
+  constructor(
+    private toastrService: NotifyService,
     private locationService: LocationService,
     private loader: LoaderDialogService,
     private router: Router,

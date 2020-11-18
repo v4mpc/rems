@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { LoaderComponent } from "../components/loader/loader.component";
 import { NbDialogService } from '@nebular/theme';
+import { DeleteDialogComponent } from "../components/delete-dialog/delete-dialog.component";
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +30,10 @@ export class LoaderDialogService {
 
   close() {
     this.dialogRef.close();
+  }
+
+  showDialog() {
+    return this.dialogService.open(DeleteDialogComponent)
   }
 
 }

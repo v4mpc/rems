@@ -20,15 +20,16 @@ import {
   NbToastrModule,
   NbWindowModule,
   NbCardModule,
+  NbButtonModule,
+
 
   NbSpinnerModule,
   // NbToastrModule.forRoot(),
 
 } from '@nebular/theme';
-import { LoaderComponent } from './components/loader/loader.component';
 
 @NgModule({
-  declarations: [AppComponent, LoaderComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -36,6 +37,7 @@ import { LoaderComponent } from './components/loader/loader.component';
     NbSpinnerModule,
     AppRoutingModule,
     NbCardModule,
+    NbButtonModule,
 
     NbSidebarModule.forRoot(),
     NbMenuModule.forRoot(),

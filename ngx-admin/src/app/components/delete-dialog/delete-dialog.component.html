@@ -1,0 +1,10 @@
+<nb-card>
+    <nb-card-header>Are you sure?</nb-card-header>
+    <nb-card-body>
+        This Advance Request will be deleted permanently with its corresponding Expense Report if present.
+    </nb-card-body>
+    <nb-card-footer>
+      <button nbButton (click)="dismiss()">Cancel</button>
+      <button class="offset-sm-1" nbButton (click)="confirm()" status="danger">Yes, Delete</button>
+    </nb-card-footer>
+  </nb-card>

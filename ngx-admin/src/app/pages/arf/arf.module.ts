@@ -4,7 +4,6 @@ import { ReactiveFormsModule } from "@angular/forms";
 
 import {
   NbActionsModule,
-  NbButtonModule,
   NbCardModule,
   NbCheckboxModule,
   NbDatepickerModule,
@@ -18,24 +17,27 @@ import {
   NbToggleModule,
   NbBadgeModule,
   NbContextMenuModule,
+  NbButtonModule,
+
 
 
 } from '@nebular/theme';
-import { NgxMaskModule, IConfig } from 'ngx-mask'
+import { NgxMaskModule } from 'ngx-mask'
 import { ArfRoutingModule } from './arf-routing.module';
 import { ArfComponent } from './arf.component';
 import { ListComponent } from './list/list.component';
 import { CreateComponent } from './create/create.component';
+import { LoaderComponent } from '../../components/loader/loader.component';
+import { DeleteDialogComponent } from '../../components/delete-dialog/delete-dialog.component';
 
 
 @NgModule({
-  declarations: [ArfComponent, ListComponent, CreateComponent],
+  declarations: [ArfComponent, ListComponent, CreateComponent, LoaderComponent, DeleteDialogComponent],
   imports: [
     CommonModule,
     ArfRoutingModule,
     NbInputModule,
     NbCardModule,
-    NbButtonModule,
     NbActionsModule,
     NbUserModule,
     NbCheckboxModule,
@@ -48,6 +50,8 @@ import { CreateComponent } from './create/create.component';
     ReactiveFormsModule,
     NbContextMenuModule,
     NbBadgeModule,
+    NbButtonModule,
+
     NgxMaskModule.forRoot(),
     NbToggleModule,
 
