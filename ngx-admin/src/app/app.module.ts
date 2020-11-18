@@ -20,7 +20,6 @@ import {
   NbToastrModule,
   NbWindowModule,
   NbCardModule,
-  NbButtonModule,
 
 
   NbSpinnerModule,
@@ -37,7 +36,6 @@ import {
     NbSpinnerModule,
     AppRoutingModule,
     NbCardModule,
-    NbButtonModule,
 
     NbSidebarModule.forRoot(),
     NbMenuModule.forRoot(),

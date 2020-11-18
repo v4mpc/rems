@@ -1,4 +1,4 @@
-export interface Location {
+export interface LocationIn {
     pk: number,
     name: string,
     lodging: number,

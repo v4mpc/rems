@@ -4,12 +4,12 @@ import { Me } from "../../../interfaces/me";
 import { OtherCost } from "../../../interfaces/other-cost";
 import { Lodging } from "../../../interfaces/lodging";
 import { NotifyService } from "../../../services/notify.service";
-import { Location } from "../../../interfaces/location";
+import { LocationIn } from "../../../interfaces/location";
 import { LocationService } from "../../../services/location.service";
-import { Router, ActivatedRoute, ParamMap, Params } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap, Params, NavigationExtras } from '@angular/router';
 import { ArfService } from "../../../services/arf.service";
 import { LoaderDialogService } from "../../../services/loader-dialog.service";
-import { formatDate } from '@angular/common';
+import { formatDate, Location } from '@angular/common';
 
 
 
@@ -30,7 +30,7 @@ export class CreateComponent implements OnInit {
   lodgingLimit = 9
   otherCostLimit = 6
   selectedId: number
-  locations: Location[]
+  locations: LocationIn[]
   editMode = false
   selectedLocation: any
   minDate: Date;
@@ -63,6 +63,7 @@ export class CreateComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private arfService: ArfService,
+    private location: Location,
 
 
 
@@ -77,7 +78,7 @@ export class CreateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.locationService.getAll().subscribe((locations: Location[]) => {
+    this.locationService.getAll().subscribe((locations: LocationIn[]) => {
       this.locations = locations
 
     })
@@ -179,7 +180,9 @@ export class CreateComponent implements OnInit {
       if (this.editMode) {
 
         this.arfService.update(this.selectedId, arf).subscribe(arf => {
-          this.router.navigate(['../arf']);
+          // this.router.navigate(['arf'], { relativeTo: this.route });
+          this.location.back()
+
           this.loader.close();
           this.toastrService.succMessage('Advance Request Updated');
 
@@ -193,7 +196,9 @@ export class CreateComponent implements OnInit {
         this.arfService.save(arf).subscribe(arf => {
           this.toastrService.succMessage('Advance Request Created');
 
-          this.router.navigate(['../arf']);
+          // this.router.navigate(['arf/list'], { relativeTo: this.route });
+          this.location.back()
+
           this.loader.close();
 
         }, (error) => {
