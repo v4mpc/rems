@@ -16,6 +16,7 @@ import {
   NbTooltipModule,
   NbFormFieldModule,
   NbToggleModule,
+  NbBadgeModule,
 
 
 } from '@nebular/theme';
@@ -44,6 +45,7 @@ import { CreateComponent } from './create/create.component';
     NbTooltipModule,
     NbFormFieldModule,
     ReactiveFormsModule,
+    NbBadgeModule,
     NgxMaskModule.forRoot(),
     NbToggleModule,
 

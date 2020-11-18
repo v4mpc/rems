@@ -4,11 +4,25 @@
         <!-- <nb-card-header>Using the Grid</nb-card-header> -->
     
         <nb-card-body>
-            <h6>
-                Trip Info
-            </h6>
+            <div>
+                <h6 style="display: inline;">Trip Info</h6>
+
+                <span class="float-right"><label class="label">Grand Total:&nbsp;&nbsp;</label>
+                  <!-- <nb-badge text="badgeText"></nb-badge> -->
+                  <span class="badge badge-warning">
+                  <strong>{{otherCostsSum()+lodgingsSum()+mesSum()|number }} TZS</strong>
+                  </span>
+                 </span>
+            </div>
             <hr>
           <form [formGroup]="arfForm">
+            <div class="form-group row">
+              <label class="label col-sm-3 col-form-label">Name</label>
+              <div class="col-sm-9">
+
+                <input class="disabled-bold" nbInput fullWidth disabled>
+              </div>
+            </div>
             <div class="form-group row">
               <label class="label col-sm-3 col-form-label">Trip Purpose</label>
               <div class="col-sm-9">
@@ -46,7 +60,7 @@
                 <label class="label col-sm-3 col-form-label">Signature Date</label>
 
                 <div class="col-sm-3">
-                  <input type="text" disabled formControlName="signatureDate" fullWidth nbInput>
+                  <input type="text" class="disabled-bold" disabled formControlName="signatureDate" fullWidth nbInput>
                 </div>
 
               </div>
@@ -247,6 +261,8 @@
                 </tbody>
               </table>
 
+
+
               <h6>
                 Approval
             </h6>
@@ -257,7 +273,7 @@
               <label class="label col-sm-3 col-form-label">Supervisor Name</label>
               <div class="col-sm-9">
 
-                <input nbInput fullWidth placeholder="name">
+                <input class="disabled-bold" disabled nbInput fullWidth placeholder="name">
               </div>
             </div>
   
@@ -280,7 +296,7 @@
                 <label class="label col-sm-3 col-form-label">Approval Date</label>
 
                 <div class="col-sm-3">
-                  <input type="text" disabled formControlName="approvalDate" fullWidth nbInput>
+                  <input type="text" class="disabled-bold" disabled formControlName="approvalDate" fullWidth nbInput>
                 </div>
 
               </div>
