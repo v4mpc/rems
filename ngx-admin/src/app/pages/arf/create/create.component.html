@@ -1,8 +1,6 @@
 <div class="row">
     <div class="col-md-12">
       <nb-card>
-        <!-- <nb-card-header>Using the Grid</nb-card-header> -->
-    
         <nb-card-body>
             <div>
               <ng-container *ngIf="editMode; else elseTemplate">
@@ -25,7 +23,7 @@
                
 
                 <span class="float-right"><label class="label">Grand Total:&nbsp;&nbsp;</label>
-                  <!-- <nb-badge text="badgeText"></nb-badge> -->
+                
                   <span class="badge badge-warning">
                   <strong>{{otherCostsSum()+lodgingsSum()+mesSum()|number }} TZS</strong>
                   </span>

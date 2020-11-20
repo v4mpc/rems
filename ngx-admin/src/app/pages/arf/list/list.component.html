@@ -65,35 +65,20 @@
 
                                 <div class="row">
                                   <div class="col-sm-4">
-                                    <a outline routerLink="../create" status="success" size="small" nbTooltip="Edit" nbTooltipStatus="success"  nbButton><nb-icon icon="edit-outline"></nb-icon></a>
+                                    <a outline [routerLink]="['../erf', arf.erf.pk]" status="success" size="small" nbTooltip="Edit" nbTooltipStatus="success"  nbButton><nb-icon icon="edit-outline"></nb-icon></a>
     
                                   </div>
                                   <div class="col-sm-4">
-                                    <a outline routerLink="../create" status="primary" size="small" nbTooltip="View" nbTooltipStatus="primary" nbButton><nb-icon icon="eye-outline"></nb-icon></a>
+                                    <a outline [routerLink]="['../erf/view', arf.erf.pk]" status="primary" size="small" nbTooltip="View" nbTooltipStatus="primary" nbButton><nb-icon icon="eye-outline"></nb-icon></a>
                                   
                                   </div>
-                                  <div class="col-sm-4">
+                                  <!-- <div class="col-sm-4">
                                     <button outline status="danger" size="small" nbTooltip="Delete" nbTooltipStatus="danger"  nbButton><nb-icon icon="trash-2-outline"></nb-icon></button>
                                   
-                                  </div>
+                                  </div> -->
     
                                 </div>
           
-                                  <!-- <button color="accent" mat-icon-button matTooltip="Edit"
-                                      [routerLink]="['/erfs-edit', arf.erf.pk]">
-                                      <mat-icon>edit</mat-icon>
-                                  </button>
-          
-                                  <button color="accent" mat-icon-button matTooltip="Download" *ngIf="arf.excel_sheet"
-                                      (click)="downloadArf(arf.excel_sheet)">
-                                      <mat-icon>cloud_download</mat-icon>
-                                  </button>
-                                  <button color="accent" mat-icon-button matTooltip="Print" (click)="openDeleteDialog(i,arft.pk)">
-                                      <mat-icon>print</mat-icon>
-                                  </button>
-                                  <button color="warn" mat-icon-button matTooltip="Delete" (click)="openDeleteDialog(i,arf.pk)">
-                                      <mat-icon>delete_forever</mat-icon>
-                                  </button> -->
                               </td>
                           </tr>
                       </ng-container>

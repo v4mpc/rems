@@ -401,11 +401,7 @@ export class CreateComponent implements OnInit {
 
   signChanged() {
     if (this.arfForm.value.sign) {
-      // let currentDate=new Date()
-      // let year = currentDate.getFullYear()
-      // let month = currentDate.
       this.arfForm.patchValue({ signatureDate: formatDate(new Date(), 'MMM dd, yyyy', 'en-US') })
-
     } else {
       this.arfForm.patchValue({ signatureDate: '' })
     }

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ArfComponent } from "./arf.component";
 import { CreateComponent } from './create/create.component';
+import { ErfCreateComponent } from "../erf/create/create.component";
 import { ListComponent } from "./list/list.component";
 
 const routes: Routes = [{
@@ -25,6 +26,18 @@ const routes: Routes = [{
     {
       path: 'view/:id',
       component: CreateComponent,
+    }
+
+    ,
+    {
+      path: 'erf/:id',
+      component: ErfCreateComponent,
+    }
+
+    ,
+    {
+      path: 'erf/view/:id',
+      component: ErfCreateComponent,
     }
     ,
     {
