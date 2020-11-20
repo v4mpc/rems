@@ -23,6 +23,11 @@ const routes: Routes = [{
     }
     ,
     {
+      path: 'view/:id',
+      component: CreateComponent,
+    }
+    ,
+    {
       path: '',
       redirectTo: 'list',
       pathMatch: 'full',

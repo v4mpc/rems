@@ -6,7 +6,15 @@
         <nb-card-body>
             <div>
               <ng-container *ngIf="editMode; else elseTemplate">
-                <h6 style="display: inline;">Edit Advance Request</h6>
+
+                <ng-container *ngIf="viewMode; else elseTemplate">
+                  <h6 style="display: inline;">View Advance Request</h6>
+                </ng-container>
+                <ng-template #elseTemplate>
+                  <h6 style="display: inline;">Edit Advance Request</h6>
+                </ng-template>
+                
+     
 
               </ng-container>
               <ng-template #elseTemplate>
@@ -36,7 +44,7 @@
               <label class="label col-sm-3 col-form-label">Trip Purpose</label>
               <div class="col-sm-9">
 
-                <textarea nbInput fullWidth formControlName="purpose" placeholder="..."></textarea>
+                <textarea class="disabled-bold" nbInput fullWidth formControlName="purpose" disabled="viewMode" placeholder="..."></textarea>
                 <small  class="form-text text-danger" *ngIf="arfForm.controls.purpose.invalid && arfForm.controls.purpose.touched">
                  Trip Purpose is required
                 </small>
@@ -47,7 +55,7 @@
             <div class="form-group row">
               <label for="inputPassword2" class="label col-sm-3 col-form-label">Traveling to</label>
               <div class="col-sm-9">
-                <nb-select placeholder="Select Location" formControlName="region" (selectedChange)="regionChanged()" fullWidth>
+                <nb-select placeholder="Select Location" formControlName="region" class="disabled-bold" [disabled]="viewMode"  (selectedChange)="regionChanged()" fullWidth>
                     <nb-option *ngFor="let location of locations" [value]="location">
 
                     {{location.name}}
@@ -63,7 +71,7 @@
             <div class="form-group row">
               <label class="col-sm-3 label">Trip Date</label>
               <div class="col-sm-9">
-                <input [nbDatepicker]="rangepicker" [value]="datePickerRange"   nbInput fullWidth >
+                <input [nbDatepicker]="rangepicker" [value]="datePickerRange"  class="disabled-bold" [disabled]="viewMode"   nbInput fullWidth >
 <nb-rangepicker (rangeChange)="rangeCanged($event)" [range]="selectedRange" #rangepicker></nb-rangepicker>
 <small  class="form-text text-danger"  *ngIf="arfForm.controls.startTravelDate.invalid && arfForm.controls.startTravelDate.touched">
   From and To date is Required
@@ -75,7 +83,7 @@
                 <label class="label col-sm-3 col-form-label">Sign Document</label>
                 <div class="col-sm-3">
   
-                    <nb-toggle labelPosition="end" formControlName="sign" (change)="signChanged()"> {{arfForm.value.sign?"Yes":"No"}}</nb-toggle>
+                    <nb-toggle class="disabled-bold" [disabled]="viewMode"  labelPosition="end" formControlName="sign" (change)="signChanged()"> {{arfForm.value.sign?"Yes":"No"}}</nb-toggle>
                 </div>
                 <label class="label col-sm-3 col-form-label">Signature Date</label>
 
@@ -101,7 +109,7 @@
                     <th scope="col" style="width: 15%; text-align:right;"><label class="label-"> Daily Rate</label></th>
                     <th scope="col" style="width: 12%; text-align:right;"><label class="label-"> % Daily Rate</label></th>
                     <th scope="col" style="width: 15%; text-align:right;"><label class="label-"> Advance Amount</label></th>
-                    <th scope="col" style="width: 8%;" colspan="2"><label class="label-"> Action</label></th>
+                    <th scope="col" style="width: 8%;" colspan="2" *ngIf="!viewMode"><label class="label-"> Action</label></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -110,19 +118,19 @@
                   <tr>
                     <th class="align-middle">{{i+1}}</th>
                     <td>        
-                      <input type="text" formControlName="destination" fullWidth nbInput>
+                      <input type="text" formControlName="destination" class="disabled-bold" disabled="viewMode"  fullWidth nbInput>
                       <small  class="form-text text-danger" *ngIf="arfForm.controls.mes.controls[i].controls.destination.invalid && arfForm.controls.mes.controls[i].controls.destination.touched">
                         Please fill this field
                        </small>
                     </td>
                     <td>       
-                       <input type="text" formControlName="days" mask="separator" thousandSeparator="," style="text-align:right;" fullWidth nbInput>
+                       <input type="text" formControlName="days" class="disabled-bold" disabled="viewMode"  mask="separator" thousandSeparator="," style="text-align:right;" fullWidth nbInput>
                        <small  class="form-text text-danger" *ngIf="arfForm.controls.mes.controls[i].controls.days.invalid && arfForm.controls.mes.controls[i].controls.days.touched">
                         Please fill this field
                        </small>
                     </td>
                     <td>        
-                      <input type="text" formControlName="rate"  mask="separator" thousandSeparator=","  style="text-align:right;" fullWidth nbInput>
+                      <input type="text" formControlName="rate" class="disabled-bold" disabled="viewMode"   mask="separator" thousandSeparator=","  style="text-align:right;" fullWidth nbInput>
                       <small  class="form-text text-danger" *ngIf="arfForm.controls.mes.controls[i].controls.rate.invalid && arfForm.controls.mes.controls[i].controls.rate.touched">
                         Please fill this field
                        </small>
@@ -130,7 +138,7 @@
                     <td>       
                         <nb-form-field>
                             <nb-icon nbSuffix icon="percent" pack="eva"></nb-icon>
-                            <input type="text" formControlName="pRate" style="text-align:right;" mask="separator" thousandSeparator=","  nbInput>
+                            <input type="text" formControlName="pRate"  class="disabled-bold" disabled="viewMode" style="text-align:right;" mask="separator" thousandSeparator=","  nbInput>
                             
                           </nb-form-field>
                           <small  class="form-text text-danger" *ngIf="arfForm.controls.mes.controls[i].controls.pRate.invalid && arfForm.controls.mes.controls[i].controls.pRate.touched">
@@ -142,11 +150,11 @@
                                            <!-- <input type="text" disabled fullWidth nbInput [value]="((mes.value[i].rate*mes.value[i].days*mes.value[i].pRate)/100)|number"> -->
                     </td>
                    
-                    <td class="align-middle" *ngIf="mes.length>1">
+                    <td class="align-middle" *ngIf="mes.length>1 && !viewMode" >
                         <button nbButton outline status="danger" (click)="removeMe(i)" nbTooltip="Delete" nbTooltipStatus="primary" size="small"><nb-icon icon="trash-2"></nb-icon></button>
                     </td>
 
-                    <td class="align-middle" *ngIf="i+1==mes.length">
+                    <td class="align-middle" *ngIf="i+1==mes.length && !viewMode">
                         <button nbButton outline status="primary" (click)="addMe({destination:''})" nbTooltip="Add" nbTooltipStatus="primary" size="small"><nb-icon icon="plus"></nb-icon></button>
                         
 
@@ -186,7 +194,7 @@
                     <th scope="col" style="width: 15%; text-align:right;"><label class="label-"> Daily Rate</label></th>
                     <th scope="col" style="width: 12%; text-align:right;"><label class="label-"> % Daily Rate</label></th>
                     <th scope="col" style="width: 15%; text-align:right;"><label class="label-"> Advance Amount</label></th>
-                    <th scope="col" style="width: 8%;" colspan="2"><label class="label-"> Action</label></th>
+                    <th scope="col" style="width: 8%;" colspan="2" *ngIf="!viewMode"><label class="label-"> Action</label></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -195,19 +203,19 @@
                   <tr>
                     <th class="align-middle">{{i+1}}</th>
                     <td>       
-                       <input type="text" formControlName="destination" fullWidth nbInput>
+                       <input type="text" formControlName="destination" class="disabled-bold" disabled="viewMode" fullWidth nbInput>
                        <small  class="form-text text-danger" *ngIf="arfForm.controls.lodgings.controls[i].controls.destination.invalid && arfForm.controls.lodgings.controls[i].controls.destination.touched">
                         Please fill this field
                        </small>
                     </td>
                     <td>       
-                       <input type="text" formControlName="nights" mask="separator" thousandSeparator="," style="text-align:right;" fullWidth nbInput>
+                       <input type="text" formControlName="nights" class="disabled-bold" disabled="viewMode" mask="separator" thousandSeparator="," style="text-align:right;" fullWidth nbInput>
                        <small  class="form-text text-danger" *ngIf="arfForm.controls.lodgings.controls[i].controls.nights.invalid && arfForm.controls.lodgings.controls[i].controls.nights.touched">
                         Please fill this field
                        </small>
                     </td>
                     <td>        
-                      <input type="text" formControlName="rate"  mask="separator" thousandSeparator=","  style="text-align:right;" fullWidth nbInput>
+                      <input type="text" formControlName="rate" class="disabled-bold" disabled="viewMode"  mask="separator" thousandSeparator=","  style="text-align:right;" fullWidth nbInput>
                       <small  class="form-text text-danger" *ngIf="arfForm.controls.lodgings.controls[i].controls.rate.invalid && arfForm.controls.lodgings.controls[i].controls.rate.touched">
                         Please fill this field
                        </small>
@@ -215,10 +223,10 @@
                     <td>       
                         <nb-form-field>
                             <nb-icon nbSuffix icon="percent" pack="eva"></nb-icon>
-                            <input type="text" formControlName="pRate" style="text-align:right;" mask="separator" thousandSeparator=","  nbInput>
+                            <input type="text" formControlName="pRate" class="disabled-bold" disabled="viewMode" style="text-align:right;" mask="separator" thousandSeparator=","  nbInput>
                            
                           </nb-form-field>
-                          <small  class="form-text text-danger" *ngIf="arfForm.controls.lodgings.controls[i].controls.pRate.invalid && arfForm.controls.lodgings.controls[i].controls.pRate.touched">
+                          <small  class="form-text text-danger"  *ngIf="arfForm.controls.lodgings.controls[i].controls.pRate.invalid && arfForm.controls.lodgings.controls[i].controls.pRate.touched">
                             Please fill this field
                            </small>
                     </td>
@@ -228,11 +236,11 @@
 
                     </td>
                    
-                    <td class="align-middle" *ngIf="lodgings.length>1">
+                    <td class="align-middle" *ngIf="lodgings.length>1  && !viewMode">
                         <button nbButton outline status="danger" (click)="removeLodging(i)" nbTooltip="Delete" nbTooltipStatus="primary" size="small"><nb-icon icon="trash-2"></nb-icon></button>
                     </td>
 
-                    <td class="align-middle" *ngIf="i+1==lodgings.length">
+                    <td class="align-middle" *ngIf="i+1==lodgings.length  && !viewMode">
                         <button nbButton outline status="primary" (click)="addLodging({destination:''})" nbTooltip="Add" nbTooltipStatus="primary" size="small"><nb-icon icon="plus"></nb-icon></button>
                         
 
@@ -271,7 +279,7 @@
                     <th scope="col" style="width: 55%;"><label class="label-"> Purpose</label></th>
                     <th scope="col" style="width: 32%; text-align:right;"><label class="label-"> Amount</label></th>
 
-                    <th scope="col" style="width: 8%;" colspan="2"><label class="label-">Action</label></th>
+                    <th scope="col" style="width: 8%;" colspan="2" *ngIf="!viewMode"><label class="label-">Action</label></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -279,19 +287,19 @@
                         <ng-container [formGroupName]="i">
                   <tr>
                     <th class="align-middle">{{i+1}}</th>
-                    <td>        <input type="text" formControlName="purpose" fullWidth nbInput>
+                    <td>        <input type="text" class="disabled-bold" disabled="viewMode" formControlName="purpose" fullWidth nbInput>
                     </td>
-                    <td>        <input type="text" formControlName="amount" mask="separator" thousandSeparator="," style="text-align:right;" fullWidth nbInput>
+                    <td>        <input type="text"  class="disabled-bold" disabled="viewMode" formControlName="amount" mask="separator" thousandSeparator="," style="text-align:right;" fullWidth nbInput>
                     </td>
                
                    
                  
                    
-                    <td class="align-middle" *ngIf="otherCosts.length>1">
+                    <td class="align-middle" *ngIf="otherCosts.length>1  && !viewMode">
                         <button nbButton outline status="danger" (click)="removeOtherCost(i)" nbTooltip="Delete" nbTooltipStatus="primary" size="small"><nb-icon icon="trash-2"></nb-icon></button>
                     </td>
 
-                    <td class="align-middle" *ngIf="i+1==otherCosts.length">
+                    <td class="align-middle" *ngIf="i+1==otherCosts.length  && !viewMode">
                         <button nbButton outline status="primary" (click)="addOtherCost({destination:''})" nbTooltip="Add" nbTooltipStatus="primary" size="small"><nb-icon icon="plus"></nb-icon></button>
                         
 
@@ -366,8 +374,16 @@
                 <div class="offset-sm-3 col-sm-3">
                   <a routerLink="/pages/arf" nbButton>Back</a>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-3" *ngIf="!viewMode">
                   <button type="submit" nbButton (click)="save()" status="primary">Save</button>
+                </div>
+
+                <div class="col-sm-3" *ngIf="viewMode">
+                  <button type="submit" nbButton status="primary">Print</button>
+                </div>
+
+                <div class="col-sm-3" *ngIf="viewMode">
+                  <button nbButton (click)="downloadArf()" status="info">Download</button>
                 </div>
               </div>
           </form>

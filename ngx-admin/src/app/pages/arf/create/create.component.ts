@@ -11,6 +11,8 @@ import { ArfService } from "../../../services/arf.service";
 import { LoaderDialogService } from "../../../services/loader-dialog.service";
 import { formatDate, Location } from '@angular/common';
 import { NbCalendarRange } from "@nebular/theme";
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 
 
@@ -35,11 +37,13 @@ export class CreateComponent implements OnInit {
   selectedId: number
   locations: LocationIn[]
   editMode = false
+  viewMode = false
   selectedLocation: any
   minDate: Date;
   maxDate: Date;
   selectedRange: NbCalendarRange<Date>;
   datePickerRange = null;
+  file_name = null;
 
 
   arfForm = new FormGroup({
@@ -54,7 +58,7 @@ export class CreateComponent implements OnInit {
     lodgings: new FormArray([]),
     otherCosts: new FormArray([]),
     sign: new FormControl(false),
-    // datePickerRange: new FormControl(null)
+
   })
 
 
@@ -92,22 +96,24 @@ export class CreateComponent implements OnInit {
 
 
     this.route.params.subscribe((params: Params) => {
+
+      this.viewMode = this.router.url.split('/')[3] == 'view' ? true : false
+
       this.selectedId = +params['id']
       this.editMode = params['id'] != null
 
       if (this.editMode) {
         this.arfService.getOne(this.selectedId).subscribe((arf: any) => {
+          this.file_name = arf.excel_sheet
+
           this.selectedLocation = this.getSelectedLocation(arf.location)[0]
-          console.log(this.selectedLocation)
           this.arfForm.patchValue({
             purpose: arf.purpose,
             startTravelDate: new Date(arf.start_date),
             endTravelDate: new Date(arf.end_date),
             region: this.selectedLocation,
-            // datePickerRange: `${arf.start_date} - ${arf.end_date}`
           })
 
-          // console.log(`${arf.start_date} - ${arf.end_date}`)
           this.datePickerRange = `${formatDate(arf.start_date, 'MMM dd, yyyy', 'en-US')} - ${arf.end_date}`
           this.selectedRange = {
             start: new Date(arf.start_date),
@@ -244,7 +250,6 @@ export class CreateComponent implements OnInit {
 
 
   transformMe(me) {
-    console.log(me)
     return {
       destination: me.destination,
       days: me.no_of_nights,
@@ -277,7 +282,6 @@ export class CreateComponent implements OnInit {
 
   rangeCanged(event) {
 
-    console.log(this.rangepicker)
 
     if ('start' in event) {
       this.arfForm.patchValue({ startTravelDate: event.start })
@@ -372,6 +376,10 @@ export class CreateComponent implements OnInit {
 
 
 
+  }
+
+  downloadArf() {
+    this.arfService.download(this.file_name)
   }
 
   mesSum() {
@@ -487,7 +495,6 @@ export class CreateComponent implements OnInit {
   }
 
   validInputs() {
-    console.log(this.arfForm.get('startTravelDate').valid)
     return this.arfForm.get('region').valid && this.arfForm.get('startTravelDate').valid && this.arfForm.get('endTravelDate').valid
   }
 
@@ -503,7 +510,6 @@ export class CreateComponent implements OnInit {
 
 
   approveChanged() {
-    console.log('am here')
     if (this.arfForm.value.approve == "1") {
 
       this.arfForm.patchValue({ approvalDate: formatDate(new Date(), 'MMM dd, yyyy', 'en-US') })
