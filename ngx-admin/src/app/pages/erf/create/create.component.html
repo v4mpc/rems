@@ -6,17 +6,17 @@
               <ng-container *ngIf="editMode; else elseTemplate">
 
                 <ng-container *ngIf="viewMode; else elseTemplate">
-                  <h6 style="display: inline;">View Advance Request</h6>
+                  <h6 style="display: inline;">View Expense Report</h6>
                 </ng-container>
                 <ng-template #elseTemplate>
-                  <h6 style="display: inline;">Edit Advance Request</h6>
+                  <h6 style="display: inline;">Edit Expense Report</h6>
                 </ng-template>
                 
      
 
               </ng-container>
               <ng-template #elseTemplate>
-                <h6 style="display: inline;">Create Advance Request</h6>
+                <h6 style="display: inline;">Create Expense Report</h6>
               </ng-template>
               
                
@@ -30,7 +30,7 @@
                  </span>
             </div>
             <hr>
-          <form [formGroup]="arfForm">
+          <form [formGroup]="erfForm">
             <div class="form-group row">
               <label class="label col-sm-3 col-form-label">Name</label>
               <div class="col-sm-9">
@@ -42,8 +42,8 @@
               <label class="label col-sm-3 col-form-label">Trip Purpose</label>
               <div class="col-sm-9">
 
-                <textarea class="disabled-bold" nbInput fullWidth formControlName="purpose" [disabled]="viewMode" placeholder="..."></textarea>
-                <small  class="form-text text-danger" *ngIf="arfForm.controls.purpose.invalid && arfForm.controls.purpose.touched">
+                <textarea class="disabled-bold" nbInput fullWidth formControlName="purpose" [disabled]="true" placeholder="..."></textarea>
+                <small  class="form-text text-danger" *ngIf="erfForm.controls.purpose.invalid && erfForm.controls.purpose.touched">
                  Trip Purpose is required
                 </small>
               </div>
@@ -53,7 +53,7 @@
             <div class="form-group row">
               <label for="inputPassword2" class="label col-sm-3 col-form-label">Traveling to</label>
               <div class="col-sm-9">
-                <nb-select placeholder="Select Location" formControlName="region" class="disabled-bold" [disabled]="viewMode"  (selectedChange)="regionChanged()" fullWidth>
+                <nb-select placeholder="Select Location" formControlName="region" class="disabled-bold" [disabled]="true"  fullWidth>
                     <nb-option *ngFor="let location of locations" [value]="location">
 
                     {{location.name}}
@@ -61,7 +61,7 @@
                     </nb-option>
 
                   </nb-select>
-                  <small  class="form-text text-danger" *ngIf="arfForm.controls.region.invalid && arfForm.controls.region.touched">
+                  <small  class="form-text text-danger" *ngIf="erfForm.controls.region.invalid && erfForm.controls.region.touched">
                     Location is required
                    </small>
               </div>
@@ -69,9 +69,9 @@
             <div class="form-group row">
               <label class="col-sm-3 label">Trip Date</label>
               <div class="col-sm-9">
-                <input [nbDatepicker]="rangepicker" [value]="datePickerRange"  class="disabled-bold" [disabled]="viewMode"   nbInput fullWidth >
-<nb-rangepicker (rangeChange)="rangeCanged($event)" [range]="selectedRange" #rangepicker></nb-rangepicker>
-<small  class="form-text text-danger"  *ngIf="arfForm.controls.startTravelDate.invalid && arfForm.controls.startTravelDate.touched">
+                <input [nbDatepicker]="rangepicker" [value]="datePickerRange"  class="disabled-bold" [disabled]="true"   nbInput fullWidth >
+<nb-rangepicker  [range]="selectedRange" #rangepicker></nb-rangepicker>
+<small  class="form-text text-danger"  *ngIf="erfForm.controls.startTravelDate.invalid && erfForm.controls.startTravelDate.touched">
   From and To date is Required
  </small>
               </div>
@@ -81,7 +81,7 @@
                 <label class="label col-sm-3 col-form-label">Sign Document</label>
                 <div class="col-sm-3">
   
-                    <nb-toggle class="disabled-bold" [disabled]="viewMode"  labelPosition="end" formControlName="sign" (change)="signChanged()"> {{arfForm.value.sign?"Yes":"No"}}</nb-toggle>
+                    <nb-toggle class="disabled-bold" [disabled]="viewMode"  labelPosition="end" formControlName="sign" (change)="signChanged()"> {{erfForm.value.sign?"Yes":"No"}}</nb-toggle>
                 </div>
                 <label class="label col-sm-3 col-form-label">Signature Date</label>
 
@@ -102,11 +102,11 @@
                 <thead class="thead-dark">
                   <tr>
                     <th scope="col" style="width: 5%;"><label class="label-"> #</label></th>
-                    <th scope="col" style="width: 37%;"><label class="label-"> Destination</label></th>
-                    <th scope="col" style="width: 8%; text-align:right;"><label class="label-"> # of  Days</label></th>
-                    <th scope="col" style="width: 15%; text-align:right;"><label class="label-"> Daily Rate</label></th>
-                    <th scope="col" style="width: 12%; text-align:right;"><label class="label-"> % Daily Rate</label></th>
-                    <th scope="col" style="width: 15%; text-align:right;"><label class="label-"> Advance Amount</label></th>
+                    <th scope="col" style="width: 25%;"><label class="label-"> Departure</label></th>
+                    <th scope="col" style="width: 24%;"><label class="label-"> Location</label></th>
+                    <th scope="col" style="width: 14%; text-align:right;"><label class="label-"> Rate</label></th>
+                    <th scope="col" style="width: 10%; text-align:right;"><label class="label-"> Days</label></th>
+                    <th scope="col" style="width: 14%; text-align:right;"><label class="label-">  Total</label></th>
                     <th scope="col" style="width: 8%;" colspan="2" *ngIf="!viewMode"><label class="label-"> Action</label></th>
                   </tr>
                 </thead>
@@ -116,33 +116,31 @@
                   <tr>
                     <th class="align-middle">{{i+1}}</th>
                     <td>        
-                      <input type="text" formControlName="destination" class="disabled-bold" [disabled]="viewMode"  fullWidth nbInput>
-                      <small  class="form-text text-danger" *ngIf="arfForm.controls.mes.controls[i].controls.destination.invalid && arfForm.controls.mes.controls[i].controls.destination.touched">
-                        Please fill this field
-                       </small>
-                    </td>
-                    <td>       
-                       <input type="text" formControlName="days" class="disabled-bold" [disabled]="viewMode"  mask="separator" thousandSeparator="," style="text-align:right;" fullWidth nbInput>
-                       <small  class="form-text text-danger" *ngIf="arfForm.controls.mes.controls[i].controls.days.invalid && arfForm.controls.mes.controls[i].controls.days.touched">
+                      <input [nbDatepicker]="rangepicker" [value]="meDatePickerRangeList[i]"  class="disabled-bold" [disabled]="viewMode"   nbInput fullWidth >
+                      <nb-rangepicker (rangeChange)="meRangeCanged($event,me)" [range]="meSelectedDateRangeList[i]" #rangepicker></nb-rangepicker>
+                      <small  class="form-text text-danger" *ngIf="erfForm.controls.mes.controls[i].controls.start_date.invalid && erfForm.controls.mes.controls[i].controls.destination.touched">
                         Please fill this field
                        </small>
                     </td>
                     <td>        
+                      <input type="text" formControlName="destination" class="disabled-bold" [disabled]="viewMode"  fullWidth nbInput>
+                      <small  class="form-text text-danger" *ngIf="erfForm.controls.mes.controls[i].controls.destination.invalid && erfForm.controls.mes.controls[i].controls.destination.touched">
+                        Please fill this field
+                       </small>
+                    </td>
+                    
+                    <td>        
                       <input type="text" formControlName="rate" class="disabled-bold" [disabled]="viewMode"   mask="separator" thousandSeparator=","  style="text-align:right;" fullWidth nbInput>
-                      <small  class="form-text text-danger" *ngIf="arfForm.controls.mes.controls[i].controls.rate.invalid && arfForm.controls.mes.controls[i].controls.rate.touched">
+                      <small  class="form-text text-danger" *ngIf="erfForm.controls.mes.controls[i].controls.rate.invalid && erfForm.controls.mes.controls[i].controls.rate.touched">
                         Please fill this field
                        </small>
                     </td>
                     <td>       
-                        <nb-form-field>
-                            <nb-icon nbSuffix icon="percent" pack="eva"></nb-icon>
-                            <input type="text" formControlName="pRate"  class="disabled-bold" [disabled]="viewMode" style="text-align:right;" mask="separator" thousandSeparator=","  nbInput>
-                            
-                          </nb-form-field>
-                          <small  class="form-text text-danger" *ngIf="arfForm.controls.mes.controls[i].controls.pRate.invalid && arfForm.controls.mes.controls[i].controls.pRate.touched">
-                            Please fill this field
-                           </small>
-                    </td>
+                      <input type="text" formControlName="days" class="disabled-bold" [disabled]="viewMode"  mask="separator" thousandSeparator=","  fullWidth nbInput>
+                      <small  class="form-text text-danger" *ngIf="erfForm.controls.mes.controls[i].controls.days.invalid && erfForm.controls.mes.controls[i].controls.days.touched">
+                       Please fill this field
+                      </small>
+                   </td>
                                   
                                     <td class="align-middle" style="text-align:right;">    {{((mes.value[i].rate*mes.value[i].days*mes.value[i].pRate)/100)|number}} 
                                            <!-- <input type="text" disabled fullWidth nbInput [value]="((mes.value[i].rate*mes.value[i].days*mes.value[i].pRate)/100)|number"> -->
@@ -187,12 +185,13 @@
                 <thead class="thead-dark">
                   <tr>
                     <th scope="col" style="width: 5%;"><label class="label-">#</label></th>
-                    <th scope="col" style="width: 37%;"><label class="label-"> Destination</label></th>
-                    <th scope="col" style="width: 8%;" style="text-align:right;"><label class="label-" ># of  nights</label></th>
-                    <th scope="col" style="width: 15%; text-align:right;"><label class="label-"> Daily Rate</label></th>
-                    <th scope="col" style="width: 12%; text-align:right;"><label class="label-"> % Daily Rate</label></th>
-                    <th scope="col" style="width: 15%; text-align:right;"><label class="label-"> Advance Amount</label></th>
-                    <th scope="col" style="width: 8%;" colspan="2" *ngIf="!viewMode"><label class="label-"> Action</label></th>
+                    <th scope="col" style="width: 25%;"><label class="label-"> Date</label></th>
+                    <th scope="col" style="width: 25%;" ><label class="label-" >Location</label></th>
+                    <th scope="col" style="width: 10%; text-align:right;"><label class="label-"> Lodging Max</label></th>
+                    <th scope="col" style="width: 10%; text-align:right;"><label class="label-"> Actual Cost</label></th>
+                    <th scope="col" style="width: 8%; text-align:right;"><label class="label-"> No. of Nights</label></th>
+                    <th scope="col" style="width: 10%; text-align:right;"><label class="label-"> Total</label></th>
+                    <th scope="col" style="width: 7%;" colspan="2" *ngIf="!viewMode"><label class="label-"> Action</label></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -200,34 +199,40 @@
                         <ng-container [formGroupName]="i">
                   <tr>
                     <th class="align-middle">{{i+1}}</th>
+                    <td>        
+                      <input [nbDatepicker]="rangepicker" [value]="lodgingDatePickerRangeList[i]"  class="disabled-bold" [disabled]="viewMode"   nbInput fullWidth >
+                      <nb-rangepicker (rangeChange)="meRangeCanged($event,lodging)" [range]="lodgingSelectedDateRangeList[i]" #rangepicker></nb-rangepicker>
+                      <small  class="form-text text-danger" *ngIf="erfForm.controls.mes.controls[i].controls.start_date.invalid && erfForm.controls.mes.controls[i].controls.destination.touched">
+                        Please fill this field
+                       </small>
+                    </td>
                     <td>       
                        <input type="text" formControlName="destination" class="disabled-bold" [disabled]="viewMode" fullWidth nbInput>
-                       <small  class="form-text text-danger" *ngIf="arfForm.controls.lodgings.controls[i].controls.destination.invalid && arfForm.controls.lodgings.controls[i].controls.destination.touched">
+                       <small  class="form-text text-danger" *ngIf="erfForm.controls.lodgings.controls[i].controls.destination.invalid && erfForm.controls.lodgings.controls[i].controls.destination.touched">
                         Please fill this field
                        </small>
                     </td>
-                    <td>       
-                       <input type="text" formControlName="nights" class="disabled-bold" [disabled]="viewMode" mask="separator" thousandSeparator="," style="text-align:right;" fullWidth nbInput>
-                       <small  class="form-text text-danger" *ngIf="arfForm.controls.lodgings.controls[i].controls.nights.invalid && arfForm.controls.lodgings.controls[i].controls.nights.touched">
-                        Please fill this field
-                       </small>
-                    </td>
+                    
                     <td>        
                       <input type="text" formControlName="rate" class="disabled-bold" [disabled]="viewMode"  mask="separator" thousandSeparator=","  style="text-align:right;" fullWidth nbInput>
-                      <small  class="form-text text-danger" *ngIf="arfForm.controls.lodgings.controls[i].controls.rate.invalid && arfForm.controls.lodgings.controls[i].controls.rate.touched">
+                      <small  class="form-text text-danger" *ngIf="erfForm.controls.lodgings.controls[i].controls.rate.invalid && erfForm.controls.lodgings.controls[i].controls.rate.touched">
                         Please fill this field
                        </small>
                     </td>
                     <td>       
-                        <nb-form-field>
-                            <nb-icon nbSuffix icon="percent" pack="eva"></nb-icon>
+                  
                             <input type="text" formControlName="pRate" class="disabled-bold" [disabled]="viewMode" style="text-align:right;" mask="separator" thousandSeparator=","  nbInput>
-                           
-                          </nb-form-field>
-                          <small  class="form-text text-danger"  *ngIf="arfForm.controls.lodgings.controls[i].controls.pRate.invalid && arfForm.controls.lodgings.controls[i].controls.pRate.touched">
+                       
+                          <small  class="form-text text-danger"  *ngIf="erfForm.controls.lodgings.controls[i].controls.pRate.invalid && erfForm.controls.lodgings.controls[i].controls.pRate.touched">
                             Please fill this field
                            </small>
                     </td>
+                    <td>       
+                      <input type="text" formControlName="nights" class="disabled-bold" [disabled]="viewMode" mask="separator" thousandSeparator="," style="text-align:right;" fullWidth nbInput>
+                      <small  class="form-text text-danger" *ngIf="erfForm.controls.lodgings.controls[i].controls.nights.invalid && erfForm.controls.lodgings.controls[i].controls.nights.touched">
+                       Please fill this field
+                      </small>
+                   </td>
                                   
                                     <td class="align-middle" style="text-align:right;"> 
                                         {{((lodgings.value[i].rate*lodgings.value[i].nights*lodgings.value[i].pRate)/100)|number}}
@@ -274,9 +279,9 @@
                 <thead class="thead-dark">
                   <tr>
                     <th scope="col" style="width: 5%;"><label class="label-"> #</label></th>
-                    <th scope="col" style="width: 55%;"><label class="label-"> Purpose</label></th>
-                    <th scope="col" style="width: 32%; text-align:right;"><label class="label-"> Amount</label></th>
-
+                    <th scope="col" style="width: 16%;"><label class="label-"> Date</label></th>
+                    <th scope="col" style="width: 55%;"><label class="label-"> Travel expense</label></th>
+                    <th scope="col" style="width: 16%; text-align:right;"><label class="label-"> Cost</label></th>
                     <th scope="col" style="width: 8%;" colspan="2" *ngIf="!viewMode"><label class="label-">Action</label></th>
                   </tr>
                 </thead>
@@ -285,6 +290,13 @@
                         <ng-container [formGroupName]="i">
                   <tr>
                     <th class="align-middle">{{i+1}}</th>
+                    <td>       
+                      <input [nbDatepicker]="datepicker" [value]="datePickerList[i]"  class="disabled-bold" [disabled]="viewMode"   nbInput fullWidth >
+<nb-datepicker (dateChange)="dateChanged($event,otherCost)" [date]="selectedDateList[i]" #datepicker></nb-datepicker>
+<small  class="form-text text-danger" *ngIf="erfForm.controls.otherCosts.controls[i].controls.date.invalid && erfForm.controls.otherCosts.controls[i].controls.date.touched">
+  Please fill this field
+ </small>
+                    </td>
                     <td>        <input type="text" class="disabled-bold" [disabled]="viewMode" formControlName="purpose" fullWidth nbInput>
                     </td>
                     <td>        <input type="text"  class="disabled-bold" [disabled]="viewMode" formControlName="amount" mask="separator" thousandSeparator="," style="text-align:right;" fullWidth nbInput>
@@ -343,13 +355,13 @@
                   <nb-select placeholder="Pending" formControlName="approve" (selectedChange)="approveChanged()" fullWidth >
 
       <nb-select-label>
-        {{ arfForm.value.approve=="1"?"Approved":"Rejected" }}
+        {{ erfForm.value.approve=="1"?"Approved":"Rejected" }}
       </nb-select-label>
                     <nb-option value="1">Approve</nb-option>
                     <nb-option value="0">Reject</nb-option>
 
                   </nb-select>
-                    <!-- <nb-toggle labelPosition="end" formControlName="sign" (change)="signChanged()"> {{arfForm.value.sign?"Approved":"Rejected"}}</nb-toggle> -->
+                    <!-- <nb-toggle labelPosition="end" formControlName="sign" (change)="signChanged()"> {{erfForm.value.sign?"Approved":"Rejected"}}</nb-toggle> -->
                 </div>
                 <label class="label col-sm-3 col-form-label">Approval Date</label>
 

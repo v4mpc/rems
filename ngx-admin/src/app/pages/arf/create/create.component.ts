@@ -114,7 +114,7 @@ export class CreateComponent implements OnInit {
             region: this.selectedLocation,
           })
 
-          this.datePickerRange = `${formatDate(arf.start_date, 'MMM dd, yyyy', 'en-US')} - ${arf.end_date}`
+          this.datePickerRange = `${formatDate(arf.start_date, 'MMM dd, yyyy', 'en-US')} - ${formatDate(arf.end_date, 'MMM dd, yyyy', 'en-US')}`
           this.selectedRange = {
             start: new Date(arf.start_date),
             end: new Date(arf.end_date)

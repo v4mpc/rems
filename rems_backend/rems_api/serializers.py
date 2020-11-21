@@ -160,7 +160,7 @@ class ArfSerializer(serializers.ModelSerializer):
                     compare_value = location_name+' - dar es salaam'
                     compare_value = compare_value.lower().split()
                     if value == compare_value:
-                        new_dict_of_me['end_date'] = end_date
+                        new_dict_of_me['start_date'] = end_date
                         new_dict_of_me['date'] = end_date
 
             new_mes_data.append(new_dict_of_me)
