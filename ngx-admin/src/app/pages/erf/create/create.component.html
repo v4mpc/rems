@@ -142,7 +142,7 @@
                       </small>
                    </td>
                                   
-                                    <td class="align-middle" style="text-align:right;">    {{((mes.value[i].rate*mes.value[i].days*mes.value[i].pRate)/100)|number}} 
+                                    <td class="align-middle" style="text-align:right;">    {{((mes.value[i].rate*mes.value[i].days))|number}} 
                                            <!-- <input type="text" disabled fullWidth nbInput [value]="((mes.value[i].rate*mes.value[i].days*mes.value[i].pRate)/100)|number"> -->
                     </td>
                    
@@ -333,6 +333,50 @@
                 </tbody>
               </table>
 
+            <div class="row">
+                <div class="offset-sm-6 col-sm-6">
+                  <table class="table table-hover" formArrayName="otherCosts">
+            
+                    <tbody>
+                      <tr class="table-info" >
+                        <td>TOTAL ADVANCE</td>
+                        <th>
+                        
+                            {{arfTotal| number}} TZS
+                          
+                        </th>
+                      </tr>
+                      <tr class="table-info">
+                        <td>TOTAL EXPENSE</td>
+                        <th>
+                        
+                          {{otherCostsSum()+lodgingsSum()+mesSum()|number }} TZS
+                        
+                        </th>
+                      </tr>
+                     
+                      <tr class="table-success">
+                        <td>TOTAL OWED TRAVELER</td>
+                        <th>
+                        
+                           {{ (otherCostsSum()+lodgingsSum()+mesSum())>arfTotal?((otherCostsSum()+lodgingsSum()+mesSum())-arfTotal):0 |number }} TZS
+                           
+                        </th>
+                      </tr>
+
+                      <tr class="table-warning" >
+                        <td>TOTAL OWED JSI</td>
+                        <th>
+                        
+                          {{ (arfTotal>(otherCostsSum()+lodgingsSum()+mesSum()))?arfTotal-(otherCostsSum()+lodgingsSum()+mesSum()):0 |number }} TZS
+                       
+                        </th>
+                      </tr>
+                      </tbody>
+                  </table>
+                </div>
+            </div>
+
 
 
               <h6>
@@ -379,6 +423,12 @@
                   <textarea nbInput fullWidth placeholder="..."></textarea>
                 </div>
               </div>
+
+
+
+              
+
+            
               <div class="form-group row">
                
 

@@ -35,6 +35,7 @@ export class ErfCreateComponent implements OnInit {
   selectedLocation: any
   minDate: Date;
   maxDate: Date;
+  arfTotal = 0;
 
   datePickerRange: string;
   selectedRange: NbCalendarRange<Date>
@@ -100,10 +101,13 @@ export class ErfCreateComponent implements OnInit {
       this.selectedId = +params['id']
       this.editMode = params['id'] != null
 
+
+
       if (this.editMode) {
         this.erfService.getOne(this.selectedId).subscribe((erf: any) => {
           this.file_name = erf.excel_sheet
           this.selectedLocation = this.getSelectedLocation(erf.location)[0]
+          this.arfTotal = erf.arf_total
           this.erfForm.patchValue({
             purpose: erf.purpose,
             startTravelDate: new Date(erf.start_date),
@@ -162,16 +166,12 @@ export class ErfCreateComponent implements OnInit {
             this.otherCosts.clear()
             otherCostList.forEach(otherCost => {
               if (otherCost.date != null) {
-                // console.log(otherCost.date)
                 this.datePickerList.push(`${formatDate(otherCost.date, 'MMM dd, yyyy', 'en-US')}`)
+                this.selectedDateList.push(new Date())
               } else {
                 this.datePickerList.push('')
+                this.selectedDateList.push('')
               }
-
-              // this.selectedDateList.push({
-              //   start: new Date(me.start_date),
-              //   end: new Date(me.end_date)
-              // })
 
 
               this.addOtherCost(otherCost)
@@ -232,7 +232,7 @@ export class ErfCreateComponent implements OnInit {
       const group = new FormGroup({
         purpose: new FormControl(otherCost.purpose),
         amount: new FormControl(otherCost.amount),
-        date: new FormControl(otherCost.date, [this.editMode && otherCost.purpose ? Validators.required : null]),
+        date: new FormControl(otherCost.date, [Validators.required]),
 
       })
       this.otherCosts.push(group)
@@ -293,7 +293,7 @@ export class ErfCreateComponent implements OnInit {
       start_date: new Date(me.start_date),
       end_date: me.end_date ? new Date(me.end_date) : null,
       destination: me.destination,
-      days: me.percentage_of_daily_rate * me.no_of_nights / 100,
+      days: me.days,
       rate: me.daily_rate,
       pRate: me.percentage_of_daily_rate,
     }
@@ -305,10 +305,10 @@ export class ErfCreateComponent implements OnInit {
       start_date: new Date(lodging.start_date),
       end_date: lodging.end_date ? new Date(lodging.end_date) : null,
       destination: lodging.destination,
-      nights: lodging.no_of_nights * lodging.percentage_of_daily_rate / 100,
+      nights: lodging.no_of_nights,
       rate: lodging.daily_rate,
       pRate: lodging.percentage_of_daily_rate,
-      actualCost: lodging.daily_rate
+      actualCost: lodging.actual_cost
     }
   }
 
@@ -325,7 +325,7 @@ export class ErfCreateComponent implements OnInit {
   mesSum() {
     let sum = 0
     this.mes.value.forEach(me => {
-      sum += ((me.rate * me.days * me.pRate) / 100)
+      sum += me.rate * me.days
     });
     return sum
   }
@@ -343,7 +343,10 @@ export class ErfCreateComponent implements OnInit {
   otherCostsSum() {
     let sum = 0
     this.otherCosts.value.forEach(otherCost => {
-      sum += otherCost.amount
+      if (otherCost.amount) {
+        sum += parseInt(otherCost.amount, 10)
+
+      }
     });
     return sum
   }
@@ -372,6 +375,7 @@ export class ErfCreateComponent implements OnInit {
           end_date: me.end_date ? formatDate(me.start_date, 'yyyy-MM-dd', 'en-US') : null,
           destination: me.destination,
           no_of_nights: me.days,
+          days: me.days,
           daily_rate: me.rate,
           percentage_of_daily_rate: me.pRate,
         })
@@ -474,7 +478,6 @@ export class ErfCreateComponent implements OnInit {
       otherCost.patchValue({ date: event })
     }
 
-    console.log
   }
 
 

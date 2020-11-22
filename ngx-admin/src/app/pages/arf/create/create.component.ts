@@ -170,6 +170,7 @@ export class CreateComponent implements OnInit {
           no_of_nights: me.days,
           daily_rate: me.rate,
           percentage_of_daily_rate: me.pRate,
+          days: me.days * me.pRate / 100
         })
       });
       arf.mes = apiMes
@@ -180,6 +181,7 @@ export class CreateComponent implements OnInit {
           no_of_nights: lodging.nights,
           daily_rate: lodging.rate,
           percentage_of_daily_rate: lodging.pRate,
+          actual_cost: lodging.rate
         })
       });
       arf.lodgings = apiLodgings
@@ -368,9 +370,15 @@ export class CreateComponent implements OnInit {
   otherCostsSum() {
 
     let sum = 0
-    // this.otherCosts.value.forEach(otherCost => {
-    //   sum += otherCost.amount
-    // });
+    console.log(this.otherCosts.value)
+    this.otherCosts.value.forEach(otherCost => {
+      if (otherCost.amount) {
+        sum += parseInt(otherCost.amount, 10)
+
+      }
+    });
+
+    console.log(sum)
 
     return sum
 

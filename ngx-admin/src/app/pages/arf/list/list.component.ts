@@ -43,7 +43,7 @@ export class ListComponent implements OnInit {
 
     let mesSum = 0
     singleArf.mes.forEach(me => {
-      mesSum += ((me.daily_rate * me.no_of_nights * me.percentage_of_daily_rate) / 100)
+      mesSum += (me.daily_rate * me.days)
     });
 
 

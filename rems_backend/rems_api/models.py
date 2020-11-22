@@ -29,6 +29,22 @@ class Arf(models.Model):
     status = models.CharField(max_length=50)
     excel_sheet = models.CharField(blank=True, null=True, max_length=100)
 
+    def calculate_grand_total(self):
+        mes_sum = 0
+        for me in self.mes.all():
+            mes_sum += me.no_of_nights*me.percentage_of_daily_rate*me.daily_rate/100
+
+        lodging_sum = 0
+        for lodging in self.lodgings.all():
+            lodging_sum += lodging.daily_rate*lodging.no_of_nights * \
+                lodging.percentage_of_daily_rate / 100
+
+        othercost_sum = 0
+        for othercost in self.other_costs.all():
+            othercost_sum += othercost.amount
+
+        return mes_sum+lodging_sum+othercost_sum
+
 
 class Me(models.Model):
     arf = models.ForeignKey(
@@ -36,7 +52,8 @@ class Me(models.Model):
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
     destination = models.TextField()
-    no_of_nights = models.FloatField()
+    no_of_nights = models.FloatField(blank=True, null=True)
+    days = models.FloatField(blank=True, null=True)
     daily_rate = models.IntegerField()
     percentage_of_daily_rate = models.SmallIntegerField(blank=True, null=True)
     created_on = models.DateField(auto_now=True, auto_now_add=False)

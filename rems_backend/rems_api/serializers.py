@@ -15,7 +15,7 @@ class LocationSerializer(serializers.ModelSerializer):
 class MeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Me
-        fields = ['start_date', 'end_date', 'destination', 'no_of_nights',
+        fields = ['start_date', 'end_date', 'destination', 'no_of_nights', 'days',
                   'daily_rate', 'percentage_of_daily_rate', 'pk']
 
 
@@ -39,6 +39,11 @@ class ErfSerializer(serializers.ModelSerializer):
     lodgings = LodgingSerializer(many=True)
     other_costs = OtherCostSerializer(many=True, required=False)
     location_name = serializers.StringRelatedField(source="location.name")
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret['arf_total'] = instance.arf.calculate_grand_total()
+        return ret
 
     class Meta:
         model = Erf
@@ -212,6 +217,7 @@ class ArfSerializer(serializers.ModelSerializer):
         return arf
 
     def mutate(self, validated_data):
+        print(validated_data)
         location_name = validated_data['location'].name
         start_date = validated_data['start_date']
         end_date = validated_data['end_date']
