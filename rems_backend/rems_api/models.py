@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
@@ -36,9 +36,9 @@ class Me(models.Model):
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
     destination = models.TextField()
-    no_of_nights = models.SmallIntegerField()
+    no_of_nights = models.FloatField()
     daily_rate = models.IntegerField()
-    percentage_of_daily_rate = models.SmallIntegerField()
+    percentage_of_daily_rate = models.SmallIntegerField(blank=True, null=True)
     created_on = models.DateField(auto_now=True, auto_now_add=False)
     erf = models.ForeignKey('Erf', on_delete=models.CASCADE,
                             blank=True, null=True, related_name='mes')
@@ -52,7 +52,8 @@ class Lodging(models.Model):
     destination = models.TextField()
     no_of_nights = models.SmallIntegerField()
     daily_rate = models.IntegerField()
-    percentage_of_daily_rate = models.SmallIntegerField()
+    actual_cost = models.IntegerField(blank=True, null=True)
+    percentage_of_daily_rate = models.SmallIntegerField(blank=True, null=True)
     created_on = models.DateField(auto_now=True, auto_now_add=False)
     erf = models.ForeignKey('Erf', on_delete=models.CASCADE,
                             blank=True, null=True, related_name='lodgings')

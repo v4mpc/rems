@@ -251,6 +251,7 @@ export class ErfCreateComponent implements OnInit {
         destination: new FormControl(lodging.destination, [Validators.required]),
         nights: new FormControl(lodging.nights, [Validators.required]),
         rate: new FormControl(lodging.rate, [Validators.required]),
+        actualCost: new FormControl(lodging.actualCost, [Validators.required]),
         pRate: new FormControl(lodging.pRate, [Validators.required]),
 
       })
@@ -306,7 +307,8 @@ export class ErfCreateComponent implements OnInit {
       destination: lodging.destination,
       nights: lodging.no_of_nights * lodging.percentage_of_daily_rate / 100,
       rate: lodging.daily_rate,
-      pRate: lodging.percentage_of_daily_rate
+      pRate: lodging.percentage_of_daily_rate,
+      actualCost: lodging.daily_rate
     }
   }
 
@@ -321,53 +323,118 @@ export class ErfCreateComponent implements OnInit {
 
 
   mesSum() {
-
     let sum = 0
     this.mes.value.forEach(me => {
       sum += ((me.rate * me.days * me.pRate) / 100)
     });
-
     return sum
-
-
-
   }
 
   lodgingsSum() {
 
     let sum = 0
     this.lodgings.value.forEach(lodging => {
-      sum += ((lodging.rate * lodging.nights * lodging.pRate) / 100)
+      sum += ((lodging.nights * lodging.actualCost))
     });
-
     return sum
-
-
-
   }
 
 
   otherCostsSum() {
-
     let sum = 0
     this.otherCosts.value.forEach(otherCost => {
       sum += otherCost.amount
     });
-
     return sum
-
-
-
   }
 
   save() {
 
     if (this.erfForm.valid) {
-      // this.loader.show()
-      this.toastrService.succMessage(`form valid`);
+      this.loader.show()
+      let erf = {
+        user: 1,
+        location: this.erfForm.getRawValue().region.pk,
+        address: "JSI TZ",
+        purpose: this.erfForm.getRawValue().purpose,
+        start_date: formatDate(this.erfForm.getRawValue().startTravelDate, 'yyyy-MM-dd', 'en-US'),
+        end_date: formatDate(this.erfForm.getRawValue().endTravelDate, 'yyyy-MM-dd', 'en-US'),
+        date_of_request: formatDate(new Date(), 'yyyy-MM-dd', 'en-US'),
+        status: "Pending",
+        mes: null,
+        lodgings: null,
+        other_costs: null,
+      }
+      let apiMes = []
+      this.erfForm.value.mes.forEach(me => {
+        apiMes.push({
+          start_date: formatDate(me.start_date, 'yyyy-MM-dd', 'en-US'),
+          end_date: me.end_date ? formatDate(me.start_date, 'yyyy-MM-dd', 'en-US') : null,
+          destination: me.destination,
+          no_of_nights: me.days,
+          daily_rate: me.rate,
+          percentage_of_daily_rate: me.pRate,
+        })
+      });
+      erf.mes = apiMes
+      let apiLodgings = []
+      this.erfForm.value.lodgings.forEach(lodging => {
+        apiLodgings.push({
+          start_date: formatDate(lodging.start_date, 'yyyy-MM-dd', 'en-US'),
+          end_date: lodging.end_date ? formatDate(lodging.start_date, 'yyyy-MM-dd', 'en-US') : null,
+          destination: lodging.destination,
+          no_of_nights: lodging.nights,
+          actual_cost: lodging.actualCost,
+          daily_rate: lodging.rate,
+          percentage_of_daily_rate: lodging.pRate,
+        })
+      });
+      erf.lodgings = apiLodgings
+
+
+      let apiOtherCosts = []
+      this.erfForm.value.otherCosts.forEach(otherCost => {
+        if (otherCost.amount != null) {
+          apiOtherCosts.push({
+            date: formatDate(otherCost.date, 'yyyy-MM-dd', 'en-US'),
+            purpose: otherCost.purpose,
+            amount: otherCost.amount
+          })
+        }
+
+      });
+      erf.other_costs = apiOtherCosts
+      if (this.editMode) {
+        this.erfService.update(this.selectedId, erf).subscribe(erf => {
+          this.location.back()
+          this.loader.close();
+          this.toastrService.succMessage('Expense Report Updated');
+        }, (error) => {
+          console.log(error)
+          this.toastrService.errMessage('Contact System Admin');
+          this.loader.close();
+        })
+      } else {
+        this.erfService.save(erf).subscribe(erf => {
+          this.toastrService.succMessage('Expense Report Created');
+          this.location.back()
+          this.loader.close();
+        }, (error) => {
+          console.log(error)
+          this.loader.close();
+          this.toastrService.errMessage('Contact System Admin');
+
+
+
+
+        })
+
+      }
+
+
+
     } else {
       this.toastrService.errMessage(`The Form has Erros!`);
-
       this.erfForm.markAllAsTouched()
     }
   }

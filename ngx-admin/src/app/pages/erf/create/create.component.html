@@ -184,14 +184,14 @@
             <table class="table table-borderless" formArrayName="lodgings">
                 <thead class="thead-dark">
                   <tr>
-                    <th scope="col" style="width: 5%;"><label class="label-">#</label></th>
-                    <th scope="col" style="width: 25%;"><label class="label-"> Date</label></th>
-                    <th scope="col" style="width: 25%;" ><label class="label-" >Location</label></th>
-                    <th scope="col" style="width: 10%; text-align:right;"><label class="label-"> Lodging Max</label></th>
-                    <th scope="col" style="width: 10%; text-align:right;"><label class="label-"> Actual Cost</label></th>
-                    <th scope="col" style="width: 8%; text-align:right;"><label class="label-"> No. of Nights</label></th>
-                    <th scope="col" style="width: 10%; text-align:right;"><label class="label-"> Total</label></th>
-                    <th scope="col" style="width: 7%;" colspan="2" *ngIf="!viewMode"><label class="label-"> Action</label></th>
+                    <th scope="col" style="min-width: 5%;"><label class="label-">#</label></th>
+                    <th scope="col" style="min-width: 25%;"><label class="label-"> Date</label></th>
+                    <th scope="col" style="min-width: 25%;" ><label class="label-" >Location</label></th>
+                    <th scope="col" style="min-width: 10%; text-align:right;"><label class="label-"> Lodging Max</label></th>
+                    <th scope="col" style="min-width: 10%; text-align:right;"><label class="label-"> Actual Cost</label></th>
+                    <th scope="col" style="min-width: 8%; text-align:right;"><label class="label-"> No. of Nights</label></th>
+                    <th scope="col" style="min-width: 10%; text-align:right;"><label class="label-"> Total</label></th>
+                    <th scope="col" style="min-width: 7%;" colspan="2" *ngIf="!viewMode"><label class="label-"> Action</label></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -221,9 +221,9 @@
                     </td>
                     <td>       
                   
-                            <input type="text" formControlName="pRate" class="disabled-bold" [disabled]="viewMode" style="text-align:right;" mask="separator" thousandSeparator=","  nbInput>
+                            <input type="text" formControlName="actualCost" class="disabled-bold" [disabled]="viewMode" style="text-align:right;" mask="separator" thousandSeparator=","  nbInput>
                        
-                          <small  class="form-text text-danger"  *ngIf="erfForm.controls.lodgings.controls[i].controls.pRate.invalid && erfForm.controls.lodgings.controls[i].controls.pRate.touched">
+                          <small  class="form-text text-danger"  *ngIf="erfForm.controls.lodgings.controls[i].controls.actualCost.invalid && erfForm.controls.lodgings.controls[i].controls.actualCost.touched">
                             Please fill this field
                            </small>
                     </td>
@@ -235,7 +235,7 @@
                    </td>
                                   
                                     <td class="align-middle" style="text-align:right;"> 
-                                        {{((lodgings.value[i].rate*lodgings.value[i].nights*lodgings.value[i].pRate)/100)|number}}
+                                        {{((lodgings.value[i].nights*lodgings.value[i].actualCost))|number}}
 
                     </td>
                    
@@ -259,10 +259,11 @@
 
                 <td></td>
                 <td></td>
+                <td></td>
                 <th>Total</th>
                 <th style="text-align:right;">{{lodgingsSum()|number}}</th>
                 <td></td>
-                <td></td>
+                
             </tr>
                   
                 </tbody>
@@ -322,10 +323,11 @@
             <tr>
                
                 <td></td>
+                <td></td>
                 <th>Total</th>
                 <th style="text-align:right;">{{otherCostsSum()|number}}</th>
                 <td></td>
-                <td></td>
+                
             </tr>
                   
                 </tbody>

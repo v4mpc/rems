@@ -20,8 +20,8 @@ export class ErfService {
 
   }
 
-  save(arf) {
-    return this.http.post(this.API_URL + this.url, arf);
+  save(erf) {
+    return this.http.post(this.API_URL + this.url, erf);
   }
 
   deleteOne(pk) {
@@ -40,9 +40,9 @@ export class ErfService {
   }
 
 
-  update(pk, arf) {
+  update(pk, erf) {
     let end_point = `${pk}/`
-    return this.http.put(this.API_URL + this.url + end_point, arf);
+    return this.http.put(this.API_URL + this.url + end_point, erf);
 
 
   }

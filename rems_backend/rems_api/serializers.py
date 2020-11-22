@@ -23,7 +23,7 @@ class LodgingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lodging
-        fields = ['start_date', 'end_date', 'destination', 'no_of_nights',
+        fields = ['start_date', 'end_date', 'destination', 'actual_cost', 'no_of_nights',
                   'daily_rate', 'percentage_of_daily_rate', 'pk']
 
 
@@ -67,6 +67,101 @@ class ErfSerializer(serializers.ModelSerializer):
         for lodging_data in lodgings_data:
             Lodging.objects.create(erf=erf, **lodging_data)
         return erf
+
+    def mutate(self, validated_data):
+        location_name = validated_data['location'].name
+        start_date = validated_data['start_date']
+        end_date = validated_data['end_date']
+        mes_data = validated_data.pop('mes')
+        lodgings_data = validated_data.pop('lodgings')
+        new_mes_data = []
+        new_lodgings_data = []
+        for dict_of_lodging in lodgings_data:
+            new_dict_of_lodging = OrderedDict()
+            for key, value in dict_of_lodging.items():
+                new_dict_of_lodging[key] = value
+                if key == 'destination':
+                    value = value.lower().strip()
+                    compare_value = location_name.lower().strip()
+                    if value == compare_value:
+                        new_dict_of_lodging['start_date'] = start_date
+                        new_dict_of_lodging['end_date'] = end_date
+                        new_dict_of_lodging[
+                            'date'] = f"{start_date.strftime('%b-%d-%Y')} - {end_date.strftime('%b-%d-%Y')}"
+            new_lodgings_data.append(new_dict_of_lodging)
+        for dict_of_me in mes_data:
+            new_dict_of_me = OrderedDict()
+            for key, value in dict_of_me.items():
+                new_dict_of_me[key] = value
+                if key == 'destination':
+                    value = value.lower().strip().split()
+
+                    compare_value = 'dar es salaam - '+location_name
+                    compare_value = compare_value.lower().split()
+                    if value == compare_value:
+                        new_dict_of_me['start_date'] = start_date
+                        new_dict_of_me['date'] = start_date
+
+                    if value == location_name.lower().split():
+                        new_dict_of_me['start_date'] = start_date + \
+                            timedelta(days=1)
+                        new_dict_of_me['end_date'] = end_date-timedelta(days=1)
+                        new_dict_of_me[
+                            'date'] = f"{new_dict_of_me['start_date'].strftime('%b-%d-%Y')} - {new_dict_of_me['end_date'].strftime('%b-%d-%Y')}"
+
+                    compare_value = location_name+' - dar es salaam'
+                    compare_value = compare_value.lower().split()
+                    if value == compare_value:
+                        new_dict_of_me['start_date'] = end_date
+                        new_dict_of_me['date'] = end_date
+
+            new_mes_data.append(new_dict_of_me)
+
+        return new_mes_data, new_lodgings_data
+
+    def update(self, instance, validated_data):
+        print(validated_data)
+        instance.location = validated_data.get('location', instance.location)
+        instance.address = validated_data.get('address', instance.address)
+        instance.purpose = validated_data.get('purpose', instance.purpose)
+        instance.start_date = validated_data.get(
+            'start_date', instance.start_date)
+        instance.end_date = validated_data.get('end_date', instance.end_date)
+        instance.date_of_request = validated_data.get(
+            'date_of_request', instance.date_of_request)
+        instance.status = validated_data.get(
+            'status', instance.status)
+        # instance.excel_sheet = validated_data.get(
+        #     'excel_sheet', instance.excel_sheet)
+        instance.save()
+
+        instance.mes.all().delete()
+        instance.lodgings.all().delete()
+        instance.other_costs.all().delete()
+
+        # save new ones
+        mes_data, lodgings_data = self.mutate(validated_data)
+        other_costs_data = validated_data.pop('other_costs')
+        # mes_data = validated_data.pop('mes')
+        # lodgings_data = validated_data.pop('lodgings')
+
+        erf_sheet = ErfExcel(instance.excel_sheet)
+        erf_sheet.init(validated_data, mes_data,
+                       lodgings_data, other_costs_data)
+        erf_sheet.write_and_save()
+
+        for me_data in mes_data:
+            me_data.pop('date')
+            Me.objects.create(erf=instance, **me_data)
+
+        for other_cost_data in other_costs_data:
+            OtherCost.objects.create(erf=instance, **other_cost_data)
+
+        for lodging_data in lodgings_data:
+            lodging_data.pop('date')
+            Lodging.objects.create(erf=instance, **lodging_data)
+
+        return instance
 
 
 class ArfSerializer(serializers.ModelSerializer):
@@ -168,7 +263,6 @@ class ArfSerializer(serializers.ModelSerializer):
         return new_mes_data, new_lodgings_data
 
     def update(self, instance, validated_data):
-
         arf_sheet = WorkBook("Advance Request")
         arf_sheet.init(validated_data)
         arf_sheet.delete(instance.excel_sheet)

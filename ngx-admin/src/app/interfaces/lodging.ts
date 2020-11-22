@@ -4,6 +4,7 @@ export interface Lodging {
     rate: number,
     pRate: number,
     start_date: Date,
-    end_date: Date
+    end_date: Date,
+    actualCost?: number
 
 }
