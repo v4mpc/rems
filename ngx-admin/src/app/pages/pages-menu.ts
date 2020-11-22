@@ -13,9 +13,21 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link: '/pages/arf',
   },
   {
-    title: 'FEATURES',
-    group: true,
-  },
+    title: 'Profile',
+    icon: 'person-outline',
+    link: '/pages/profile',
+  }
+  ,
+  {
+    title: 'Logout',
+    icon: 'log-out-outline',
+    link: '/pages/arf',
+  }
+  ,
+  // {
+  //   title: 'FEATURES',
+  //   group: true,
+  // },
   {
     title: 'Auth',
     icon: 'lock-outline',

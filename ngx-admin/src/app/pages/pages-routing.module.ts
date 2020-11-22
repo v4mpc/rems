@@ -20,6 +20,11 @@ const routes: Routes = [{
         .then(m => m.ArfModule),
     },
     {
+      path: 'profile',
+      loadChildren: () => import('./profile/profile.module')
+        .then(m => m.ProfileModule),
+    },
+    {
       path: '',
       redirectTo: 'dashboard',
       pathMatch: 'full',
