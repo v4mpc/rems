@@ -97,7 +97,7 @@ class WorkBook:
             while len(data) > x:
                 cell_address = self.fields[field][x]
                 cell_value = data[x]
-                if field is 'lodge_rate' or field is 'me_rate':
+                if (field == 'lodge_rate') or (field == 'me_rate'):
                     self.write_cell(cell_address, f'{cell_value}%')
                 else:
                     self.write_cell(cell_address, cell_value)

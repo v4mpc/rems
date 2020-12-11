@@ -39,6 +39,7 @@ class ErfSerializer(serializers.ModelSerializer):
     lodgings = LodgingSerializer(many=True)
     other_costs = OtherCostSerializer(many=True, required=False)
     location_name = serializers.StringRelatedField(source="location.name")
+    user_name = serializers.StringRelatedField(source="user.username")
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)
@@ -47,7 +48,7 @@ class ErfSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Erf
-        fields = ['pk', 'user', 'location', 'location_name', 'address', 'purpose',
+        fields = ['pk', 'user', 'location', 'user_name' 'location_name', 'address', 'purpose',
                   'start_date', 'end_date', 'date_of_request', 'status', 'mes', 'lodgings', 'other_costs', 'excel_sheet']
 
     def create(self, validated_data):
@@ -174,12 +175,13 @@ class ArfSerializer(serializers.ModelSerializer):
     lodgings = LodgingSerializer(many=True)
     other_costs = OtherCostSerializer(many=True, required=False)
     location_name = serializers.StringRelatedField(source="location.name")
+    user_name = serializers.StringRelatedField(source="user.username")
     erf = ErfSerializer(required=False)
 
     class Meta:
         model = Arf
         # depth = 1
-        fields = ['pk', 'user', 'location', 'location_name', 'address', 'purpose',
+        fields = ['pk', 'user', 'user_name', 'location', 'location_name', 'address', 'purpose',
                   'start_date', 'end_date', 'date_of_request', 'status', 'mes', 'lodgings', 'other_costs', 'excel_sheet', 'erf']
 
     def create(self, validated_data):
