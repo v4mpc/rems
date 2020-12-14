@@ -167,6 +167,10 @@ class DownloadArf(APIView):
             raise Http404
 
     def get(self, request, pk):
+        # generate file
+        # send it
+        # then delete with crone maybe not sure
+
         module_dir = os.path.dirname(__file__)
         arf_path = os.path.join(module_dir, 'static/rems_api/')
         file_path = os.path.join(arf_path, file_name)
