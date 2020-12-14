@@ -16,7 +16,7 @@ urlpatterns = [
     path('erfs/', views.ErfList.as_view(), name='erf_list'),
     path('erfs/<int:pk>/', views.ErfDetail.as_view()),
 
-    path('download-arf/<str:file_name>/', views.DownloadArf.as_view()),
+    path('download-arf/<int:pk>/', views.DownloadArf.as_view()),
 
 
 

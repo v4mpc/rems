@@ -387,7 +387,7 @@ export class CreateComponent implements OnInit {
   }
 
   downloadArf() {
-    this.arfService.download(this.file_name)
+    this.arfService.download(this.selectedId)
   }
 
   mesSum() {

@@ -13,16 +13,6 @@ from django.core.mail import send_mail
 # TODO: Make authenication work
 
 
-class HelloView(APIView, TokenAuthentication):
-    # permission_classes = (IsAuthenticated, )
-    # keyword = "Bearer"
-
-    def get(self, request):
-        print(request.user)
-        content = {'message': 'Hello, World!'}
-        return Response(content)
-
-
 class ArfList(APIView, TokenAuthentication):
     # permission_classes = (IsAuthenticated, )
 
@@ -176,7 +166,7 @@ class DownloadArf(APIView):
         except Arf.DoesNotExist:
             raise Http404
 
-    def get(self, request, file_name):
+    def get(self, request, pk):
         module_dir = os.path.dirname(__file__)
         arf_path = os.path.join(module_dir, 'static/rems_api/')
         file_path = os.path.join(arf_path, file_name)
