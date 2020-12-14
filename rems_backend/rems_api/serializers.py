@@ -38,8 +38,10 @@ class ErfSerializer(serializers.ModelSerializer):
     mes = MeSerializer(many=True)
     lodgings = LodgingSerializer(many=True)
     other_costs = OtherCostSerializer(many=True, required=False)
-    location_name = serializers.StringRelatedField(source="location.name")
-    user_name = serializers.StringRelatedField(source="user.username")
+    location_name = serializers.StringRelatedField(
+        source="location.name", required=False)
+    user_name = serializers.StringRelatedField(
+        source="user.username", required=False)
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)
@@ -48,17 +50,17 @@ class ErfSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Erf
-        fields = ['pk', 'user', 'location', 'user_name' 'location_name', 'address', 'purpose',
+        fields = ['pk', 'user', 'location', 'user_name', 'location_name', 'address', 'purpose',
                   'start_date', 'end_date', 'date_of_request', 'status', 'mes', 'lodgings', 'other_costs', 'excel_sheet']
 
     def create(self, validated_data):
-        erf_sheet = WorkBook("Tanzania Expense Report")
-        erf_sheet.init(validated_data)
-        if erf_sheet.exists():
-            raise serializers.ValidationError('File exists')
-        erf_sheet.write_and_save()
-        file_name = erf_sheet.get_file_name()
-        validated_data['excel_sheet'] = file_name
+        # erf_sheet = WorkBook("Tanzania Expense Report")
+        # erf_sheet.init(validated_data)
+        # if erf_sheet.exists():
+        #     raise serializers.ValidationError('File exists')
+        # erf_sheet.write_and_save()
+        # file_name = erf_sheet.get_file_name()
+        # validated_data['excel_sheet'] = file_name
         mes_data = validated_data.pop('mes')
         lodgings_data = validated_data.pop('lodgings')
         other_costs_data = validated_data.pop('other_costs')
@@ -126,7 +128,7 @@ class ErfSerializer(serializers.ModelSerializer):
         return new_mes_data, new_lodgings_data
 
     def update(self, instance, validated_data):
-        print(validated_data)
+
         instance.location = validated_data.get('location', instance.location)
         instance.address = validated_data.get('address', instance.address)
         instance.purpose = validated_data.get('purpose', instance.purpose)
@@ -151,10 +153,10 @@ class ErfSerializer(serializers.ModelSerializer):
         # mes_data = validated_data.pop('mes')
         # lodgings_data = validated_data.pop('lodgings')
 
-        erf_sheet = ErfExcel(instance.excel_sheet)
-        erf_sheet.init(validated_data, mes_data,
-                       lodgings_data, other_costs_data)
-        erf_sheet.write_and_save()
+        # erf_sheet = ErfExcel(instance.excel_sheet)
+        # erf_sheet.init(validated_data, mes_data,
+        #                lodgings_data, other_costs_data)
+        # erf_sheet.write_and_save()
 
         for me_data in mes_data:
             me_data.pop('date')
@@ -185,21 +187,21 @@ class ArfSerializer(serializers.ModelSerializer):
                   'start_date', 'end_date', 'date_of_request', 'status', 'mes', 'lodgings', 'other_costs', 'excel_sheet', 'erf']
 
     def create(self, validated_data):
-        arf_sheet = WorkBook("Advance Request")
-        arf_sheet.init(validated_data)
-        if arf_sheet.exists():
-            raise serializers.ValidationError('File exists')
-        arf_sheet.write_and_save()
-        file_name = arf_sheet.get_file_name()
-        validated_data['excel_sheet'] = file_name
+        # arf_sheet = WorkBook("Advance Request")
+        # arf_sheet.init(validated_data)
+        # if arf_sheet.exists():
+        #     raise serializers.ValidationError('File exists')
+        # arf_sheet.write_and_save()
+        # file_name = arf_sheet.get_file_name()
+        # validated_data['excel_sheet'] = file_name
         mes_data, lodgings_data = self.mutate(validated_data)
         other_costs_data = validated_data.pop('other_costs')
         arf = Arf.objects.create(**validated_data)
 
-        erf_sheet = ErfExcel(validated_data['excel_sheet'])
-        erf_sheet.init(validated_data, mes_data,
-                       lodgings_data, other_costs_data)
-        erf_sheet.write_and_save()
+        # erf_sheet = ErfExcel(validated_data['excel_sheet'])
+        # erf_sheet.init(validated_data, mes_data,
+        #                lodgings_data, other_costs_data)
+        # erf_sheet.write_and_save()
         # validated_data.pop('excel_sheet')
         # TODO: Days in expense report should be in terms of 0.75 and >=1
         erf = Erf.objects.create(arf=arf, **validated_data)
@@ -219,7 +221,6 @@ class ArfSerializer(serializers.ModelSerializer):
         return arf
 
     def mutate(self, validated_data):
-        print(validated_data)
         location_name = validated_data['location'].name
         start_date = validated_data['start_date']
         end_date = validated_data['end_date']
@@ -271,12 +272,12 @@ class ArfSerializer(serializers.ModelSerializer):
         return new_mes_data, new_lodgings_data
 
     def update(self, instance, validated_data):
-        arf_sheet = WorkBook("Advance Request")
-        arf_sheet.init(validated_data)
-        arf_sheet.delete(instance.excel_sheet)
-        arf_sheet.write_and_save()
-        file_name = arf_sheet.get_file_name()
-        validated_data['excel_sheet'] = file_name
+        # arf_sheet = WorkBook("Advance Request")
+        # arf_sheet.init(validated_data)
+        # arf_sheet.delete(instance.excel_sheet)
+        # arf_sheet.write_and_save()
+        # file_name = arf_sheet.get_file_name()
+        # validated_data['excel_sheet'] = file_name
 
         instance.location = validated_data.get('location', instance.location)
         instance.address = validated_data.get('address', instance.address)
@@ -288,8 +289,8 @@ class ArfSerializer(serializers.ModelSerializer):
             'date_of_request', instance.date_of_request)
         instance.status = validated_data.get(
             'status', instance.status)
-        instance.excel_sheet = validated_data.get(
-            'excel_sheet', instance.excel_sheet)
+        # instance.excel_sheet = validated_data.get(
+        #     'excel_sheet', instance.excel_sheet)
         instance.save()
 
         instance.mes.all().delete()
@@ -302,10 +303,10 @@ class ArfSerializer(serializers.ModelSerializer):
         mes_data, lodgings_data = self.mutate(validated_data)
         other_costs_data = validated_data.pop('other_costs')
 
-        erf_sheet = ErfExcel(validated_data['excel_sheet'])
-        erf_sheet.init(validated_data, mes_data,
-                       lodgings_data, other_costs_data)
-        erf_sheet.write_and_save()
+        # erf_sheet = ErfExcel(validated_data['excel_sheet'])
+        # erf_sheet.init(validated_data, mes_data,
+        #                lodgings_data, other_costs_data)
+        # erf_sheet.write_and_save()
         # validated_data.pop('excel_sheet')
         erf = Erf.objects.create(arf=instance, **validated_data)
         for me_data in mes_data:

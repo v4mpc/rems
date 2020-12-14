@@ -83,7 +83,10 @@ class WorkBook:
 
     def get_file_name(self):
         region = "_".join(self.region.split(' '))
-        sheet_name = "_".join(self.sheet_name.split(' '))
+        sheet_name = "Expense Report"
+        if isinstance(self, WorkBook):
+            sheet_name = "Advance Request"
+        sheet_name = "_".join(sheet_name.split(' '))
         name = "_".join(self.name.split(' '))
         date_travel = self.date_of_request
         return f"{name}_{sheet_name}_{region}_{date_travel}.xlsx"
